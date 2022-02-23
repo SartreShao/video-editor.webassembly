@@ -1,24 +1,14 @@
-# web-video-editor
+# Web Video Editor
+## Tech Stack
+- WebAssmeble：C / C++ working in JavaScript
+- Emscripten: turn C / C++ to WASM
+- FFmpeg：library for video editing
+- H5 Canvas
+- H5 Video Blob
+- H5 Web Worker
 
-## Project setup
+## How To Start Using
 ```
-npm install
+$ npm install
+$ npm run serve
 ```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
