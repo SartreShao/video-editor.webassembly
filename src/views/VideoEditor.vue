@@ -45,11 +45,10 @@ const timeLineWidth = inject(Store.timeLineWidth);
 timeLineWidth.value = Mapping.calcTimeLineWidth(document.body.clientWidth);
 
 // 动态监听：窗口变化 -> 时间轴组件的宽度
-window.onresize = () => {
-  return (() => {
+window.onresize = () =>
+  (() => {
     timeLineWidth.value = Mapping.calcTimeLineWidth(document.body.clientWidth);
   })();
-};
 </script>
 
 <style lang="scss" scope>
