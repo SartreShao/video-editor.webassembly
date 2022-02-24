@@ -1,5 +1,5 @@
 <template>
-  <div class="video-editor-container">
+  <div class="video-editor-container" :style="{ width: timeLineWidth + 'px' }">
     <!-- 顶部按钮 -->
     <section class="controller-section">
       <div class="button-container">
@@ -52,8 +52,6 @@ window.onresize = () => {
     timeLineWidth.value = document.body.clientWidth - OTHER_WIDTH;
   })();
 };
-
-
 </script>
 
 <style lang="scss" scope>
@@ -68,7 +66,6 @@ window.onresize = () => {
 }
 
 .video-editor-container {
-  width: 100%;
   height: 100%;
   background: #1a1a1a;
   display: flex;
@@ -78,7 +75,7 @@ window.onresize = () => {
 
 .controller-section {
   height: 80px;
-  width: 693px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

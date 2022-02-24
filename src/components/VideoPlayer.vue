@@ -15,7 +15,7 @@
 
 <style lang="scss" scope>
 .video-player-container {
-  width: 693px;
+  width: 100%;
   height: 422px;
   background: #202020;
   display: flex;

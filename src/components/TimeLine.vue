@@ -20,7 +20,7 @@ export default {};
 
 <style lang="scss" scope>
 .timeline-container {
-  width: 693px;
+  width: 100%;
   height: 288px;
   background: #202020;
   border-top: 1px solid #1a1a1a;
