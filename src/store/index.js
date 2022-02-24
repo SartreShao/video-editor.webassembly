@@ -1,14 +1,15 @@
-import { provide } from "vue";
+import { provide, ref } from "vue";
 
 /**
  * This file define global states in project
  */
-const example = Symbol();
+const timeLineWidth = Symbol();
 
 function useProvider() {
-  provide(example);
+  provide(timeLineWidth, ref(0));
 }
 
 export default {
-  useProvider
+  useProvider,
+  timeLineWidth
 };

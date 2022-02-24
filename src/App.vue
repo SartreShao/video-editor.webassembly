@@ -1,11 +1,12 @@
 <template>
-  <router-view />
+  <video-editor></video-editor>
 </template>
 
 <script setup>
 import Store from "@/store";
+import VideoEditor from "@/views/VideoEditor.vue";
 
-// 提供全局依赖注入
+// 依赖注入
 Store.useProvider();
 </script>
 
