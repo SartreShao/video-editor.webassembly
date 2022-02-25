@@ -310,9 +310,85 @@ const gridBufferFirstIndex = (offsetLeft, gridWidth) => {
 };
 
 // 格子缓存数量
-const gridBufferNumber = (timescale_width, gridWidth) =>
+const getGridBufferNumber = (timescale_width, gridWidth) =>
   Math.ceil(timescale_width / gridWidth) + 1;
 
+/**
+ * 渲染格子
+ * @param {ref<List>} gridBufferList 最终要渲染的 GridBufferList
+ * @param {*} gridWidth 每个格子的宽度
+ * @param {number} groupGridFrame 每个 GridGroup 里包含多少 Frame
+ * @param {number} gridFrame 每个 Grid 里包含多少 Frame
+ * @param {width} timeLineOffsetLeft 时间轴的左偏移量
+ * @param {*} timescale_width 时间轴的实际宽度（不是显示宽度）
+ */
+const renderGridBufferList = (
+  gridBufferList,
+  gridWidth,
+  groupGridFrame,
+  gridFrame,
+  timeLineOffsetLeft,
+  timescale_width
+) => {
+  try {
+    console.log(
+      gridBufferList,
+      gridWidth,
+      groupGridFrame,
+      gridFrame,
+      timeLineOffsetLeft,
+      timescale_width
+    );
+
+    // 获取格子倍数；例如：2 倍，就是 2 的倍数都会绘制大格
+    const gridMultiple = groupGridFrame / gridFrame;
+
+    // 初始位置
+    const firstIndex = gridBufferFirstIndex(timeLineOffsetLeft, gridWidth);
+
+    // 结束位置
+    const gridBufferNumber = getGridBufferNumber(timescale_width, gridWidth);
+
+    // 动态计算数组长度
+    if (gridBufferNumber > gridBufferList.value.length) {
+      const dValue = gridBufferNumber - gridBufferList.value.length;
+      for (let i = 1; i <= dValue; i++) {
+        gridBufferList.value.push({
+          frame: 0,
+          showNumber: false,
+          width: 0
+        });
+      }
+    } else if (gridBufferNumber < gridBufferList.value.length) {
+      const dValue = gridBufferList.value.length - gridBufferNumber;
+      gridBufferList.value.splice(gridBufferList.value.length - dValue, dValue);
+    } else {
+      // doing nothing
+    }
+
+    console.log("渲染开始");
+    // 渲染过程
+    for (let i = firstIndex; i <= gridBufferNumber + firstIndex - 1; i++) {
+      const grid = gridBufferList.value[i - firstIndex];
+      if (i - 1 === 0) {
+        grid.frame = 0;
+        grid.showNumber = true;
+        grid.width = gridWidth;
+      } else if ((i - 1) % gridMultiple === 0) {
+        grid.frame = (i - 1) * gridFrame;
+        grid.showNumber = true;
+        grid.width = gridWidth;
+      } else {
+        grid.frame = (i - 1) * gridFrame;
+        grid.showNumber = false;
+        grid.width = gridWidth;
+      }
+    }
+  } catch (error) {
+    // doing nothing
+    console.log(error);
+  }
+};
 export default {
   calcTimeLineContainerWidth,
   frame2Time,
@@ -321,5 +397,5 @@ export default {
   getTimeScaleWidth,
   getTimeScalePlaceHolderWidth,
   gridBufferFirstIndex,
-  gridBufferNumber
+  renderGridBufferList
 };

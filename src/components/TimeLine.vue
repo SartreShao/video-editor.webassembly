@@ -216,13 +216,16 @@ import Mapping from "@/map";
 
 // 帧宽度：决定了时间轴的比例
 const frameWidth = inject(Store.frameWidth);
-console.log("shit", frameWidth);
-
-// 时间轴容器的宽度
-const timeLineContainer_width = inject(Store.timeLineContainer_width);
 
 // 时间轴
 const timeLine = ref(null);
+
+// timescale's grid
+const gridBufferList = ref([]);
+
+/** 依赖注入 start */
+// 时间轴容器的宽度
+const timeLineContainer_width = inject(Store.timeLineContainer_width);
 
 // 时间轴滚动轴左偏移量
 const timeLineOffsetLeft = inject(Store.timeLineOffsetLeft);
@@ -235,6 +238,29 @@ const timescale_width = inject(Store.timescale_width);
 
 // 时间刻度左侧占位的宽度
 const timescale_placeholder_width = inject(Store.timescale_placeholder_width);
+
+// 当前格子宽度
+const gridWidth = inject(Store.gridWidth);
+
+// 格子内帧数
+const gridFrame = inject(Store.gridFrame);
+
+// 每组格子内的帧数
+const groupGridFrame = inject(Store.groupGridFrame);
+
+/** 依赖注入 end */
+
+watchEffect(() => {
+  // 渲染 gridBufferList
+  Mapping.renderGridBufferList(
+    gridBufferList,
+    gridWidth.value,
+    groupGridFrame.value,
+    gridFrame.value,
+    timeLineOffsetLeft.value,
+    timescale_width.value
+  );
+});
 
 // 计算 timeLineOffsetLeft
 onMounted(() => {
@@ -252,81 +278,6 @@ onMounted(() => {
     });
   } else {
     console.log("error: timeLine.value is", timeLine.value);
-  }
-});
-
-// timescale's grid
-const gridBufferList = ref([]);
-
-// 当前格子宽度
-const gridWidth = inject(Store.gridWidth);
-
-// 格子内帧数
-const gridFrame = inject(Store.gridFrame);
-
-// 每组格子内的帧数
-const groupGridFrame = inject(Store.groupGridFrame);
-
-watchEffect(() => {
-  try {
-    // 获取格子倍数；例如：2 倍，就是 2 的倍数都会绘制大格
-    const gridMultiple = groupGridFrame.value / gridFrame.value;
-
-    // 初始位置
-    const firstIndex = Mapping.gridBufferFirstIndex(
-      timeLineOffsetLeft.value,
-      gridWidth.value
-    );
-
-    // 结束位置
-    const gridBufferNumber = Mapping.gridBufferNumber(
-      timescale_width.value,
-      gridWidth.value
-    );
-
-    // 动态计算数组长度
-    if (gridBufferNumber > gridBufferList.value.length) {
-      const dValue = gridBufferNumber - gridBufferList.value.length;
-      for (let i = 1; i <= dValue; i++) {
-        gridBufferList.value.push({
-          frame: 0,
-          showNumber: false,
-          width: 0,
-        });
-      }
-    } else if (gridBufferNumber < gridBufferList.value.length) {
-      const dValue = gridBufferList.value.length - gridBufferNumber;
-      gridBufferList.value.splice(gridBufferList.value.length - dValue, dValue);
-    } else {
-      // doing nothing
-    }
-
-    // 渲染过程
-    console.log("开始渲染");
-    console.log("gridWidth", gridWidth.value);
-    console.log("第一个格子", firstIndex);
-    console.log("格子列表数量", gridBufferList.value.length);
-    for (let i = firstIndex; i <= gridBufferNumber + firstIndex - 1; i++) {
-      console.log("渲染过程", i);
-      const grid = gridBufferList.value[i - firstIndex];
-      if (i - 1 === 0) {
-        grid.frame = 0;
-        grid.showNumber = true;
-        grid.width = gridWidth.value;
-      } else if ((i - 1) % gridMultiple === 0) {
-        grid.frame = (i - 1) * gridFrame.value;
-        grid.showNumber = true;
-        grid.width = gridWidth.value;
-      } else {
-        grid.frame = (i - 1) * gridFrame.value;
-        grid.showNumber = false;
-        grid.width = gridWidth.value;
-      }
-    }
-
-    console.log("结束渲染", gridBufferList.value);
-  } catch (error) {
-    // doing nothing
   }
 });
 </script>

@@ -39,7 +39,7 @@ function useProvider() {
   // init data
   const $maxFrameOfMaterial = ref(5400);
   const $timeLineContainer_width = ref(0);
-  const $frameWidth = ref(0.3);
+  const $frameWidth = ref(0.003);
   const $timeLineOffsetLeft = ref(0);
 
   // computed data
@@ -67,6 +67,7 @@ function useProvider() {
     )
   );
 
+  // provide
   provide(timeLineContainer_width, $timeLineContainer_width);
   provide(timeLine_width, $timeLine_width);
   provide(timescale_width, $timescale_width);
