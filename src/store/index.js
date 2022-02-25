@@ -1,4 +1,5 @@
 import { provide, ref, computed } from "vue";
+import Mapping from "@/map";
 
 /**
  * This file define global states in project
@@ -28,20 +29,31 @@ const timescale_width = Symbol();
 // 时间轴偏移量
 const timeLineOffsetLeft = Symbol();
 
-function useProvider() {
-  const timeLineContainer_width_value = ref(0);
-  const timeLine_width_value = computed(
-    () => timeLineContainer_width_value.value - 37
-  );
+// 时间轴素材最大帧数
+const maxFrameOfMaterial = Symbol();
 
-  provide(timeLineContainer_width, timeLineContainer_width_value);
-  provide(timeLine_width, timeLine_width_value);
-  provide(timescale_width, ref(0));
-  provide(frameWidth, ref(0.003));
+function useProvider() {
+  const $maxFrameOfMaterial = ref(5400);
+  const $timeLineContainer_width = ref(0);
+  const $timeLine_width = computed(() => $timeLineContainer_width.value - 37);
+  const $timescale_width = computed(() =>
+    Mapping.getTimeScaleWidth(
+      $frameWidth.value,
+      $timeLine_width.value,
+      $maxFrameOfMaterial.value
+    )
+  );
+  const $frameWidth = ref(0.3);
+
+  provide(timeLineContainer_width, $timeLineContainer_width);
+  provide(timeLine_width, $timeLine_width);
+  provide(timescale_width, $timescale_width);
+  provide(frameWidth, $frameWidth);
   provide(timeLineOffsetLeft, ref(0));
   provide(gridWidth, ref(0));
   provide(gridFrame, ref(0));
   provide(groupGridFrame, ref(0));
+  provide(maxFrameOfMaterial, $maxFrameOfMaterial);
 }
 
 export default {
@@ -53,5 +65,6 @@ export default {
   timeLineOffsetLeft,
   gridWidth,
   gridFrame,
-  groupGridFrame
+  groupGridFrame,
+  maxFrameOfMaterial
 };

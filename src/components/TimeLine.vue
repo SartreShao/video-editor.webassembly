@@ -196,7 +196,7 @@
 
           <!-- 时间轴的格子 -->
           <grid
-            v-for="grid in timeScaleGridList"
+            v-for="grid in gridBufferList"
             v-bind:key="grid"
             :frame="grid.frame"
             :width="grid.width"
@@ -256,10 +256,7 @@ onMounted(() => {
 });
 
 // timescale's grid
-const timeScaleGridList = ref([]);
-
-// 常量，素材最大帧数 (3min = 5400f)
-const MATERIAL_MAX_FRAME = 5400;
+const gridBufferList = ref([]);
 
 // 当前格子宽度
 const gridWidth = inject(Store.gridWidth);
@@ -270,6 +267,7 @@ const gridFrame = inject(Store.gridFrame);
 // 每组格子内的帧数
 const groupGridFrame = inject(Store.groupGridFrame);
 
+
 watchEffect(() => {
   try {
     // 获取格子宽度、格子内帧数、每组格子内帧数
@@ -278,22 +276,6 @@ watchEffect(() => {
     groupGridFrame.value = Mapping.frameWidth2Grid(
       frameWidth.value
     ).groupGridFrame;
-
-    // 获取格子数量
-    const gridTotalNumber = Mapping.gridTotalNumber(
-      frameWidth.value,
-      timeLine_width.value,
-      MATERIAL_MAX_FRAME
-    );
-
-    console.log("gridTotalNumber", gridTotalNumber);
-
-    // 获取 TimeScale's width
-    timescale_width.value = Mapping.getTimeScaleWidth(
-      frameWidth.value,
-      timeLine_width.value,
-      MATERIAL_MAX_FRAME
-    );
 
     // 获取 PlaceHolder 宽度
     timescale_placeholder_width.value = Mapping.getTimeScalePlaceHolderWidth(
@@ -316,22 +298,21 @@ watchEffect(() => {
       gridWidth.value
     );
 
-    timeScaleGridList.value = [];
 
     // 动态计算数组长度
-    if (gridBufferNumber > timeScaleGridList.value.length) {
-      const dValue = gridBufferNumber - timeScaleGridList.value.length;
+    if (gridBufferNumber > gridBufferList.value.length) {
+      const dValue = gridBufferNumber - gridBufferList.value.length;
       for (let i = 1; i <= dValue; i++) {
-        timeScaleGridList.value.push({
+        gridBufferList.value.push({
           frame: 0,
           showNumber: false,
           width: 0,
         });
       }
-    } else if (gridBufferNumber < timeScaleGridList.value.length) {
-      const dValue = timeScaleGridList.value.length - gridBufferNumber;
-      timeScaleGridList.value.splice(
-        timeScaleGridList.value.length - dValue,
+    } else if (gridBufferNumber < gridBufferList.value.length) {
+      const dValue = gridBufferList.value.length - gridBufferNumber;
+      gridBufferList.value.splice(
+        gridBufferList.value.length - dValue,
         dValue
       );
     } else {
@@ -342,10 +323,10 @@ watchEffect(() => {
     console.log("开始渲染");
     console.log("gridWidth", gridWidth.value);
     console.log("第一个格子", firstIndex);
-    console.log("格子列表数量", timeScaleGridList.value.length);
+    console.log("格子列表数量", gridBufferList.value.length);
     for (let i = firstIndex; i <= gridBufferNumber + firstIndex - 1; i++) {
       console.log("渲染过程", i);
-      const grid = timeScaleGridList.value[i - firstIndex];
+      const grid = gridBufferList.value[i - firstIndex];
       if (i - 1 === 0) {
         grid.frame = 0;
         grid.showNumber = true;
@@ -361,7 +342,7 @@ watchEffect(() => {
       }
     }
 
-    console.log("结束渲染", timeScaleGridList.value);
+    console.log("结束渲染", gridBufferList.value);
   } catch (error) {
     // doing nothing
   }
