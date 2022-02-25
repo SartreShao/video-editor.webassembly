@@ -29,12 +29,29 @@ const timescale_width = Symbol();
 // 时间轴偏移量
 const timeLineOffsetLeft = Symbol();
 
+// 时间轴左偏移占位宽度
+const timescale_placeholder_width = Symbol();
+
 // 时间轴素材最大帧数
 const maxFrameOfMaterial = Symbol();
 
 function useProvider() {
+  // init data
   const $maxFrameOfMaterial = ref(5400);
   const $timeLineContainer_width = ref(0);
+  const $frameWidth = ref(0.3);
+  const $timeLineOffsetLeft = ref(0);
+
+  // computed data
+  const $gridWidth = computed(
+    () => Mapping.frameWidth2Grid($frameWidth.value).gridWidth
+  );
+  const $gridFrame = computed(
+    () => Mapping.frameWidth2Grid($frameWidth.value).gridFrame
+  );
+  const $groupGridFrame = computed(
+    () => Mapping.frameWidth2Grid($frameWidth.value).groupGridFrame
+  );
   const $timeLine_width = computed(() => $timeLineContainer_width.value - 37);
   const $timescale_width = computed(() =>
     Mapping.getTimeScaleWidth(
@@ -43,17 +60,23 @@ function useProvider() {
       $maxFrameOfMaterial.value
     )
   );
-  const $frameWidth = ref(0.3);
+  const $timescale_placeholder_width = computed(() =>
+    Mapping.getTimeScalePlaceHolderWidth(
+      $timeLineOffsetLeft.value,
+      $gridWidth.value
+    )
+  );
 
   provide(timeLineContainer_width, $timeLineContainer_width);
   provide(timeLine_width, $timeLine_width);
   provide(timescale_width, $timescale_width);
   provide(frameWidth, $frameWidth);
-  provide(timeLineOffsetLeft, ref(0));
-  provide(gridWidth, ref(0));
-  provide(gridFrame, ref(0));
-  provide(groupGridFrame, ref(0));
+  provide(timeLineOffsetLeft, $timeLineOffsetLeft);
+  provide(gridWidth, $gridWidth);
+  provide(gridFrame, $gridFrame);
+  provide(groupGridFrame, $groupGridFrame);
   provide(maxFrameOfMaterial, $maxFrameOfMaterial);
+  provide(timescale_placeholder_width, $timescale_placeholder_width);
 }
 
 export default {
@@ -66,5 +89,6 @@ export default {
   gridWidth,
   gridFrame,
   groupGridFrame,
-  maxFrameOfMaterial
+  maxFrameOfMaterial,
+  timescale_placeholder_width
 };

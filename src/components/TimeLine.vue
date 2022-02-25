@@ -234,7 +234,7 @@ const timeLine_width = inject(Store.timeLine_width);
 const timescale_width = inject(Store.timescale_width);
 
 // 时间刻度左侧占位的宽度
-const timescale_placeholder_width = ref(0);
+const timescale_placeholder_width = inject(Store.timescale_placeholder_width);
 
 // 计算 timeLineOffsetLeft
 onMounted(() => {
@@ -267,22 +267,8 @@ const gridFrame = inject(Store.gridFrame);
 // 每组格子内的帧数
 const groupGridFrame = inject(Store.groupGridFrame);
 
-
 watchEffect(() => {
   try {
-    // 获取格子宽度、格子内帧数、每组格子内帧数
-    gridWidth.value = Mapping.frameWidth2Grid(frameWidth.value).gridWidth;
-    gridFrame.value = Mapping.frameWidth2Grid(frameWidth.value).gridFrame;
-    groupGridFrame.value = Mapping.frameWidth2Grid(
-      frameWidth.value
-    ).groupGridFrame;
-
-    // 获取 PlaceHolder 宽度
-    timescale_placeholder_width.value = Mapping.getTimeScalePlaceHolderWidth(
-      timeLineOffsetLeft.value,
-      gridWidth.value
-    );
-
     // 获取格子倍数；例如：2 倍，就是 2 的倍数都会绘制大格
     const gridMultiple = groupGridFrame.value / gridFrame.value;
 
@@ -298,7 +284,6 @@ watchEffect(() => {
       gridWidth.value
     );
 
-
     // 动态计算数组长度
     if (gridBufferNumber > gridBufferList.value.length) {
       const dValue = gridBufferNumber - gridBufferList.value.length;
@@ -311,10 +296,7 @@ watchEffect(() => {
       }
     } else if (gridBufferNumber < gridBufferList.value.length) {
       const dValue = gridBufferList.value.length - gridBufferNumber;
-      gridBufferList.value.splice(
-        gridBufferList.value.length - dValue,
-        dValue
-      );
+      gridBufferList.value.splice(gridBufferList.value.length - dValue, dValue);
     } else {
       // doing nothing
     }
@@ -412,7 +394,7 @@ watchEffect(() => {
     display: flex;
     flex-direction: column;
     overflow-x: scroll;
-    box-shadow: inset 3px -3px 3px rgba(0, 0, 0, 0.10);
+    box-shadow: inset 3px -3px 3px rgba(0, 0, 0, 0.1);
 
     .timescale {
       display: flex;
