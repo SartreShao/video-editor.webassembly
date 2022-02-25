@@ -1,7 +1,7 @@
 <template>
   <div
     style="position: relative; flex-shrink: 0"
-    :style="{ width: width + 'px', height: height + 'px' }"
+    :style="{ width: width + 'px', height: '22px' }"
   >
     <!-- 小格 -->
     <div
@@ -32,7 +32,7 @@ const props = defineProps({
 });
 
 // 小格的高度
-const height = computed(() => (props.showNumber ? 4 : 2));
+const height = computed(() => (props.showNumber ? 5 : 3));
 
 // 小格的显示时间
 const time = computed(() =>
@@ -43,19 +43,21 @@ const time = computed(() =>
 <style>
 .grid-container {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   background: #202020;
-  border-left: 1px solid #707070;
+  border-left: 1.5px solid #707070;
 }
 
 .grid-number {
   position: absolute;
   left: 0;
-  top: 0;
+  bottom: 7px;
   color: #979797;
-  font-size: 10px;
-  margin-left: 2.5px;
   font-weight: bold;
+  font-size: 12px;
+  transform: scale(0.83333333);
+  transform-origin: left center;
+  line-height: 18px;
 }
 </style>
