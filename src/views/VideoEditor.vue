@@ -3,7 +3,13 @@
     <!-- 顶部按钮 -->
     <section class="controller-section">
       <div class="button-container">
-        <div class="button" @click="click_uploadVideo">上传视频</div>
+        <div class="button">
+          <input
+            type="file"
+            style="width: 100%; height: 100%; opacity: 0; position: absolute"
+            @change="uploadVideos($event)"
+          />上传视频
+        </div>
         <div class="button">清空视频</div>
       </div>
 
@@ -40,10 +46,10 @@
 <script setup>
 import VideoPlayer from "@/components/VideoPlayer.vue";
 import TimeLine from "@/components/TimeLine.vue";
-
 import Store from "@/store";
-import { inject, computed } from "vue";
+import { inject, computed, ref, onMounted } from "vue";
 import Mapping from "@/map";
+import Api from "@/api";
 
 // 时间轴的宽度
 const timeLineContainer_width = inject(Store.timeLineContainer_width);
@@ -69,9 +75,10 @@ const timeLine_width = inject(Store.timeLine_width);
 // 时间刻度总宽度：包含用户看不见的宽度
 const timescale_width = inject(Store.timescale_width);
 
-// 点击事件
-const click_uploadVideo = () => {
-  
+// 视频上传 Callback
+const uploadVideos = (e) => {
+  const videoList = e.target.files;
+  Api.getVideoDuration(videoList[0]);
 };
 
 // 初始化：时间轴组件的宽度
@@ -123,6 +130,7 @@ window.onresize = () =>
   justify-content: space-between;
 
   .button {
+    position: relative;
     width: 80px;
     height: 27px;
     background: #222222;
@@ -132,6 +140,9 @@ window.onresize = () =>
     justify-content: center;
     font-size: 12px;
     cursor: pointer;
+    input {
+      cursor: pointer;
+    }
   }
 }
 </style>
