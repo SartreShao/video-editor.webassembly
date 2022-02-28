@@ -7,6 +7,7 @@
           <input
             type="file"
             style="width: 100%; height: 100%; opacity: 0; position: absolute"
+            multiple
             @change="uploadVideos($event)"
           />上传视频
         </div>
@@ -76,9 +77,10 @@ const timeLine_width = inject(Store.timeLine_width);
 const timescale_width = inject(Store.timescale_width);
 
 // 视频上传 Callback
-const uploadVideos = (e) => {
+const uploadVideos = async (e) => {
   const videoList = e.target.files;
-  Api.getVideoDuration(videoList[0]);
+  const totalDuration = await Api.getVideoListDuration(videoList);
+  console.log("totalDuration: " + totalDuration);
 };
 
 // 初始化：时间轴组件的宽度
