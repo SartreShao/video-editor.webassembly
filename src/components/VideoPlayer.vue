@@ -1,6 +1,6 @@
 <template>
   <div class="video-player-container">
-    <video></video>
+    <video :src="currentVideoUrl ? currentVideoUrl : null"></video>
     <div class="button-container">
       <span class="current-time">00:00:00:00</span>
       <span class="total-time">00:00:00:00</span>
@@ -11,6 +11,11 @@
 </template>
 
 <script setup>
+import { inject } from "vue";
+import Store from "@/store";
+
+// 当前预览器加载的视频 URL
+const currentVideoUrl = inject(Store.currentVideoUrl);
 </script>
 
 <style lang="scss" scope>

@@ -389,6 +389,36 @@ const renderGridBufferList = (
     console.log(error);
   }
 };
+
+/**
+ * 获取时间轴最小帧宽度
+ * @param {number} maxMaterialFrame 时间轴上素材的最大帧数，单位 frame
+ * @param {number} timeLineWidth 时间轴的长度，单位 px
+ * @returns
+ */
+const getMinFrameWidth = (maxMaterialFrame, timeLineWidth) => {
+  const maxMaterialFrameWidth = timeLineWidth * (1 / 3);
+  return maxMaterialFrameWidth / maxMaterialFrame;
+};
+
+/**
+ * 获取时间轴合适帧宽度
+ * 常量：200px
+ */
+const getMaxFrameWidth = () => 200;
+
+/**
+ * 获取时间轴合适帧宽度
+ * @param {number} maxMaterialFrame
+ * @param {number} timeLineWidth
+ * @returns
+ */
+const getFitFrameWidth = (maxMaterialFrame, timeLineWidth) => {
+  const maxMaterialFrameWidth = timeLineWidth * (4 / 5);
+  return maxMaterialFrameWidth / maxMaterialFrame;
+};
+
+
 export default {
   calcTimeLineContainerWidth,
   frame2Time,
@@ -397,5 +427,8 @@ export default {
   getTimeScaleWidth,
   getTimeScalePlaceHolderWidth,
   gridBufferFirstIndex,
-  renderGridBufferList
+  renderGridBufferList,
+  getMinFrameWidth,
+  getMaxFrameWidth,
+  getFitFrameWidth
 };

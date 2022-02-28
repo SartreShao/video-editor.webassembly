@@ -35,6 +35,9 @@ const timescale_placeholder_width = Symbol();
 // 时间轴素材最大帧数
 const maxFrameOfMaterial = Symbol();
 
+// 当前播放的视频 URL
+const currentVideoUrl = Symbol();
+
 function useProvider() {
   // init data
   const $maxFrameOfMaterial = ref(5400);
@@ -66,6 +69,7 @@ function useProvider() {
       $gridWidth.value
     )
   );
+  const $currentVideoUrl = ref("");
 
   // provide
   provide(timeLineContainer_width, $timeLineContainer_width);
@@ -78,6 +82,7 @@ function useProvider() {
   provide(groupGridFrame, $groupGridFrame);
   provide(maxFrameOfMaterial, $maxFrameOfMaterial);
   provide(timescale_placeholder_width, $timescale_placeholder_width);
+  provide(currentVideoUrl, $currentVideoUrl);
 }
 
 export default {
@@ -91,5 +96,6 @@ export default {
   gridFrame,
   groupGridFrame,
   maxFrameOfMaterial,
-  timescale_placeholder_width
+  timescale_placeholder_width,
+  currentVideoUrl
 };

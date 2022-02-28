@@ -8,10 +8,11 @@
             type="file"
             style="width: 100%; height: 100%; opacity: 0; position: absolute"
             multiple
-            @change="uploadVideos($event)"
+            ref="videoInputElement"
+            @change="uploadVideoList($event)"
           />上传视频
         </div>
-        <div class="button">清空视频</div>
+        <div class="button" @click="clearVideo">清空视频</div>
       </div>
 
       <div class="button-container">
@@ -76,11 +77,29 @@ const timeLine_width = inject(Store.timeLine_width);
 // 时间刻度总宽度：包含用户看不见的宽度
 const timescale_width = inject(Store.timescale_width);
 
+// 当前预览器加载的视频 URL
+const currentVideoUrl = inject(Store.currentVideoUrl);
+
+// 视频选择器 input type=file
+const videoInputElement = ref(null);
+
 // 视频上传 Callback
-const uploadVideos = async (e) => {
+const uploadVideoList = async (e) => {
   const videoList = e.target.files;
+
+  // 暂时先仅加载第一个视频的 URL
+  if (videoList.length > 0) {
+    currentVideoUrl.value = URL.createObjectURL(videoList[0]);
+  }
+
+  // 计算视频的时长
   const totalDuration = await Api.getVideoListDuration(videoList);
-  console.log("totalDuration: " + totalDuration);
+};
+
+// 清空当前预览器的视频
+const clearVideo = () => {
+  currentVideoUrl.value = null;
+  videoInputElement.value.value = null;
 };
 
 // 初始化：时间轴组件的宽度
