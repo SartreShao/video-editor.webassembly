@@ -3,7 +3,7 @@
     <!-- 顶部按钮 -->
     <section class="controller-section">
       <div class="button-container">
-        <div class="button">上传视频</div>
+        <div class="button" @click="click_uploadVideo">上传视频</div>
         <div class="button">清空视频</div>
       </div>
 
@@ -69,6 +69,11 @@ const timeLine_width = inject(Store.timeLine_width);
 // 时间刻度总宽度：包含用户看不见的宽度
 const timescale_width = inject(Store.timescale_width);
 
+// 点击事件
+const click_uploadVideo = () => {
+  
+};
+
 // 初始化：时间轴组件的宽度
 timeLineContainer_width.value = Mapping.calcTimeLineContainerWidth(
   document.body.clientWidth
@@ -126,6 +131,7 @@ window.onresize = () =>
     align-items: center;
     justify-content: center;
     font-size: 12px;
+    cursor: pointer;
   }
 }
 </style>
