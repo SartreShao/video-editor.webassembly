@@ -80,6 +80,8 @@ const timescale_width = inject(Store.timescale_width);
 // 当前预览器加载的视频 URL
 const currentVideoUrl = inject(Store.currentVideoUrl);
 
+const maxFrameOfMaterial = inject(Store.maxFrameOfMaterial);
+
 // 视频选择器 input type=file
 const videoInputElement = ref(null);
 
@@ -92,8 +94,14 @@ const uploadVideoList = async (e) => {
     currentVideoUrl.value = URL.createObjectURL(videoList[0]);
   }
 
-  // 计算视频的时长
-  const totalDuration = await Api.getVideoListDuration(videoList);
+  // 计算视频的总时长
+  // const totalDuration = await Api.getVideoListDuration(videoList);
+
+  // 计算第一个视频的时长
+  const firstVideoDuration = await Api.getVideoDuration(videoList[0]);
+
+  // 设置当前的最大视频素材的帧数
+  maxFrameOfMaterial.value = Mapping.ms2Frame(firstVideoDuration, 30);
 };
 
 // 清空当前预览器的视频

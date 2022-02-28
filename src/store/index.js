@@ -1,4 +1,4 @@
-import { provide, ref, computed } from "vue";
+import { provide, ref, computed, reactive } from "vue";
 import Mapping from "@/map";
 
 /**
@@ -35,8 +35,20 @@ const timescale_placeholder_width = Symbol();
 // 时间轴素材最大帧数
 const maxFrameOfMaterial = Symbol();
 
+// 最大帧宽度
+const maxFrameWidth = Symbol();
+
+// 最小帧宽度
+const minFrameWidth = Symbol();
+
+// 合适帧宽度
+const fitFrameWidth = Symbol();
+
 // 当前播放的视频 URL
 const currentVideoUrl = Symbol();
+
+// 项目核心数据
+const coreData = Symbol();
 
 function useProvider() {
   // init data
@@ -44,6 +56,277 @@ function useProvider() {
   const $timeLineContainer_width = ref(0);
   const $frameWidth = ref(0.003);
   const $timeLineOffsetLeft = ref(0);
+  const $currentVideoUrl = ref("");
+  const $coreData = reactive({
+    // 系统参数
+    systemParam: {
+      // 产品代号
+      appType: 0,
+      // 版本号
+      versionCode: 0,
+      // 平台
+      platform: "pc"
+    },
+    // 视频元数据
+    videoMetaData: {
+      // 标题
+      title: "",
+      // 合成视频宽
+      videoWidth: 0,
+      // 合成视频高
+      videoHeight: 0,
+      // 封面
+      coverUrl: "",
+      // 合成视频总时长
+      duration: 0,
+      // 素材总大小，单位 byty
+      materialTotalSize: 0,
+      // 是否添加片尾
+      appendTailStatus: 0,
+      // 画布类型
+      canvasType: 0
+    },
+    // 全局设置
+    globalSetting: {
+      // 画布类型
+      canvasType: 1,
+      // 是否添加片尾
+      appendTailStatus: 0,
+      // 是否添加自动特效
+      addAutoEffect: 0,
+      // 视频音量增益
+      videoVolumeGain: 0.0,
+      // 字幕位置布局
+      subtitleLayoutType: "",
+      // 字幕字体
+      subtiitleFontSize: 0,
+      // 字幕字体颜色
+      subtitleFontColor: "",
+      // 字幕背景色
+      subtitleBgColor: ""
+    },
+    // 段落列表
+    sections: [
+      {
+        // 段落类型
+        sectionType: "",
+        // 段落序号
+        sectionIndex: 1,
+        // 段落文字
+        sectionText: "",
+        // 段落相对于项目时间线的入点，单位：微秒
+        projectTimelineIn: 0,
+        // 段落相对于项目时间线的出点，单位：微秒
+        projectTimelineOut: 0,
+        // 段落时长，单位：微秒
+        duration: 0,
+        // 段落时间线
+        sectionTimeline: {
+          // 视觉轨
+          visionTrack: {
+            // 素材数量
+            count: 0,
+            // 视觉轨道时长，单位：微秒
+            duration: 0,
+            // 视觉轨素材列表
+            visionTrackMaterils: [
+              {
+                // 素材 id
+                id: 0,
+                // 素材类型（image, video, gif, suubtitle）
+                type: "",
+                // 素材宽
+                width: 0,
+                // 素材高
+                height: 0,
+                // 素材时长，单位：微秒
+                duration: 0,
+                // 素材旋转角度
+                rotate: 0,
+                // 素材相对于时间线的入点，单位：微秒
+                timelineIn: 0,
+                // 素材相对于时间线的出点，单位：微秒
+                timelineOut: 0,
+                // 素材片段相对于素材的入点，单位：微秒
+                in: 0,
+                // 素材片段相对于素材的出点，单位：微秒
+                out: 0,
+                // 音量增益
+                volumeGain: 0.0,
+                // 画布填充方式（full:充满画布，complete:完整显示）
+                canvasFillType: "",
+                // 字幕信息
+                subtitleInfo: {
+                  // 位置布局
+                  layoutType: "",
+                  // 字幕内容
+                  text: "",
+                  // 字体
+                  font: "",
+                  // 字号
+                  fontSize: 0,
+                  // 字体颜色
+                  fontColor: "",
+                  // 背景色
+                  bgColor: "",
+                  // 字幕内容对应的 tts url
+                  ttsMediaUrl: ""
+                },
+                // 素材时长适配方式
+                materialDurationFit: {
+                  // 适配方式（multiple:倍数, loop:循环，staticFrame:定帧）
+                  fitType: "",
+                  // 倍数值，0.1 - 10  大于1表示快速，小于1表示慢速
+                  multipleValue: 0.0,
+                  // 循环次数
+                  loopValue: 0
+                },
+                // 素材尺寸裁剪
+                materialSizeClip: {
+                  // 相对于 TopLeft 的偏移坐标 x
+                  x: 0,
+                  // 相对于 TopLeft 的偏移坐标 y
+                  y: 0,
+                  // 剪裁后的宽
+                  width: 0,
+                  // 剪裁后的高
+                  height: 0,
+                  // 缩放比例
+                  scale: 0,
+                  // 旋转角度
+                  rotate: 0
+                },
+                // 素材位置
+                materialPosition: {
+                  // 相对于 TopLeft 的偏移坐标 x
+                  x: 0,
+                  // 相对于 TopLeft 的偏移坐标 y
+                  y: 0,
+                  // 在画布中的宽
+                  width: 0,
+                  // 在画布中的高
+                  height: 0
+                },
+                // 素材图层
+                materialLayer: {
+                  // 图层
+                  layer: 0
+                },
+                // 素材特效
+                materialEffect: {
+                  // 特效类型
+                  type: "",
+                  // 特效参数
+                  params: ""
+                },
+                // 素材url，前端不需要传值，服务端返回sdata数据时，会根据素材ID赋值
+                materialUrl: "",
+                // 素材文件内容 md5 值
+                contentMd5: ""
+              }
+            ]
+          },
+          // 音频轨
+          audioTrack: {
+            // 素材数量
+            count: 0,
+            // 音频轨道时长
+            duration: 0,
+            // 音频轨素材列表
+            audioTrackMaterials: [
+              {
+                // 素材 id
+                id: 0,
+                // 素材类型
+                type: "",
+                // 音频类型
+                voiceType: "",
+                // 素材时长
+                duration: 0,
+                // 素材相对于时间线的入点
+                timelineIn: 0,
+                // 素材相对于时间线的出点
+                timelineOut: 0,
+                // 素材片段相对于素材的入点
+                in: 0,
+                // 素材片段相对于素材的出点
+                out: 0,
+                // 音量增益
+                volumeGain: 0.0,
+                // 素材时长适配方式
+                materialDurationFit: {
+                  // 适配方式（multiple:倍数, loop:循环，staticFrame:定帧）
+                  fitType: "",
+                  // 倍数值，0.1 - 10  大于1表示快速，小于1表示慢速
+                  multipleValue: 0.0,
+                  // 循环次数
+                  loopValue: 0
+                },
+                // 合成语音配置信息
+                produceVoiceConfig: {
+                  // 渠道（aliyun/deepsound/azure/cmww）
+                  channel: "",
+                  // 发音人
+                  voice: "",
+                  // aliyun 音量
+                  volume: 0,
+                  // aliyun 语速
+                  speechRate: 0,
+                  // aliyun 语调
+                  pitchRate: 0,
+                  // deepsound 音量
+                  deepsoundVolume: "",
+                  // deepsound语速（取值为lower/low/normal/high/higher，默认normal表示选择中等语速）
+                  deepsoundSpeechRate: "",
+                  // deepsound语调（取值为lower/low//high/higher，默认normal表示选择中等音调）
+                  deepsoundPitchRate: "",
+                  // azure音量（0.0 到 150.0（从最安静到最大声）， 默认值为 100）
+                  azureVolume: "",
+                  // azure语速，取值为0.00-2.00，默认为1.0，如果值为 1，则速率不会变化。 如果值为 0.5，则速率会减慢一半。 如果值为 2，则速率为2倍
+                  azureSpeechRate: "",
+                  // azure语调，取值为-50%-50%，默认为0%
+                  azurePitchRate: "",
+                  // azure语音风格，默认为 general
+                  azureStyle: "",
+                  // azure句末停顿时间，默认0ms
+                  azureEndBreakTime: "",
+                  // cmww 音量
+                  cmwwVolume: 0.0,
+                  // cmww 语速
+                  cmwwSpeechRate: 0.0,
+                  // cmww语调（-10 - 10，默认值 0）
+                  cmwwPitchRate: 0.0,
+                  // cmww语气，默认无
+                  cmwwStyle: ""
+                },
+                // 背景音乐信息
+                bgmInfo: {
+                  // 音乐 ID
+                  musicId: "",
+                  // 分类 ID
+                  cateId: 0,
+                  // 音乐来源
+                  originType: 0,
+                  // 选择的声音类型，1：原声 ，2：背景声
+                  selectVoiceType: 0,
+                  // 卡点音乐节奏速度（1：快节奏，2：适中，3：慢节奏）
+                  rhythmMusicSpeed: 0
+                },
+                // 素材 url
+                materialUrl: "",
+                // 素材文件内容 md5
+                contentMd5: ""
+              }
+            ]
+          }
+        },
+        // 是否添加自动特效
+        addAutoEffect: 0,
+        // 扩展字段
+        sectionExtData: ""
+      }
+    ]
+  });
 
   // computed data
   const $gridWidth = computed(
@@ -69,7 +352,13 @@ function useProvider() {
       $gridWidth.value
     )
   );
-  const $currentVideoUrl = ref("");
+  const $maxFrameWidth = Mapping.getMaxFrameWidth();
+  const $minFrameWidth = computed(() =>
+    Mapping.getMinFrameWidth($maxFrameOfMaterial.value, timeLine_width.value)
+  );
+  const $fitFrameWidth = computed(() =>
+    Mapping.getMinFrameWidth($maxFrameOfMaterial.value, timeLine_width.value)
+  );
 
   // provide
   provide(timeLineContainer_width, $timeLineContainer_width);
@@ -83,6 +372,9 @@ function useProvider() {
   provide(maxFrameOfMaterial, $maxFrameOfMaterial);
   provide(timescale_placeholder_width, $timescale_placeholder_width);
   provide(currentVideoUrl, $currentVideoUrl);
+  provide(maxFrameWidth, $maxFrameWidth);
+  provide(minFrameWidth, $minFrameWidth);
+  provide(fitFrameWidth, $fitFrameWidth);
 }
 
 export default {
@@ -97,5 +389,8 @@ export default {
   groupGridFrame,
   maxFrameOfMaterial,
   timescale_placeholder_width,
-  currentVideoUrl
+  currentVideoUrl,
+  maxFrameWidth,
+  minFrameWidth,
+  fitFrameWidth
 };

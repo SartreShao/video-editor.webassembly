@@ -187,6 +187,7 @@
         :style="{ width: timeLine_width + 'px' }"
         ref="timeLine"
       >
+        <!-- 时间轴刻度 -->
         <div class="timescale" :style="{ width: timescale_width + 'px' }">
           <!-- 宽度占位 -->
           <div
@@ -202,6 +203,11 @@
             :width="grid.width"
             :showNumber="grid.showNumber"
           ></grid>
+        </div>
+
+        <!-- 时间轴的视频容器 -->
+        <div class="video-line">
+          <div class="video-item"></div>
         </div>
       </div>
     </section>
@@ -350,6 +356,17 @@ onMounted(() => {
     .timescale {
       display: flex;
       flex-direction: row;
+    }
+
+    .video-line {
+      margin-top: 15px;
+      height: 72px;
+      display: flex;
+      flex-direction: row;
+
+      .video-item {
+        background: #000;
+      }
     }
   }
 }
