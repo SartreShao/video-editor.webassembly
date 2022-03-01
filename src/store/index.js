@@ -62,9 +62,9 @@ function useProvider() {
     systemParam: {
       // 产品代号
       appType: 0,
-      // 版本号
+      // 版本号，注意：这里是视频结构化数据格式版本，当前版本 2
       versionCode: 0,
-      // 平台
+      // 平台：ios/android/pc
       platform: "pc"
     },
     // 视频元数据
@@ -77,26 +77,26 @@ function useProvider() {
       videoHeight: 0,
       // 封面
       coverUrl: "",
-      // 合成视频总时长
+      // 合成视频总时长，单位：微秒
       duration: 0,
-      // 素材总大小，单位 byty
+      // 素材总大小，单位：byte，服务端返回结构化数据时，会计算该参数的值
       materialTotalSize: 0,
-      // 是否添加片尾
+      // 是否添加片尾（1：是，0：否）
       appendTailStatus: 0,
-      // 画布类型
+      // 画布类型（1：原始，2：9比16，3：1比1，4：16比9）
       canvasType: 0
     },
     // 全局设置
     globalSetting: {
-      // 画布类型
+      // 画布类型（1：原始，2：9比16，3：1比1，4：16比9）
       canvasType: 1,
-      // 是否添加片尾
+      // 是否添加片尾（1：是，0：否）
       appendTailStatus: 0,
-      // 是否添加自动特效
+      // 是否添加自动特效（1：是，0：否）
       addAutoEffect: 0,
-      // 视频音量增益
+      // 视频音量增益，保留一位小数，取值范围 0.0 - 10.0，大于1，表示音量增强。小于1，表示音量减小。0.0 表示静音
       videoVolumeGain: 0.0,
-      // 字幕位置布局
+      // 字幕位置布局：(bottom/center/top)
       subtitleLayoutType: "",
       // 字幕字体
       subtiitleFontSize: 0,
@@ -108,9 +108,9 @@ function useProvider() {
     // 段落列表
     sections: [
       {
-        // 段落类型
-        sectionType: "",
-        // 段落序号
+        // 段落类型（普通段：normal/全局段：global）
+        sectionType: "normal",
+        // 段落序号，从1开始
         sectionIndex: 1,
         // 段落文字
         sectionText: "",
@@ -131,9 +131,9 @@ function useProvider() {
             // 视觉轨素材列表
             visionTrackMaterils: [
               {
-                // 素材 id
+                // 素材id（素材类型为subtitle时ID可以为空）
                 id: 0,
-                // 素材类型（image, video, gif, suubtitle）
+                // 素材类型（image, video, gif, subtitle）
                 type: "",
                 // 素材宽
                 width: 0,
@@ -151,11 +151,11 @@ function useProvider() {
                 in: 0,
                 // 素材片段相对于素材的出点，单位：微秒
                 out: 0,
-                // 音量增益
+                // 音量增益，保留一位小数，取值范围 0.00 - 10.00，大于1，表示音量增强。小于1，表示音量减小。0.0 表示静音，1 表示原始音量
                 volumeGain: 0.0,
                 // 画布填充方式（full:充满画布，complete:完整显示）
                 canvasFillType: "",
-                // 字幕信息
+                // 字幕信息，当素材类型为subtitle时需要传值
                 subtitleInfo: {
                   // 位置布局
                   layoutType: "",
@@ -320,9 +320,9 @@ function useProvider() {
             ]
           }
         },
-        // 是否添加自动特效
+        // 是否添加自动特效（1：是，0：否）
         addAutoEffect: 0,
-        // 扩展字段
+        // 扩展字段，json string
         sectionExtData: ""
       }
     ]
@@ -375,6 +375,7 @@ function useProvider() {
   provide(maxFrameWidth, $maxFrameWidth);
   provide(minFrameWidth, $minFrameWidth);
   provide(fitFrameWidth, $fitFrameWidth);
+  provide(coreData, $coreData);
 }
 
 export default {
@@ -392,5 +393,6 @@ export default {
   currentVideoUrl,
   maxFrameWidth,
   minFrameWidth,
-  fitFrameWidth
+  fitFrameWidth,
+  coreData
 };
