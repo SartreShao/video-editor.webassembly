@@ -1,6 +1,6 @@
 /* eslint-disable no-async-promise-executor */
 /**
- * 获取一个视频的时长，单位毫秒
+ * 获取一个视频的时长，单位微秒
  * @param {*} videoFile
  * @returns
  */
@@ -11,7 +11,7 @@ const getVideoDuration = videoFile =>
       const tempAudio = new Audio(url);
       tempAudio.addEventListener("loadedmetadata", () => {
         console.log("getVideoDuration success", tempAudio.duration);
-        resolve(tempAudio.duration * 1000);
+        resolve(tempAudio.duration * 1000000);
       });
     } catch (error) {
       console.log("getVideoDuration error", error);
@@ -20,7 +20,7 @@ const getVideoDuration = videoFile =>
   });
 
 /**
- * 获取多个视频的时长，单位毫秒
+ * 获取多个视频的时长，单位微秒
  * @param {*} videoFile
  * @returns
  */
@@ -35,7 +35,7 @@ const getVideoListDuration = videoFileList =>
         totalDuration += duration;
       }
       console.log("getVideoListDuration success", totalDuration);
-      resolve(totalDuration * 1000);
+      resolve(totalDuration * 1000000);
     } catch (error) {
       console.log("getVideoListDuration error", error);
       reject(error);

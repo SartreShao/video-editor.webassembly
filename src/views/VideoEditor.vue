@@ -101,7 +101,7 @@ const uploadVideoList = async (e) => {
   const firstVideoDuration = await Api.getVideoDuration(videoList[0]);
 
   // 设置当前的最大视频素材的帧数
-  maxFrameOfMaterial.value = Mapping.ms2Frame(firstVideoDuration, 30);
+  maxFrameOfMaterial.value = Mapping.μs2Frame(firstVideoDuration, 30);
 };
 
 // 清空当前预览器的视频

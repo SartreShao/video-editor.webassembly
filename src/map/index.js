@@ -419,12 +419,12 @@ const getFitFrameWidth = (maxMaterialFrame, timeLineWidth) => {
 };
 
 /**
- * 毫秒转帧数
- * @param {*} ms 需要转换的毫秒数
+ * 微秒转帧数
+ * @param {*} μs 需要转换的微秒数
  * @param {number} fps 帧率
  * @returns 帧数
  */
-const ms2Frame = (ms, fps) => ms * (fps / 1000);
+const μs2Frame = (ms, fps) => ms * (fps / 1000000);
 
 export default {
   calcTimeLineContainerWidth,
@@ -438,5 +438,5 @@ export default {
   getMinFrameWidth,
   getMaxFrameWidth,
   getFitFrameWidth,
-  ms2Frame
+  μs2Frame
 };
