@@ -41,10 +41,18 @@ const getVideoListDuration = videoFileList =>
     }
   });
 
+/**
+ * 将 videoFileList 中的视频，加入到 CoreData 中去
+ * @param {*} coreData
+ * @param {*} videoFileList
+ * @param {*} currentSectionIndex
+ * @returns
+ */
 const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
   new Promise(async (resolve, reject) => {
     try {
       console.log("addVideoToCoreData", coreData, videoFileList);
+      // 第一步：获取本视频
       for (let i = 0; i < videoFileList.length; i++) {
         const videoFile = videoFileList[i];
         // 当前素材的时长
