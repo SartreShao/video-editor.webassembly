@@ -39,7 +39,16 @@ digraph examle1 {
   // 项目核心数据
   coreData;
 
-  // 方法
+  // UI 数据 -------------------------------------
+  subgraph cluster_UI{//聚集子图
+      node[shape=box];
+      label="时间轴刻度绘制"
+      gridBufferList[shape="box3d"];
+      timescale_placeholder_width[shape="box3d"]
+  }
+  
+
+  // 方法 ----------------------------------------
   frameWidth2Grid[shape=box,label="Map.frameWidth2Grid()"];
 
   getTimeScaleWidth[shape=box, label="Map.getTimeScaleWidth()"]
@@ -50,10 +59,12 @@ digraph examle1 {
 
   getMinFrameWidth[shape=box, label="Map.getMinFrameWidth()"]
 
-  getMaxFrameOfMaterial[shape=box, label="Map.getMaxFrameOfMaterial()"]
+  getMaxFrameOfMaterial[shape=box, label="Map.getMaxFrameOfMaterial()",color=red];
+
+  getTimeScalePlaceHolderWidth[shape=box, label="Map.getTimeScalePlaceHolderWidth()"]
 
   // 获取帧宽度
-  "0.03px"->frameWidth;
+  "0.03px"->frameWidth[label="   init"];
   
   // 渲染帧宽度
   frameWidth->frameWidth2Grid->gridWidth,gridFrame,groupGridFrame;
@@ -64,8 +75,6 @@ digraph examle1 {
 
   // 获取时间轴实际宽度
   frameWidth,timeLine_width,maxFrameOfMaterial->getTimeScaleWidth->timescale_width;
-
-  
 
   // 当前的最大帧宽度
   "200px"->maxFrameWidth;
@@ -78,21 +87,9 @@ digraph examle1 {
 
   coreData->getMaxFrameOfMaterial->maxFrameOfMaterial;
 
+  // gridBufferList
+  gridWidth,groupGridFrame,gridFrame,timeLineOffsetleft,timescale_width->gridBufferList;
 
+  timeLineOffsetleft, gridWidth->getTimeScalePlaceHolderWidth->timescale_placeholder_width;
   
-  
-  
-
-
-  
-
-
-
-
-
-
-
-
-
-
 }
