@@ -52,37 +52,56 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
   new Promise(async (resolve, reject) => {
     try {
       console.log("addVideoToCoreData", coreData, videoFileList);
-      // 第一步：获取本视频
+
+      // 准备加入 CoreData 的视频素材
+      const tempVisionTrackMaterials = [];
+
+      // 获取视频素材中最大的 timeLineOut
+      let maxTimeLineOut = 0;
+
+      const visionTrackMaterials =
+        coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
+          .visionTrackMaterials;
+
+      for (let i = 0; i < visionTrackMaterials.length; i++) {
+        const timeLineOut = visionTrackMaterials[i].timeLineOut;
+        if (timeLineOut > maxTimeLineOut) {
+          maxTimeLineOut = timeLineOut;
+        }
+      }
+
+      // 构建 tempVisionTrackMaterials
       for (let i = 0; i < videoFileList.length; i++) {
         const videoFile = videoFileList[i];
+
         // 当前素材的时长
         const duration = await getVideoDuration(videoFile);
 
-        // 当前素材的 timeLineIn 为前一个素材的 timeLineOut，当然如果没有前面的素材，timeLineIn 为 0
+        // 当前素材的 timeLineIn 为 maxTimeLineOut，当然如果没有前面的素材，timeLineIn 为 0
         const timeLineIn =
-          coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
-            .visionTrackMaterials.length === 0
-            ? 0
-            : coreData.sections[currentSectionIndex - 1].sectionTimeline
-                .visionTrack.visionTrackMaterials[i - 1].timeLineOut;
+          i === 0
+            ? maxTimeLineOut
+            : tempVisionTrackMaterials[i - 1].timeLineOut;
 
-        // 当前素材的 timeLineOut 为本素材的 timeLineIn + duration
         const timeLineOut = timeLineIn + duration;
 
-        coreData.sections[
-          currentSectionIndex - 1
-        ].sectionTimeline.visionTrack.visionTrackMaterials.push({
+        tempVisionTrackMaterials.push({
           duration: duration,
           timeLineIn: timeLineIn,
-          timeLineOut: timeLineOut
+          timeLineOut: timeLineOut,
+          url: URL.createObjectURL(videoFile)
         });
-        console.log(
-          "duration、timeLineIn、timeLineOut",
-          duration,
-          timeLineIn,
-          timeLineOut
+      }
+
+      // 将 tempVisionTrackMaterials 加入 coreDataa
+      for (let i = 0; i < tempVisionTrackMaterials.length; i++) {
+        coreData.sections[
+          currentSectionIndex - 1
+        ].sectionTimeline.visionTrack.visionTrackMaterials.push(
+          tempVisionTrackMaterials[i]
         );
       }
+
       console.log("addVideoToCoreData success");
       resolve();
     } catch (error) {
