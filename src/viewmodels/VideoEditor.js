@@ -8,7 +8,7 @@ import Api from "@/api";
  * @param {*} frameWidth
  * @param {*} fitFrameWidth
  */
-const uploadVideoList = async (
+const addVideoOnCurrentSection = async (
   videoList,
   currentVideoUrl,
   coreData,
@@ -30,4 +30,22 @@ const uploadVideoList = async (
   videoInputElement.value.value = null;
 };
 
-export default { uploadVideoList };
+const clearVideoOfCurrentSection = async (
+  currentVideoUrl,
+  coreData,
+  currentSectionIndex,
+  frameWidth,
+  fitFrameWidth
+) => {
+  // 清空当前的 currentVideoUrl
+  currentVideoUrl.value = null;
+
+  // 清空当前的 coreDaata
+  coreData.sections[
+    currentSectionIndex.value - 1
+  ].sectionTimeline.visionTrack.visionTrackMaterials = [];
+
+  frameWidth.value = fitFrameWidth.value;
+};
+
+export default { addVideoOnCurrentSection, clearVideoOfCurrentSection };

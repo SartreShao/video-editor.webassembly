@@ -466,7 +466,7 @@ const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
   }
 
   return visionTrackMaterials.length === 0
-    ? 5400
+    ? 293333.333333
     : μs2Frame(maxTimeLineOut, 30);
 };
 

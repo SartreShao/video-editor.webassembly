@@ -9,7 +9,7 @@
             style="width: 100%; height: 100%; opacity: 0; position: absolute"
             multiple
             ref="videoInputElement"
-            @change="uploadVideoList($event)"
+            @change="addVideoOnCurrentSection($event)"
           />上传视频
         </div>
         <div class="button" @click="clearVideo">清空视频</div>
@@ -114,8 +114,8 @@ const currentSectionIndex = inject(Store.currentSectionIndex);
 const videoInputElement = ref(null);
 
 // 视频上传 Callback
-const uploadVideoList = (e) => {
-  VideoEditor.uploadVideoList(
+const addVideoOnCurrentSection = (e) => {
+  VideoEditor.addVideoOnCurrentSection(
     e.target.files,
     currentVideoUrl,
     coreData,
@@ -124,13 +124,17 @@ const uploadVideoList = (e) => {
     currentSectionIndex,
     videoInputElement
   );
-
 };
 
 // 清空当前预览器的视频
 const clearVideo = () => {
-  currentVideoUrl.value = null;
-  videoInputElement.value.value = null;
+  VideoEditor.clearVideoOfCurrentSection(
+    currentVideoUrl,
+    coreData,
+    currentSectionIndex,
+    frameWidth,
+    fitFrameWidth
+  );
 };
 
 // 初始化：时间轴组件的宽度

@@ -55,7 +55,6 @@ const currentSectionIndex = Symbol();
 
 function useProvider() {
   // init data
-  // const $maxFrameOfMaterial = ref(5400);
   const $timeLineContainer_width = ref(0);
   const $frameWidth = ref(0.003);
   const $timeLineOffsetLeft = ref(0);
