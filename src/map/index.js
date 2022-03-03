@@ -432,33 +432,42 @@ const getVideoItemWidth = (timeLineIn, timeLineOut, frameWidth) =>
  */
 // TODO 本函数目前仅仅计算了视频中的最大素材，实际上应该计算全部素材的最大素材
 const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
-  const visionTrackMaterils =
+  const visionTrackMaterials =
     coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
-      .visionTrackMaterils;
+      .visionTrackMaterials;
 
-  const audioTrackMaterils =
+  console.log("visionTrackMaterials", visionTrackMaterials);
+
+  const audioTrackMaterials =
     coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
-      .audioTrackMaterils;
+      .audioTrackMaterials;
+
+  console.log("audioTrackMaterials", audioTrackMaterials);
 
   let maxTimeLineOut = 0;
-
-  for (let i = 0; i < visionTrackMaterils; i++) {
-    const timeLineOut = visionTrackMaterils[i].timeLineOut;
-    if (timeLineOut > maxTimeLineOut) {
-      maxTimeLineOut = timeLineOut;
-    }
-  }
-
-  for (let i = 0; i < audioTrackMaterils; i++) {
-    if (audioTrackMaterils[i].voiceType !== "bgm") {
-      const timeLineOut = audioTrackMaterils[i].timeLineOut;
+  if (visionTrackMaterials) {
+    for (let i = 0; i < visionTrackMaterials.length; i++) {
+      const timeLineOut = visionTrackMaterials[i].timeLineOut;
       if (timeLineOut > maxTimeLineOut) {
         maxTimeLineOut = timeLineOut;
       }
     }
   }
 
-  return visionTrackMaterils.length === 0 ? 5400 : μs2Frame(maxTimeLineOut, 30);
+  if (audioTrackMaterials) {
+    for (let i = 0; i < audioTrackMaterials.length; i++) {
+      if (audioTrackMaterials[i].voiceType !== "bgm") {
+        const timeLineOut = audioTrackMaterials[i].timeLineOut;
+        if (timeLineOut > maxTimeLineOut) {
+          maxTimeLineOut = timeLineOut;
+        }
+      }
+    }
+  }
+
+  return visionTrackMaterials.length === 0
+    ? 5400
+    : μs2Frame(maxTimeLineOut, 30);
 };
 
 export default {

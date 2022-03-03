@@ -208,8 +208,8 @@
         <!-- 时间轴的视频容器 -->
         <div class="video-line">
           <video-item
-            v-for="item in coreData.sections[currentSectionIndex-1].sectionTimeline.visionTrack
-              .visionTrackMaterils"
+            v-for="item in coreData.sections[currentSectionIndex - 1]
+              .sectionTimeline.visionTrack.visionTrackMaterials"
             :key="item"
             :visionTrackMateril="item"
           ></video-item>
@@ -262,6 +262,9 @@ const gridFrame = inject(Store.gridFrame);
 
 // 每组格子内的帧数
 const groupGridFrame = inject(Store.groupGridFrame);
+
+// 段落级焦点
+const currentSectionIndex = inject(Store.currentSectionIndex);
 
 /** 依赖注入 end */
 

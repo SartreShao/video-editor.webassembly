@@ -52,6 +52,7 @@
     <div>合适帧宽度 fitFrameWidth：{{ fitFrameWidth }}</div>
     <div>最小帧宽度 frameWidth：{{ minFrameWidth }}</div>
     <div>最大帧宽度 frameWidth：{{ maxFrameWidth }}</div>
+    <div>素材的最大帧数 maxFrameOfMaterial：{{ maxFrameOfMaterial }}</div>
   </div>
 </template>
 

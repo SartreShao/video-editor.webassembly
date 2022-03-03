@@ -132,7 +132,7 @@ function useProvider() {
             // 视觉轨道时长，单位：微秒
             duration: 0,
             // 视觉轨素材列表
-            visionTrackMaterils: [
+            visionTrackMaterials: [
               // {
               //   // 素材id（素材类型为subtitle时ID可以为空）
               //   id: 0,
@@ -237,89 +237,89 @@ function useProvider() {
             duration: 0,
             // 音频轨素材列表
             audioTrackMaterials: [
-              {
-                // 素材 id
-                id: 0,
-                // 素材类型
-                type: "",
-                // 音频类型
-                voiceType: "",
-                // 素材时长
-                duration: 0,
-                // 素材相对于时间线的入点
-                timelineIn: 0,
-                // 素材相对于时间线的出点
-                timelineOut: 0,
-                // 素材片段相对于素材的入点
-                in: 0,
-                // 素材片段相对于素材的出点
-                out: 0,
-                // 音量增益
-                volumeGain: 0.0,
-                // 素材时长适配方式
-                materialDurationFit: {
-                  // 适配方式（multiple:倍数, loop:循环，staticFrame:定帧）
-                  fitType: "",
-                  // 倍数值，0.1 - 10  大于1表示快速，小于1表示慢速
-                  multipleValue: 0.0,
-                  // 循环次数
-                  loopValue: 0
-                },
-                // 合成语音配置信息
-                produceVoiceConfig: {
-                  // 渠道（aliyun/deepsound/azure/cmww）
-                  channel: "",
-                  // 发音人
-                  voice: "",
-                  // aliyun 音量
-                  volume: 0,
-                  // aliyun 语速
-                  speechRate: 0,
-                  // aliyun 语调
-                  pitchRate: 0,
-                  // deepsound 音量
-                  deepsoundVolume: "",
-                  // deepsound语速（取值为lower/low/normal/high/higher，默认normal表示选择中等语速）
-                  deepsoundSpeechRate: "",
-                  // deepsound语调（取值为lower/low//high/higher，默认normal表示选择中等音调）
-                  deepsoundPitchRate: "",
-                  // azure音量（0.0 到 150.0（从最安静到最大声）， 默认值为 100）
-                  azureVolume: "",
-                  // azure语速，取值为0.00-2.00，默认为1.0，如果值为 1，则速率不会变化。 如果值为 0.5，则速率会减慢一半。 如果值为 2，则速率为2倍
-                  azureSpeechRate: "",
-                  // azure语调，取值为-50%-50%，默认为0%
-                  azurePitchRate: "",
-                  // azure语音风格，默认为 general
-                  azureStyle: "",
-                  // azure句末停顿时间，默认0ms
-                  azureEndBreakTime: "",
-                  // cmww 音量
-                  cmwwVolume: 0.0,
-                  // cmww 语速
-                  cmwwSpeechRate: 0.0,
-                  // cmww语调（-10 - 10，默认值 0）
-                  cmwwPitchRate: 0.0,
-                  // cmww语气，默认无
-                  cmwwStyle: ""
-                },
-                // 背景音乐信息
-                bgmInfo: {
-                  // 音乐 ID
-                  musicId: "",
-                  // 分类 ID
-                  cateId: 0,
-                  // 音乐来源
-                  originType: 0,
-                  // 选择的声音类型，1：原声 ，2：背景声
-                  selectVoiceType: 0,
-                  // 卡点音乐节奏速度（1：快节奏，2：适中，3：慢节奏）
-                  rhythmMusicSpeed: 0
-                },
-                // 素材 url
-                materialUrl: "",
-                // 素材文件内容 md5
-                contentMd5: ""
-              }
+              // {
+              //   // 素材 id
+              //   id: 0,
+              //   // 素材类型
+              //   type: "",
+              //   // 音频类型
+              //   voiceType: "",
+              //   // 素材时长
+              //   duration: 0,
+              //   // 素材相对于时间线的入点
+              //   timelineIn: 0,
+              //   // 素材相对于时间线的出点
+              //   timelineOut: 0,
+              //   // 素材片段相对于素材的入点
+              //   in: 0,
+              //   // 素材片段相对于素材的出点
+              //   out: 0,
+              //   // 音量增益
+              //   volumeGain: 0.0,
+              //   // 素材时长适配方式
+              //   materialDurationFit: {
+              //     // 适配方式（multiple:倍数, loop:循环，staticFrame:定帧）
+              //     fitType: "",
+              //     // 倍数值，0.1 - 10  大于1表示快速，小于1表示慢速
+              //     multipleValue: 0.0,
+              //     // 循环次数
+              //     loopValue: 0
+              //   },
+              //   // 合成语音配置信息
+              //   produceVoiceConfig: {
+              //     // 渠道（aliyun/deepsound/azure/cmww）
+              //     channel: "",
+              //     // 发音人
+              //     voice: "",
+              //     // aliyun 音量
+              //     volume: 0,
+              //     // aliyun 语速
+              //     speechRate: 0,
+              //     // aliyun 语调
+              //     pitchRate: 0,
+              //     // deepsound 音量
+              //     deepsoundVolume: "",
+              //     // deepsound语速（取值为lower/low/normal/high/higher，默认normal表示选择中等语速）
+              //     deepsoundSpeechRate: "",
+              //     // deepsound语调（取值为lower/low//high/higher，默认normal表示选择中等音调）
+              //     deepsoundPitchRate: "",
+              //     // azure音量（0.0 到 150.0（从最安静到最大声）， 默认值为 100）
+              //     azureVolume: "",
+              //     // azure语速，取值为0.00-2.00，默认为1.0，如果值为 1，则速率不会变化。 如果值为 0.5，则速率会减慢一半。 如果值为 2，则速率为2倍
+              //     azureSpeechRate: "",
+              //     // azure语调，取值为-50%-50%，默认为0%
+              //     azurePitchRate: "",
+              //     // azure语音风格，默认为 general
+              //     azureStyle: "",
+              //     // azure句末停顿时间，默认0ms
+              //     azureEndBreakTime: "",
+              //     // cmww 音量
+              //     cmwwVolume: 0.0,
+              //     // cmww 语速
+              //     cmwwSpeechRate: 0.0,
+              //     // cmww语调（-10 - 10，默认值 0）
+              //     cmwwPitchRate: 0.0,
+              //     // cmww语气，默认无
+              //     cmwwStyle: ""
+              //   },
+              //   // 背景音乐信息
+              //   bgmInfo: {
+              //     // 音乐 ID
+              //     musicId: "",
+              //     // 分类 ID
+              //     cateId: 0,
+              //     // 音乐来源
+              //     originType: 0,
+              //     // 选择的声音类型，1：原声 ，2：背景声
+              //     selectVoiceType: 0,
+              //     // 卡点音乐节奏速度（1：快节奏，2：适中，3：慢节奏）
+              //     rhythmMusicSpeed: 0
+              //   },
+              //   // 素材 url
+              //   materialUrl: "",
+              //   // 素材文件内容 md5
+              //   contentMd5: ""
+              // }
             ]
           }
         },
@@ -347,7 +347,7 @@ function useProvider() {
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
       $coreData,
-      $currentSectionIndex
+      $currentSectionIndex.value
     );
   });
 

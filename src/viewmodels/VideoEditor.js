@@ -23,7 +23,7 @@ const uploadVideoList = async (
 
   console.log("currentVideoUrl loaded", currentVideoUrl.value);
 
-  await Api.addVideoToCoreData(coreData, videoList, currentSectionIndex);
+  await Api.addVideoToCoreData(coreData, videoList, currentSectionIndex.value);
   frameWidth.value = fitFrameWidth.value;
 };
 

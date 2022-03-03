@@ -53,17 +53,17 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
         // 当前素材的 timeLineIn 为前一个素材的 timeLineOut，当然如果没有前面的素材，timeLineIn 为 0
         const timeLineIn =
           coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
-            .visionTrackMaterils.length === 0
+            .visionTrackMaterials.length === 0
             ? 0
             : coreData.sections[currentSectionIndex - 1].sectionTimeline
-                .visionTrack.visionTrackMaterils[i - 1].timeLineOut;
+                .visionTrack.visionTrackMaterials[i - 1].timeLineOut;
 
         // 当前素材的 timeLineOut 为本素材的 timeLineIn + duration
         const timeLineOut = timeLineIn + duration;
 
         coreData.sections[
           currentSectionIndex - 1
-        ].sectionTimeline.visionTrack.visionTrackMaterils.push({
+        ].sectionTimeline.visionTrack.visionTrackMaterials.push({
           duration: duration,
           timeLineIn: timeLineIn,
           timeLineOut: timeLineOut
