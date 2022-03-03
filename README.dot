@@ -1,0 +1,98 @@
+digraph examle1 {
+  label = "项目数据流向图";
+  // 帧宽度
+  frameWidth;
+
+  // 格子宽度
+  gridWidth;
+
+  // 格子内帧数
+  gridFrame;
+
+  // 组格子内帧数
+  groupGridFrame;
+
+  // 时间轴容器宽度
+  timeLineContainer_width;
+
+  // 时间轴宽度
+  timeLine_width;
+
+  // 时间轴刻度尺度宽
+  timescale_width;
+
+  // 时间轴素材最大帧数
+  maxFrameOfMaterial;
+
+  // 最大帧宽度
+  maxFrameWidth; 
+
+  // 最小帧宽度
+  minFrameWidth;
+
+  // 合适帧宽度
+  fitFrameWidth;
+
+  // 当前播放的视频 URL
+  currentVideoUrl;
+
+  // 项目核心数据
+  coreData;
+
+  // 方法
+  frameWidth2Grid[shape=box,label="Map.frameWidth2Grid()"];
+
+  getTimeScaleWidth[shape=box, label="Map.getTimeScaleWidth()"]
+
+  calcTimeLineContainerWidth[shape=box, label="Map.calcTimeLineContainerWidth"]
+
+  getFitFrameWidth[shape=box, label="Map.getFitFrameWidth()"]
+
+  getMinFrameWidth[shape=box, label="Map.getMinFrameWidth()"]
+
+  getMaxFrameOfMaterial[shape=box, label="Map.getMaxFrameOfMaterial()"]
+
+  // 获取帧宽度
+  "0.03px"->frameWidth;
+  
+  // 渲染帧宽度
+  frameWidth->frameWidth2Grid->gridWidth,gridFrame,groupGridFrame;
+
+  // 获取屏幕宽度、时间轴显示宽度
+  clientWidth->calcTimeLineContainerWidth->timeLineContainer_width;
+  timeLineContainer_width->timeLine_width[label="   -37px"];
+
+  // 获取时间轴实际宽度
+  frameWidth,timeLine_width,maxFrameOfMaterial->getTimeScaleWidth->timescale_width;
+
+  
+
+  // 当前的最大帧宽度
+  "200px"->maxFrameWidth;
+
+  // 当前合适的帧宽度
+  maxFrameOfMaterial,timeLine_width->getFitFrameWidth->fitFrameWidth;
+
+  // 当前最小的帧宽度
+  maxFrameOfMaterial,timeLine_width->getMinFrameWidth->minFrameWidth;
+
+  coreData->getMaxFrameOfMaterial->maxFrameOfMaterial;
+
+
+  
+  
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+}

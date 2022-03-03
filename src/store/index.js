@@ -424,16 +424,7 @@ const getFitFrameWidth = (maxFrameOfMaterial, timeLine_width) =>
   Mapping.getFitFrameWidth(maxFrameOfMaterial, timeLine_width);
 
 const getMaxFrameOfMaterial = coreData =>
-  coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
-    .length === 0
-    ? 5400
-    : Mapping.μs2Frame(
-        coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils[
-          coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
-            .length - 1
-        ].timeLineOut,
-        30
-      );
+  Mapping.getMaxFrameOfMaterial(coreData);
 
 export default {
   useProvider,

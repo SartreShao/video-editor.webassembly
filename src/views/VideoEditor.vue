@@ -94,12 +94,16 @@ const timescale_width = inject(Store.timescale_width);
 // 当前预览器加载的视频 URL
 const currentVideoUrl = inject(Store.currentVideoUrl);
 
+// 素材的最大帧数
 const maxFrameOfMaterial = inject(Store.maxFrameOfMaterial);
 
+// 最大帧宽度
 const maxFrameWidth = inject(Store.maxFrameWidth);
 
+// 最小帧宽度
 const minFrameWidth = inject(Store.minFrameWidth);
 
+// 合适的帧宽度
 const fitFrameWidth = inject(Store.fitFrameWidth);
 
 // 视频选择器 input type=file
