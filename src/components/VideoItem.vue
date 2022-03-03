@@ -15,11 +15,11 @@ const frameWidth = inject(Store.frameWidth);
 
 const width = computed(() =>
   props.visionTrackMateril
-    ? Mapping.μs2Frame(
-        props.visionTrackMateril.timeLineOut -
-          props.visionTrackMateril.timeLineIn,
-        30
-      ) * frameWidth.value
+    ? Mapping.getVideoItemWidth(
+        props.visionTrackMateril.timeLineIn,
+        props.visionTrackMateril.timeLineOut,
+        frameWidth.value
+      )
     : 0
 );
 </script>

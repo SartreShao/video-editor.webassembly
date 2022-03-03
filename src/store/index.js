@@ -338,7 +338,7 @@ function useProvider() {
   const $maxFrameWidth = Mapping.getMaxFrameWidth();
   const $minFrameWidth = ref(0);
   const $fitFrameWidth = ref(0);
-  const $maxFrameOfMaterial = ref(5400);
+  const $maxFrameOfMaterial = ref(0);
 
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial($coreData);
@@ -421,7 +421,7 @@ const getMinFrameWidth = (maxFrameOfMaterial, timeLine_width) =>
   Mapping.getMinFrameWidth(maxFrameOfMaterial, timeLine_width);
 
 const getFitFrameWidth = (maxFrameOfMaterial, timeLine_width) =>
-  Mapping.getMinFrameWidth(maxFrameOfMaterial, timeLine_width);
+  Mapping.getFitFrameWidth(maxFrameOfMaterial, timeLine_width);
 
 const getMaxFrameOfMaterial = coreData =>
   coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils

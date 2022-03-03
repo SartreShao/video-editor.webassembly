@@ -416,6 +416,9 @@ const getFitFrameWidth = (maxMaterialFrame, timeLineWidth) => {
  */
 const μs2Frame = (ms, fps) => ms * (fps / 1000000);
 
+const getVideoItemWidth = (timeLineIn, timeLineOut, frameWidth) =>
+  μs2Frame(timeLineOut - timeLineIn, 30) * frameWidth;
+
 export default {
   calcTimeLineContainerWidth,
   frame2Time,
@@ -428,5 +431,6 @@ export default {
   getMinFrameWidth,
   getMaxFrameWidth,
   getFitFrameWidth,
-  μs2Frame
+  μs2Frame,
+  getVideoItemWidth
 };

@@ -34,14 +34,24 @@
   </div>
 
   <div class="info-container">
-    <div>时间轴容器宽度：{{ timeLineContainer_width }}</div>
-    <div>时间轴宽度：{{ timeLine_width }}</div>
-    <div>时间刻度尺宽度：{{ timescale_width }}</div>
-    <div>时间轴左偏移量：{{ timeLineOffsetLeft }}</div>
-    <div>帧宽度：{{ frameWidth }}</div>
-    <div>格子宽度：{{ gridWidth }}</div>
-    <div>格子内帧数：{{ gridFrame }}</div>
-    <div>每组格子内帧数：{{ groupGridFrame }}</div>
+    <div class="title">屏幕信息</div>
+    <div>
+      时间轴容器宽度 timeLineContainer_width：{{ timeLineContainer_width }}
+    </div>
+    <div>时间轴宽度 timeLine_width：{{ timeLine_width }}</div>
+    <div>时间刻度尺宽度 timescale_width：{{ timescale_width }}</div>
+    <div>时间轴左偏移量 timeLineOffsetLeft：{{ timeLineOffsetLeft }}</div>
+
+    <div class="title">时间轴刻度信息</div>
+    <div>格子宽度 gridWidth：{{ gridWidth }}</div>
+    <div>格子内帧数 gridFrame：{{ gridFrame }}</div>
+    <div>每组格子内帧数 groupGridFrame：{{ groupGridFrame }}</div>
+
+    <div class="title">帧宽度信息</div>
+    <div>当前帧宽度 frameWidth：{{ frameWidth }}</div>
+    <div>合适帧宽度 fitFrameWidth：{{ fitFrameWidth }}</div>
+    <div>最小帧宽度 frameWidth：{{ minFrameWidth }}</div>
+    <div>最大帧宽度 frameWidth：{{ maxFrameWidth }}</div>
   </div>
 </template>
 
@@ -85,6 +95,10 @@ const timescale_width = inject(Store.timescale_width);
 const currentVideoUrl = inject(Store.currentVideoUrl);
 
 const maxFrameOfMaterial = inject(Store.maxFrameOfMaterial);
+
+const maxFrameWidth = inject(Store.maxFrameWidth);
+
+const minFrameWidth = inject(Store.minFrameWidth);
 
 const fitFrameWidth = inject(Store.fitFrameWidth);
 
@@ -131,6 +145,15 @@ window.onresize = () =>
   flex-direction: column;
   color: #efefef;
   font-size: 14px;
+
+  .title {
+    font-weight: bold;
+    margin: 15px;
+  }
+
+  div {
+    margin: 10px;
+  }
 }
 
 .video-editor-container {
