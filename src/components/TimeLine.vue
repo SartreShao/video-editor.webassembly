@@ -208,7 +208,7 @@
         <!-- 时间轴的视频容器 -->
         <div class="video-line">
           <video-item
-            v-for="item in coreData.sections[0].sectionTimeline.visionTrack
+            v-for="item in coreData.sections[currentSectionIndex-1].sectionTimeline.visionTrack
               .visionTrackMaterils"
             :key="item"
             :visionTrackMateril="item"

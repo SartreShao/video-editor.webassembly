@@ -106,6 +106,9 @@ const minFrameWidth = inject(Store.minFrameWidth);
 // 合适的帧宽度
 const fitFrameWidth = inject(Store.fitFrameWidth);
 
+// 当前段落级焦点
+const currentSectionIndex = inject(Store.currentSectionIndex);
+
 // 视频选择器 input type=file
 const videoInputElement = ref(null);
 
@@ -116,7 +119,8 @@ const uploadVideoList = (e) => {
     currentVideoUrl,
     coreData,
     frameWidth,
-    fitFrameWidth
+    fitFrameWidth,
+    currentSectionIndex
   );
 };
 

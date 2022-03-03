@@ -85,7 +85,7 @@ digraph examle1 {
   // 当前最小的帧宽度
   maxFrameOfMaterial,timeLine_width->getMinFrameWidth->minFrameWidth;
 
-  coreData->getMaxFrameOfMaterial->maxFrameOfMaterial;
+  coreData,currentSectionIndex->getMaxFrameOfMaterial->maxFrameOfMaterial;
 
   // gridBufferList
   gridWidth,groupGridFrame,gridFrame,timeLineOffsetleft,timescale_width->gridBufferList;

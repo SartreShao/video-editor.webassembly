@@ -50,6 +50,9 @@ const currentVideoUrl = Symbol();
 // 项目核心数据
 const coreData = Symbol();
 
+// 当前段落焦点，初始值为 1
+const currentSectionIndex = Symbol();
+
 function useProvider() {
   // init data
   // const $maxFrameOfMaterial = ref(5400);
@@ -327,6 +330,7 @@ function useProvider() {
       }
     ]
   });
+  const $currentSectionIndex = ref(1);
 
   // watchEffect data
   const $gridWidth = ref(0);
@@ -341,7 +345,10 @@ function useProvider() {
   const $maxFrameOfMaterial = ref(0);
 
   watchEffect(() => {
-    $maxFrameOfMaterial.value = getMaxFrameOfMaterial($coreData);
+    $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
+      $coreData,
+      $currentSectionIndex
+    );
   });
 
   watchEffect(() => {
@@ -397,6 +404,7 @@ function useProvider() {
   provide(minFrameWidth, $minFrameWidth);
   provide(fitFrameWidth, $fitFrameWidth);
   provide(coreData, $coreData);
+  provide(currentSectionIndex, $currentSectionIndex);
 }
 
 // GETTER METHOD
@@ -423,8 +431,8 @@ const getMinFrameWidth = (maxFrameOfMaterial, timeLine_width) =>
 const getFitFrameWidth = (maxFrameOfMaterial, timeLine_width) =>
   Mapping.getFitFrameWidth(maxFrameOfMaterial, timeLine_width);
 
-const getMaxFrameOfMaterial = coreData =>
-  Mapping.getMaxFrameOfMaterial(coreData);
+const getMaxFrameOfMaterial = (coreData, currentSectionIndex) =>
+  Mapping.getMaxFrameOfMaterial(coreData, currentSectionIndex);
 
 export default {
   useProvider,
@@ -442,5 +450,6 @@ export default {
   maxFrameWidth,
   minFrameWidth,
   fitFrameWidth,
-  coreData
+  coreData,
+  currentSectionIndex
 };

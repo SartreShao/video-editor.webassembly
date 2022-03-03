@@ -430,17 +430,36 @@ const getVideoItemWidth = (timeLineIn, timeLineOut, frameWidth) =>
  *  获取当前最大的素材占据的帧
  * @param {Object} coreData 核心数据
  */
-const getMaxFrameOfMaterial = coreData =>
-  coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
-    .length === 0
-    ? 5400
-    : μs2Frame(
-        coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils[
-          coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
-            .length - 1
-        ].timeLineOut,
-        30
-      );
+// TODO 本函数目前仅仅计算了视频中的最大素材，实际上应该计算全部素材的最大素材
+const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
+  const visionTrackMaterils =
+    coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
+      .visionTrackMaterils;
+
+  const audioTrackMaterils =
+    coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
+      .audioTrackMaterils;
+
+  let maxTimeLineOut = 0;
+
+  for (let i = 0; i < visionTrackMaterils; i++) {
+    const timeLineOut = visionTrackMaterils[i].timeLineOut;
+    if (timeLineOut > maxTimeLineOut) {
+      maxTimeLineOut = timeLineOut;
+    }
+  }
+
+  for (let i = 0; i < audioTrackMaterils; i++) {
+    if (audioTrackMaterils[i].voiceType !== "bgm") {
+      const timeLineOut = audioTrackMaterils[i].timeLineOut;
+      if (timeLineOut > maxTimeLineOut) {
+        maxTimeLineOut = timeLineOut;
+      }
+    }
+  }
+
+  return visionTrackMaterils.length === 0 ? 5400 : μs2Frame(maxTimeLineOut, 30);
+};
 
 export default {
   calcTimeLineContainerWidth,
