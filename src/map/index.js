@@ -430,7 +430,7 @@ const getVideoItemWidth = (timeLineIn, timeLineOut, frameWidth) =>
  *  获取当前最大的素材占据的帧
  * @param {Object} coreData 核心数据
  */
-const getMaxFrameOfMaterial = coreData => {
+const getMaxFrameOfMaterial = coreData =>
   coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
     .length === 0
     ? 5400
@@ -441,7 +441,6 @@ const getMaxFrameOfMaterial = coreData => {
         ].timeLineOut,
         30
       );
-};
 
 export default {
   calcTimeLineContainerWidth,
