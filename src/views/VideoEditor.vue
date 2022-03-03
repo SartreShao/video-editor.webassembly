@@ -52,6 +52,10 @@ import Store from "@/store";
 import { inject, computed, ref, onMounted } from "vue";
 import Mapping from "@/map";
 import Api from "@/api";
+import { VideoEditor } from "@/viewmodels";
+
+// 核心数据
+const coreData = inject(Store.coreData);
 
 // 时间轴的宽度
 const timeLineContainer_width = inject(Store.timeLineContainer_width);
@@ -82,26 +86,20 @@ const currentVideoUrl = inject(Store.currentVideoUrl);
 
 const maxFrameOfMaterial = inject(Store.maxFrameOfMaterial);
 
+const fitFrameWidth = inject(Store.fitFrameWidth);
+
 // 视频选择器 input type=file
 const videoInputElement = ref(null);
 
 // 视频上传 Callback
-const uploadVideoList = async (e) => {
-  const videoList = e.target.files;
-
-  // 暂时先仅加载第一个视频的 URL
-  if (videoList.length > 0) {
-    currentVideoUrl.value = URL.createObjectURL(videoList[0]);
-  }
-
-  // 计算视频的总时长
-  // const totalDuration = await Api.getVideoListDuration(videoList);
-
-  // 计算第一个视频的时长
-  const firstVideoDuration = await Api.getVideoDuration(videoList[0]);
-
-  // 设置当前的最大视频素材的帧数
-  maxFrameOfMaterial.value = Mapping.μs2Frame(firstVideoDuration, 30);
+const uploadVideoList = (e) => {
+  VideoEditor.uploadVideoList(
+    e.target.files,
+    currentVideoUrl,
+    coreData,
+    frameWidth,
+    fitFrameWidth
+  );
 };
 
 // 清空当前预览器的视频

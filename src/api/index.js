@@ -30,7 +30,6 @@ const getVideoListDuration = videoFileList =>
       let totalDuration = 0;
       for (let i = 0; i < videoFileList.length; i++) {
         const videoFile = videoFileList[i];
-        console.log("videoFile", typeof videoFile);
         const duration = await getVideoDuration(videoFile);
         totalDuration += duration;
       }
@@ -42,7 +41,50 @@ const getVideoListDuration = videoFileList =>
     }
   });
 
+const addVideoToCoreData = (coreData, videoFileList) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      console.log("addVideoToCoreData", coreData, videoFileList);
+      for (let i = 0; i < videoFileList.length; i++) {
+        const videoFile = videoFileList[i];
+        // 当前素材的时长
+        const duration = await getVideoDuration(videoFile);
+
+        // 当前素材的 timeLineIn 为前一个素材的 timeLineOut，当然如果没有前面的素材，timeLineIn 为 0
+        const timeLineIn =
+          coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
+            .length === 0
+            ? 0
+            : coreData.sections[0].sectionTimeline.visionTrack
+                .visionTrackMaterils[i - 1].timeLineOut;
+
+        // 当前素材的 timeLineOut 为本素材的 timeLineIn + duration
+        const timeLineOut = timeLineIn + duration;
+
+        coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils.push(
+          {
+            duration: duration,
+            timeLineIn: timeLineIn,
+            timeLineOut: timeLineOut
+          }
+        );
+        console.log(
+          "duration、timeLineIn、timeLineOut",
+          duration,
+          timeLineIn,
+          timeLineOut
+        );
+      }
+      console.log("addVideoToCoreData success");
+      resolve();
+    } catch (error) {
+      console.log("addVideoToCoreData error", error);
+      reject(error);
+    }
+  });
+
 export default {
   getVideoDuration,
-  getVideoListDuration
+  getVideoListDuration,
+  addVideoToCoreData
 };

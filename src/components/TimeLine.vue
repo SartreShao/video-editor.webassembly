@@ -207,7 +207,12 @@
 
         <!-- 时间轴的视频容器 -->
         <div class="video-line">
-          <div class="video-item"></div>
+          <video-item
+            v-for="item in coreData.sections[0].sectionTimeline.visionTrack
+              .visionTrackMaterils"
+            :key="item"
+            :visionTrackMateril="item"
+          ></video-item>
         </div>
       </div>
     </section>
@@ -218,7 +223,11 @@
 import Store from "@/store";
 import { inject, ref, onMounted, computed, watchEffect } from "vue";
 import Grid from "@/components/Grid.vue";
+import VideoItem from "@/components/VideoItem.vue";
 import Mapping from "@/map";
+
+// 核心数据
+const coreData = inject(Store.coreData);
 
 // 帧宽度：决定了时间轴的比例
 const frameWidth = inject(Store.frameWidth);
@@ -363,10 +372,6 @@ onMounted(() => {
       height: 72px;
       display: flex;
       flex-direction: row;
-
-      .video-item {
-        background: #000;
-      }
     }
   }
 }

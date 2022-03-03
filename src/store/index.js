@@ -1,4 +1,4 @@
-import { provide, ref, computed, reactive } from "vue";
+import { provide, ref, computed, reactive, watchEffect } from "vue";
 import Mapping from "@/map";
 
 /**
@@ -52,7 +52,7 @@ const coreData = Symbol();
 
 function useProvider() {
   // init data
-  const $maxFrameOfMaterial = ref(5400);
+  // const $maxFrameOfMaterial = ref(5400);
   const $timeLineContainer_width = ref(0);
   const $frameWidth = ref(0.003);
   const $timeLineOffsetLeft = ref(0);
@@ -130,100 +130,100 @@ function useProvider() {
             duration: 0,
             // 视觉轨素材列表
             visionTrackMaterils: [
-              {
-                // 素材id（素材类型为subtitle时ID可以为空）
-                id: 0,
-                // 素材类型（image, video, gif, subtitle）
-                type: "",
-                // 素材宽
-                width: 0,
-                // 素材高
-                height: 0,
-                // 素材时长，单位：微秒
-                duration: 0,
-                // 素材旋转角度
-                rotate: 0,
-                // 素材相对于时间线的入点，单位：微秒
-                timelineIn: 0,
-                // 素材相对于时间线的出点，单位：微秒
-                timelineOut: 0,
-                // 素材片段相对于素材的入点，单位：微秒
-                in: 0,
-                // 素材片段相对于素材的出点，单位：微秒
-                out: 0,
-                // 音量增益，保留一位小数，取值范围 0.00 - 10.00，大于1，表示音量增强。小于1，表示音量减小。0.0 表示静音，1 表示原始音量
-                volumeGain: 0.0,
-                // 画布填充方式（full:充满画布，complete:完整显示）
-                canvasFillType: "",
-                // 字幕信息，当素材类型为subtitle时需要传值
-                subtitleInfo: {
-                  // 位置布局
-                  layoutType: "",
-                  // 字幕内容
-                  text: "",
-                  // 字体
-                  font: "",
-                  // 字号
-                  fontSize: 0,
-                  // 字体颜色
-                  fontColor: "",
-                  // 背景色
-                  bgColor: "",
-                  // 字幕内容对应的 tts url
-                  ttsMediaUrl: ""
-                },
-                // 素材时长适配方式
-                materialDurationFit: {
-                  // 适配方式（multiple:倍数, loop:循环，staticFrame:定帧）
-                  fitType: "",
-                  // 倍数值，0.1 - 10  大于1表示快速，小于1表示慢速
-                  multipleValue: 0.0,
-                  // 循环次数
-                  loopValue: 0
-                },
-                // 素材尺寸裁剪
-                materialSizeClip: {
-                  // 相对于 TopLeft 的偏移坐标 x
-                  x: 0,
-                  // 相对于 TopLeft 的偏移坐标 y
-                  y: 0,
-                  // 剪裁后的宽
-                  width: 0,
-                  // 剪裁后的高
-                  height: 0,
-                  // 缩放比例
-                  scale: 0,
-                  // 旋转角度
-                  rotate: 0
-                },
-                // 素材位置
-                materialPosition: {
-                  // 相对于 TopLeft 的偏移坐标 x
-                  x: 0,
-                  // 相对于 TopLeft 的偏移坐标 y
-                  y: 0,
-                  // 在画布中的宽
-                  width: 0,
-                  // 在画布中的高
-                  height: 0
-                },
-                // 素材图层
-                materialLayer: {
-                  // 图层
-                  layer: 0
-                },
-                // 素材特效
-                materialEffect: {
-                  // 特效类型
-                  type: "",
-                  // 特效参数
-                  params: ""
-                },
-                // 素材url，前端不需要传值，服务端返回sdata数据时，会根据素材ID赋值
-                materialUrl: "",
-                // 素材文件内容 md5 值
-                contentMd5: ""
-              }
+              // {
+              //   // 素材id（素材类型为subtitle时ID可以为空）
+              //   id: 0,
+              //   // 素材类型（image, video, gif, subtitle）
+              //   type: "",
+              //   // 素材宽
+              //   width: 0,
+              //   // 素材高
+              //   height: 0,
+              //   // 素材时长，单位：微秒
+              //   duration: 0,
+              //   // 素材旋转角度
+              //   rotate: 0,
+              //   // 素材相对于时间线的入点，单位：微秒
+              //   timelineIn: 0,
+              //   // 素材相对于时间线的出点，单位：微秒
+              //   timelineOut: 0,
+              //   // 素材片段相对于素材的入点，单位：微秒
+              //   in: 0,
+              //   // 素材片段相对于素材的出点，单位：微秒
+              //   out: 0,
+              //   // 音量增益，保留一位小数，取值范围 0.00 - 10.00，大于1，表示音量增强。小于1，表示音量减小。0.0 表示静音，1 表示原始音量
+              //   volumeGain: 0.0,
+              //   // 画布填充方式（full:充满画布，complete:完整显示）
+              //   canvasFillType: "",
+              //   // 字幕信息，当素材类型为subtitle时需要传值
+              //   subtitleInfo: {
+              //     // 位置布局
+              //     layoutType: "",
+              //     // 字幕内容
+              //     text: "",
+              //     // 字体
+              //     font: "",
+              //     // 字号
+              //     fontSize: 0,
+              //     // 字体颜色
+              //     fontColor: "",
+              //     // 背景色
+              //     bgColor: "",
+              //     // 字幕内容对应的 tts url
+              //     ttsMediaUrl: ""
+              //   },
+              //   // 素材时长适配方式
+              //   materialDurationFit: {
+              //     // 适配方式（multiple:倍数, loop:循环，staticFrame:定帧）
+              //     fitType: "",
+              //     // 倍数值，0.1 - 10  大于1表示快速，小于1表示慢速
+              //     multipleValue: 0.0,
+              //     // 循环次数
+              //     loopValue: 0
+              //   },
+              //   // 素材尺寸裁剪
+              //   materialSizeClip: {
+              //     // 相对于 TopLeft 的偏移坐标 x
+              //     x: 0,
+              //     // 相对于 TopLeft 的偏移坐标 y
+              //     y: 0,
+              //     // 剪裁后的宽
+              //     width: 0,
+              //     // 剪裁后的高
+              //     height: 0,
+              //     // 缩放比例
+              //     scale: 0,
+              //     // 旋转角度
+              //     rotate: 0
+              //   },
+              //   // 素材位置
+              //   materialPosition: {
+              //     // 相对于 TopLeft 的偏移坐标 x
+              //     x: 0,
+              //     // 相对于 TopLeft 的偏移坐标 y
+              //     y: 0,
+              //     // 在画布中的宽
+              //     width: 0,
+              //     // 在画布中的高
+              //     height: 0
+              //   },
+              //   // 素材图层
+              //   materialLayer: {
+              //     // 图层
+              //     layer: 0
+              //   },
+              //   // 素材特效
+              //   materialEffect: {
+              //     // 特效类型
+              //     type: "",
+              //     // 特效参数
+              //     params: ""
+              //   },
+              //   // 素材url，前端不需要传值，服务端返回sdata数据时，会根据素材ID赋值
+              //   materialUrl: "",
+              //   // 素材文件内容 md5 值
+              //   contentMd5: ""
+              // }
             ]
           },
           // 音频轨
@@ -328,38 +328,59 @@ function useProvider() {
     ]
   });
 
-  // computed data
-  const $gridWidth = computed(
-    () => Mapping.frameWidth2Grid($frameWidth.value).gridWidth
-  );
-  const $gridFrame = computed(
-    () => Mapping.frameWidth2Grid($frameWidth.value).gridFrame
-  );
-  const $groupGridFrame = computed(
-    () => Mapping.frameWidth2Grid($frameWidth.value).groupGridFrame
-  );
-  const $timeLine_width = computed(() => $timeLineContainer_width.value - 37);
-  const $timescale_width = computed(() =>
-    Mapping.getTimeScaleWidth(
+  // watchEffect data
+  const $gridWidth = ref(0);
+  const $gridFrame = ref(0);
+  const $groupGridFrame = ref(0);
+  const $timeLine_width = ref(0);
+  const $timescale_width = ref(0);
+  const $timescale_placeholder_width = ref(0);
+  const $maxFrameWidth = Mapping.getMaxFrameWidth();
+  const $minFrameWidth = ref(0);
+  const $fitFrameWidth = ref(0);
+  const $maxFrameOfMaterial = ref(5400);
+
+  watchEffect(() => {
+    $maxFrameOfMaterial.value = getMaxFrameOfMaterial($coreData);
+  });
+
+  watchEffect(() => {
+    $gridWidth.value = getGridWidth($frameWidth.value);
+  });
+  watchEffect(() => {
+    $gridFrame.value = getGridFrame($frameWidth.value);
+  });
+  watchEffect(() => {
+    $groupGridFrame.value = getGroupGridFrame($frameWidth.value);
+  });
+  watchEffect(() => {
+    $timeLine_width.value = getTimeLineWidth($timeLineContainer_width.value);
+  });
+  watchEffect(() => {
+    $timescale_width.value = getTimeScaleWidth(
       $frameWidth.value,
       $timeLine_width.value,
       $maxFrameOfMaterial.value
-    )
-  );
-  const $timescale_placeholder_width = computed(() =>
-    Mapping.getTimeScalePlaceHolderWidth(
+    );
+  });
+  watchEffect(() => {
+    $timescale_placeholder_width.value = getTimeScalePlaceHolderWidth(
       $timeLineOffsetLeft.value,
       $gridWidth.value
-    )
-  );
-  const $maxFrameWidth = Mapping.getMaxFrameWidth();
-  const $minFrameWidth = computed(() =>
-    Mapping.getMinFrameWidth($maxFrameOfMaterial.value, timeLine_width.value)
-  );
-  const $fitFrameWidth = computed(() =>
-    Mapping.getMinFrameWidth($maxFrameOfMaterial.value, timeLine_width.value)
-  );
-
+    );
+  });
+  watchEffect(() => {
+    $minFrameWidth.value = getMinFrameWidth(
+      $maxFrameOfMaterial.value,
+      $timeLine_width.value
+    );
+  });
+  watchEffect(() => {
+    $fitFrameWidth.value = getFitFrameWidth(
+      $maxFrameOfMaterial.value,
+      $timeLine_width.value
+    );
+  });
   // provide
   provide(timeLineContainer_width, $timeLineContainer_width);
   provide(timeLine_width, $timeLine_width);
@@ -377,6 +398,42 @@ function useProvider() {
   provide(fitFrameWidth, $fitFrameWidth);
   provide(coreData, $coreData);
 }
+
+// GETTER METHOD
+const getGridWidth = frameWidth =>
+  Mapping.frameWidth2Grid(frameWidth).gridWidth;
+
+const getGridFrame = framWidth => Mapping.frameWidth2Grid(framWidth).gridFrame;
+
+const getGroupGridFrame = frameWidth =>
+  Mapping.frameWidth2Grid(frameWidth).groupGridFrame;
+
+const getTimeLineWidth = timeLineContainer_width =>
+  timeLineContainer_width - 37;
+
+const getTimeScaleWidth = (frameWidth, timeLine_width, maxFrameOfMaterial) =>
+  Mapping.getTimeScaleWidth(frameWidth, timeLine_width, maxFrameOfMaterial);
+
+const getTimeScalePlaceHolderWidth = (timeLineOffsetLeft, gridWidth) =>
+  Mapping.getTimeScalePlaceHolderWidth(timeLineOffsetLeft, gridWidth);
+
+const getMinFrameWidth = (maxFrameOfMaterial, timeLine_width) =>
+  Mapping.getMinFrameWidth(maxFrameOfMaterial, timeLine_width);
+
+const getFitFrameWidth = (maxFrameOfMaterial, timeLine_width) =>
+  Mapping.getMinFrameWidth(maxFrameOfMaterial, timeLine_width);
+
+const getMaxFrameOfMaterial = coreData =>
+  coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
+    .length === 0
+    ? 5400
+    : Mapping.μs2Frame(
+        coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils[
+          coreData.sections[0].sectionTimeline.visionTrack.visionTrackMaterils
+            .length - 1
+        ].timeLineOut,
+        30
+      );
 
 export default {
   useProvider,

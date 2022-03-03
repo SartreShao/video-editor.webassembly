@@ -331,15 +331,6 @@ const renderGridBufferList = (
   timescale_width
 ) => {
   try {
-    console.log(
-      gridBufferList,
-      gridWidth,
-      groupGridFrame,
-      gridFrame,
-      timeLineOffsetLeft,
-      timescale_width
-    );
-
     // 获取格子倍数；例如：2 倍，就是 2 的倍数都会绘制大格
     const gridMultiple = groupGridFrame / gridFrame;
 
@@ -366,7 +357,6 @@ const renderGridBufferList = (
       // doing nothing
     }
 
-    console.log("渲染开始");
     // 渲染过程
     for (let i = firstIndex; i <= gridBufferNumber + firstIndex - 1; i++) {
       const grid = gridBufferList.value[i - firstIndex];
