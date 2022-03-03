@@ -121,8 +121,10 @@ const uploadVideoList = (e) => {
     coreData,
     frameWidth,
     fitFrameWidth,
-    currentSectionIndex
+    currentSectionIndex,
+    videoInputElement
   );
+
 };
 
 // 清空当前预览器的视频

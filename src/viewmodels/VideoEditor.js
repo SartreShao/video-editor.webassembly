@@ -14,7 +14,8 @@ const uploadVideoList = async (
   coreData,
   frameWidth,
   fitFrameWidth,
-  currentSectionIndex
+  currentSectionIndex,
+  videoInputElement
 ) => {
   // 暂时先仅加载第一个视频的 URL
   if (videoList.length > 0) {
@@ -25,6 +26,8 @@ const uploadVideoList = async (
 
   await Api.addVideoToCoreData(coreData, videoList, currentSectionIndex.value);
   frameWidth.value = fitFrameWidth.value;
+
+  videoInputElement.value.value = null;
 };
 
 export default { uploadVideoList };
