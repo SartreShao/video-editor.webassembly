@@ -117,7 +117,8 @@
       </div>
 
       <div>
-        <div class="top-button-right">
+        <!-- 放大时间轴 -->
+        <div class="top-button-right" @click="clickZoomIn">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="10.553"
@@ -134,7 +135,8 @@
           </svg>
         </div>
 
-        <div class="top-button-right">
+        <!-- 缩小时间轴 -->
+        <div class="top-button-right" @click="clickZoomOut">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="10.553"
@@ -151,7 +153,8 @@
           </svg>
         </div>
 
-        <div class="top-button-right">
+        <!-- 合适的时间轴 -->
+        <div class="top-button-right" @click="clickZoomFit">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="10.583"
@@ -206,7 +209,7 @@
         </div>
 
         <!-- 时间轴的视频容器 -->
-        <div class="video-line">
+        <div class="video-line" :style="{ width: timescale_width + 'px' }">
           <video-item
             v-for="item in coreData.sections[currentSectionIndex - 1]
               .sectionTimeline.visionTrack.visionTrackMaterials"
@@ -225,6 +228,7 @@ import { inject, ref, onMounted, computed, watchEffect } from "vue";
 import Grid from "@/components/Grid.vue";
 import VideoItem from "@/components/VideoItem.vue";
 import Mapping from "@/map";
+import { TimeLine } from "@/viewmodels";
 
 // 核心数据
 const coreData = inject(Store.coreData);
@@ -266,7 +270,32 @@ const groupGridFrame = inject(Store.groupGridFrame);
 // 段落级焦点
 const currentSectionIndex = inject(Store.currentSectionIndex);
 
+// 最小帧宽度
+const minFrameWidth = inject(Store.minFrameWidth);
+
+// 最大帧宽度
+const maxFrameWidth = inject(Store.maxFrameWidth);
+
+// 合适帧宽度
+const fitFrameWidth = inject(Store.fitFrameWidth);
+
 /** 依赖注入 end */
+
+/** 点击事件 start */
+// 点击放大
+const clickZoomIn = () => {
+  TimeLine.zoomIn(frameWidth, maxFrameWidth);
+};
+
+// 点击缩小
+const clickZoomOut = () => {
+  TimeLine.zoomOut(frameWidth, minFrameWidth);
+};
+
+// 点击缩放到合适
+const clickZoomFit = () => {
+  TimeLine.zoomFit(frameWidth, fitFrameWidth);
+};
 
 watchEffect(() => {
   // 渲染 gridBufferList
