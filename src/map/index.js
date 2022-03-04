@@ -271,6 +271,7 @@ const gridTotalNumber = (frameWidth, timeLineWidth, materialMaxFrame) => {
  * output @时间轴格子数量 girdTotalNumber
  */
 const getTimeScaleWidth = (frameWidth, timeLineWidth, materialMaxFrame) => {
+  console.log("getTimeScaleWidth called");
   // 格宽度
   const gridWidth = frameWidth2Grid(frameWidth).gridWidth;
 
@@ -439,7 +440,7 @@ const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
   console.log("visionTrackMaterials", visionTrackMaterials);
 
   const audioTrackMaterials =
-    coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
+    coreData.sections[currentSectionIndex - 1].sectionTimeline.audioTrack
       .audioTrackMaterials;
 
   console.log("audioTrackMaterials", audioTrackMaterials);
@@ -465,8 +466,8 @@ const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
     }
   }
 
-  return visionTrackMaterials.length === 0
-    ? 293333.333333
+  return visionTrackMaterials.length === 0 && audioTrackMaterials.length === 0
+    ? 0
     : μs2Frame(maxTimeLineOut, 30);
 };
 
