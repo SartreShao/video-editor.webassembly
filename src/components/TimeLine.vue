@@ -122,8 +122,14 @@
           class="top-button-right"
           @click="clickZoomIn"
           :style="{
-            pointerEvents: maxFrameOfMaterial === 0 ? 'none' : 'auto',
-            opacity: maxFrameOfMaterial === 0 ? 0.5 : 1,
+            pointerEvents:
+              maxFrameOfMaterial === 0 || frameWidth === maxFrameWidth
+                ? 'none'
+                : 'auto',
+            opacity:
+              maxFrameOfMaterial === 0 || frameWidth === maxFrameWidth
+                ? 0.2
+                : 1,
           }"
         >
           <svg
@@ -147,8 +153,14 @@
           class="top-button-right"
           @click="clickZoomOut"
           :style="{
-            pointerEvents: maxFrameOfMaterial === 0 ? 'none' : 'auto',
-            opacity: maxFrameOfMaterial === 0 ? 0.5 : 1,
+            pointerEvents:
+              maxFrameOfMaterial === 0 || frameWidth === minFrameWidth
+                ? 'none'
+                : 'auto',
+            opacity:
+              maxFrameOfMaterial === 0 || frameWidth === minFrameWidth
+                ? 0.2
+                : 1,
           }"
         >
           <svg
