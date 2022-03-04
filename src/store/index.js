@@ -338,7 +338,7 @@ function useProvider() {
   const $timeLine_width = ref(0);
   const $timescale_width = ref(0);
   const $timescale_placeholder_width = ref(0);
-  const $maxFrameWidth = Mapping.getMaxFrameWidth();
+  const $maxFrameWidth = ref(Mapping.getMaxFrameWidth());
   const $minFrameWidth = ref(0);
   const $fitFrameWidth = ref(0);
   const $maxFrameOfMaterial = ref(0);
@@ -407,8 +407,9 @@ function useProvider() {
 }
 
 // GETTER METHOD
-const getGridWidth = frameWidth =>
-  Mapping.frameWidth2Grid(frameWidth).gridWidth;
+const getGridWidth = frameWidth => {
+  return Mapping.frameWidth2Grid(frameWidth).gridWidth;
+};
 
 const getGridFrame = framWidth => Mapping.frameWidth2Grid(framWidth).gridFrame;
 
