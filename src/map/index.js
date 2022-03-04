@@ -306,7 +306,7 @@ const getTimeScalePlaceHolderWidth = (offsetLeft, gridWidth) =>
 // 当前绘制的是第几个格子
 const gridBufferFirstIndex = (offsetLeft, gridWidth) => {
   const placeholderWidth = Math.floor(offsetLeft / gridWidth) * gridWidth;
-  return placeholderWidth / gridWidth + 1;
+  return Math.floor(placeholderWidth / gridWidth) + 1;
 };
 
 // 格子缓存数量
