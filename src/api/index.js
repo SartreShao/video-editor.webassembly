@@ -51,8 +51,6 @@ const getVideoListDuration = videoFileList =>
 const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
   new Promise(async (resolve, reject) => {
     try {
-      console.log("addVideoToCoreData", coreData, videoFileList);
-
       // 准备加入 CoreData 的视频素材
       const tempVisionTrackMaterials = [];
 

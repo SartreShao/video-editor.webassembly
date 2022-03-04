@@ -329,7 +329,7 @@ watchEffect(() => {
     groupGridFrame.value,
     gridFrame.value,
     timeLineOffsetLeft.value,
-    timescale_width.value
+    timeLine_width.value
   );
 });
 
