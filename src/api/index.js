@@ -114,12 +114,13 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
         const { width, height } = await getVideoHeightWidth(videoFile);
 
         tempVisionTrackMaterials.push({
+          type: "video",
+          width: width,
+          height: height,
           duration: duration,
           timeLineIn: timeLineIn,
           timeLineOut: timeLineOut,
-          url: URL.createObjectURL(videoFile),
-          width: width,
-          height: height
+          url: URL.createObjectURL(videoFile)
         });
       }
 
