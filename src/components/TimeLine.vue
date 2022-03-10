@@ -244,8 +244,7 @@
         <!-- 时间轴的视频容器 -->
         <div class="video-line" :style="{ width: timescale_width + 'px' }">
           <video-item
-            v-for="item in coreData.sections[currentSectionIndex - 1]
-              .sectionTimeline.visionTrack.visionTrackMaterials"
+            v-for="item in videoTrackMaterialList"
             :key="item"
             :visionTrackMaterial="item"
             :videoFrameList="videoFrameList"
@@ -266,6 +265,14 @@ import { TimeLine } from "@/viewmodels";
 
 // 核心数据
 const coreData = inject(Store.coreData);
+
+// 视频轨道渲染数据
+const videoTrackMaterialList = computed(() =>
+  Mapping.getVideoTrackMaterialList(
+    coreData.sections[currentSectionIndex.value - 1].sectionTimeline.visionTrack
+      .visionTrackMaterials
+  )
+);
 
 // 帧宽度：决定了时间轴的比例
 const frameWidth = inject(Store.frameWidth);
