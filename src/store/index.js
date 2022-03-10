@@ -53,6 +53,8 @@ const coreData = Symbol();
 // 当前段落焦点，初始值为 1
 const currentSectionIndex = Symbol();
 
+const readFrameWorker = Symbol();
+
 function useProvider() {
   // init data
   const $timeLineContainer_width = ref(0);
@@ -330,6 +332,9 @@ function useProvider() {
     ]
   });
   const $currentSectionIndex = ref(1);
+  const $readFrameWorker = ref(
+    new Worker(process.env.BASE_URL + "readFrame-lib/readFrameWorker.js")
+  );
 
   // watchEffect data
   const $gridWidth = ref(0);
@@ -399,6 +404,7 @@ function useProvider() {
   provide(maxFrameOfMaterial, $maxFrameOfMaterial);
   provide(timescale_placeholder_width, $timescale_placeholder_width);
   provide(currentVideoUrl, $currentVideoUrl);
+  provide(readFrameWorker, $readFrameWorker);
   provide(maxFrameWidth, $maxFrameWidth);
   provide(minFrameWidth, $minFrameWidth);
   provide(fitFrameWidth, $fitFrameWidth);
@@ -451,5 +457,6 @@ export default {
   minFrameWidth,
   fitFrameWidth,
   coreData,
-  currentSectionIndex
+  currentSectionIndex,
+  readFrameWorker
 };
