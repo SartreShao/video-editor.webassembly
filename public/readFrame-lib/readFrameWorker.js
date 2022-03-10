@@ -1,7 +1,6 @@
 // Module 文件的初始化在 libffmedia.js 文件中
 self.Module = {
   onRuntimeInitialized: function () {
-    console.log("onRuntimeInitialized");
     onWasmLoaded();
   }
 };
@@ -171,7 +170,7 @@ WebFFDecoder.prototype.startClip = function (
 };
 
 WebFFDecoder.prototype.stopFFDecoder = function () {
-  console.info("web stopFFDecoder");
+  // console.info("web stopFFDecoder");
   Module._stopDecode();
   let rsp = {
     what: StopDecodeRsp
@@ -330,7 +329,7 @@ WebFFDecoder.prototype.onWasmLoaded = function () {
 
   // messageCallback
   this.messageCallback = Module.addFunction(function (event) {
-    console.info(" messageCallback > " + event);
+    // console.info(" messageCallback > " + event);
     var rsp = {
       what: OnMessageEvent,
       event: event
@@ -349,24 +348,24 @@ WebFFDecoder.prototype.onWasmLoaded = function () {
     channels,
     totalMs
   ) {
-    console.info(
-      " initCallback > width=" +
-        width +
-        " height=" +
-        height +
-        " videoBitRate=" +
-        videoBitRate +
-        " videoFps=" +
-        videoFps +
-        " videoRotate=" +
-        videoRotate +
-        " sampleRate=" +
-        sampleRate +
-        " channels=" +
-        channels +
-        " totalMs=" +
-        totalMs
-    );
+    // console.info(
+    //   " initCallback > width=" +
+    //     width +
+    //     " height=" +
+    //     height +
+    //     " videoBitRate=" +
+    //     videoBitRate +
+    //     " videoFps=" +
+    //     videoFps +
+    //     " videoRotate=" +
+    //     videoRotate +
+    //     " sampleRate=" +
+    //     sampleRate +
+    //     " channels=" +
+    //     channels +
+    //     " totalMs=" +
+    //     totalMs
+    // );
     var rsp = {
       what: MediaInfoRsp,
       width: width,
@@ -409,7 +408,7 @@ self.onmessage = function (evt) {
   // 当加载好后，遍历消息队列，再进行处理
   if (!self.ffDecoder.wasmLoaded) {
     self.ffDecoder.cacheReq(req);
-    console.info("Temp cache req " + req.t + ".");
+    // console.info("Temp cache req " + req.t + ".");
     return;
   }
 
