@@ -82,17 +82,17 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
       // 准备加入 CoreData 的视频素材
       const tempVisionTrackMaterials = [];
 
-      // 获取视频素材中最大的 timeLineOut
-      let maxTimeLineOut = 0;
+      // 获取视频素材中最大的 timelineOut
+      let maxtimelineOut = 0;
 
       const visionTrackMaterials =
         coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
           .visionTrackMaterials;
 
       for (let i = 0; i < visionTrackMaterials.length; i++) {
-        const timeLineOut = visionTrackMaterials[i].timeLineOut;
-        if (timeLineOut > maxTimeLineOut) {
-          maxTimeLineOut = timeLineOut;
+        const timelineOut = visionTrackMaterials[i].timelineOut;
+        if (timelineOut > maxtimelineOut) {
+          maxtimelineOut = timelineOut;
         }
       }
 
@@ -103,13 +103,13 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
         // 当前素材的时长
         const duration = await getVideoDuration(videoFile);
 
-        // 当前素材的 timeLineIn 为 maxTimeLineOut，当然如果没有前面的素材，timeLineIn 为 0
-        const timeLineIn =
+        // 当前素材的 timelineIn 为 maxtimelineOut，当然如果没有前面的素材，timelineIn 为 0
+        const timelineIn =
           i === 0
-            ? maxTimeLineOut
-            : tempVisionTrackMaterials[i - 1].timeLineOut;
+            ? maxtimelineOut
+            : tempVisionTrackMaterials[i - 1].timelineOut;
 
-        const timeLineOut = timeLineIn + duration;
+        const timelineOut = timelineIn + duration;
 
         const { width, height } = await getVideoHeightWidth(videoFile);
 
@@ -118,8 +118,8 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
           width: width,
           height: height,
           duration: duration,
-          timeLineIn: timeLineIn,
-          timeLineOut: timeLineOut,
+          timelineIn: timelineIn,
+          timelineOut: timelineOut,
           url: URL.createObjectURL(videoFile)
         });
       }

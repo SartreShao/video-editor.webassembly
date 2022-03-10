@@ -408,13 +408,13 @@ const frame2ms = (frame, fps) => (frame / fps) * 1000;
 
 /**
  * 获取时间轴上，视觉素材的宽度
- * @param {number} timeLineIn 素材在时间轴上的入点
- * @param {*} timeLineOut 素材在时间轴上的出点
+ * @param {number} timelineIn 素材在时间轴上的入点
+ * @param {*} timelineOut 素材在时间轴上的出点
  * @param {*} frameWidth 帧宽度
  * @returns
  */
-const getVideoItemWidth = (timeLineIn, timeLineOut, frameWidth) =>
-  μs2Frame(timeLineOut - timeLineIn, 30) * frameWidth;
+const getVideoItemWidth = (timelineIn, timelineOut, frameWidth) =>
+  μs2Frame(timelineOut - timelineIn, 30) * frameWidth;
 
 /**
  *  获取当前最大的素材占据的帧
@@ -430,12 +430,12 @@ const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
     coreData.sections[currentSectionIndex - 1].sectionTimeline.audioTrack
       .audioTrackMaterials;
 
-  let maxTimeLineOut = 0;
+  let maxtimelineOut = 0;
   if (visionTrackMaterials) {
     for (let i = 0; i < visionTrackMaterials.length; i++) {
-      const timeLineOut = visionTrackMaterials[i].timeLineOut;
-      if (timeLineOut > maxTimeLineOut) {
-        maxTimeLineOut = timeLineOut;
+      const timelineOut = visionTrackMaterials[i].timelineOut;
+      if (timelineOut > maxtimelineOut) {
+        maxtimelineOut = timelineOut;
       }
     }
   }
@@ -443,9 +443,9 @@ const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
   if (audioTrackMaterials) {
     for (let i = 0; i < audioTrackMaterials.length; i++) {
       if (audioTrackMaterials[i].voiceType !== "bgm") {
-        const timeLineOut = audioTrackMaterials[i].timeLineOut;
-        if (timeLineOut > maxTimeLineOut) {
-          maxTimeLineOut = timeLineOut;
+        const timelineOut = audioTrackMaterials[i].timelineOut;
+        if (timelineOut > maxtimelineOut) {
+          maxtimelineOut = timelineOut;
         }
       }
     }
@@ -453,7 +453,30 @@ const getMaxFrameOfMaterial = (coreData, currentSectionIndex) => {
 
   return visionTrackMaterials.length === 0 && audioTrackMaterials.length === 0
     ? 0
-    : μs2Frame(maxTimeLineOut, 30);
+    : μs2Frame(maxtimelineOut, 30);
+};
+
+/**
+ * 获得 getVideoTrackMaterialList：视频轴的素材列表
+ * 1. 根据 timelineIn 进行升序排列
+ * 2. 按照 type 筛选，仅保留 type in [image, video, gif]
+ * @param {*} visionTrackMaterials
+ */
+const getVideoTrackMaterialList = visionTrackMaterials => {
+  const tempList = [];
+
+  // 按照 type 进行筛选，仅保留 type in [image, video, gif]
+  for (let i = 0; i < visionTrackMaterials.length; i++) {
+    if (
+      visionTrackMaterials[i].type === "video" ||
+      visionTrackMaterials[i].type === "image" ||
+      visionTrackMaterials[i].type === "gif"
+    ) {
+      tempList.push(visionTrackMaterials[i]);
+    }
+  }
+
+  return tempList.sort((a, b) => a.timelineIn - b.timelineIn);
 };
 
 const getVideoFrameList = () => {};
@@ -473,5 +496,6 @@ export default {
   μs2Frame,
   frame2ms,
   getVideoItemWidth,
-  getMaxFrameOfMaterial
+  getMaxFrameOfMaterial,
+  getVideoTrackMaterialList
 };

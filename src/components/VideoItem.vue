@@ -27,8 +27,8 @@ const frameWidth = inject(Store.frameWidth);
 const width = computed(() =>
   props.visionTrackMaterial
     ? Mapping.getVideoItemWidth(
-        props.visionTrackMaterial.timeLineIn,
-        props.visionTrackMaterial.timeLineOut,
+        props.visionTrackMaterial.timelineIn,
+        props.visionTrackMaterial.timelineOut,
         frameWidth.value
       )
     : 0
@@ -40,7 +40,7 @@ const width = computed(() =>
   background: #000;
   position: relative;
   display: flex;
-  overflow: hidden;
+  // overflow: hidden;
   align-items: center;
 
   .video-frame {

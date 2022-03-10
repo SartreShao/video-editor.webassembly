@@ -126,9 +126,9 @@ function useProvider() {
         // 段落文字
         sectionText: "",
         // 段落相对于项目时间线的入点，单位：微秒
-        projectTimelineIn: 0,
+        projecttimelineIn: 0,
         // 段落相对于项目时间线的出点，单位：微秒
-        projectTimelineOut: 0,
+        projecttimelineOut: 0,
         // 段落时长，单位：微秒
         duration: 0,
         // 段落时间线
@@ -414,8 +414,8 @@ function useProvider() {
           .visionTrack.visionTrackMaterials[0];
 
       const videoWidth = Mapping.getVideoItemWidth(
-        visionTrackMaterial.timeLineIn,
-        visionTrackMaterial.timeLineOut,
+        visionTrackMaterial.timelineIn,
+        visionTrackMaterial.timelineOut,
         $frameWidth.value
       );
 

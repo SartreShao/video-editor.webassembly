@@ -34,6 +34,7 @@ const readFrame = (
     outVideoFormat: -1
   });
 
+  let i = 0;
   // 监听消息
   worker.onmessage = function (response) {
     const data = response.data;
@@ -55,6 +56,7 @@ const readFrame = (
 
         context.putImageData(imageData, 0, 0, 0, 0, videoWidth, videoHeight);
 
+        console.log("i", i++);
         // 返回 imageData
         canvas
           .convertToBlob()
