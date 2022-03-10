@@ -117,6 +117,11 @@ const videoInputElement = ref(null);
 // 读帧的 Worker
 const readFrameWorker = inject(Store.readFrameWorker);
 
+// 临时存放视频帧的列表
+const videoFrameList = inject(Store.videoFrameList);
+
+const currentFile = inject(Store.currentFile);
+
 // 视频上传 Callback
 const addVideoOnCurrentSection = (e) => {
   VideoEditor.addVideoOnCurrentSection(
@@ -129,16 +134,18 @@ const addVideoOnCurrentSection = (e) => {
     videoInputElement
   );
 
-  WASM.readFrame(
-    readFrameWorker.value,
-    e.target.files[0],
-    49,
-    52,
-    "0",
-    (imageData) => {
-      console.log("imageData", imageData);
-    }
-  );
+  currentFile.value = e.target.files[0];
+  
+  // WASM.readFrame(
+  //   readFrameWorker.value,
+  //   e.target.files[0],
+  //   49,
+  //   52,
+  //   "0",
+  //   (imageData) => {
+  //     console.log("imageData", imageData);
+  //   }
+  // );
 };
 
 // 清空当前预览器的视频

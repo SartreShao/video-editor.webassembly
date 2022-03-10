@@ -49,8 +49,16 @@ const readFrame = (
         // 创建一个 RGBA 的容器
         var imageData = new ImageData(rgbBuffers, videoWidth, videoHeight);
 
+        var canvas = new OffscreenCanvas(videoWidth, videoHeight);
+
+        var context = canvas.getContext("2d");
+
+        context.putImageData(imageData, 0, 0, 0, 0, videoWidth, videoHeight);
+
         // 返回 imageData
-        callback(imageData);
+        canvas
+          .convertToBlob()
+          .then(blob => callback(URL.createObjectURL(blob)));
         break;
       case OnMessageEvent:
         break;

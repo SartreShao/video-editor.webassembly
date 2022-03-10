@@ -4,7 +4,7 @@
       class="video-frame"
       v-for="item in videoFrameList"
       :key="item"
-      :src="url"
+      :src="item.url"
     />
 
     <!-- 分割线 -->
@@ -40,6 +40,8 @@ const width = computed(() =>
   background: #000;
   position: relative;
   display: flex;
+  overflow: hidden;
+  align-items: center;
 
   .video-frame {
     flex-shrink: 0;

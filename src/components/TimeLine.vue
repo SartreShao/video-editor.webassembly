@@ -248,6 +248,7 @@
               .sectionTimeline.visionTrack.visionTrackMaterials"
             :key="item"
             :visionTrackMaterial="item"
+            :videoFrameList="videoFrameList"
           ></video-item>
         </div>
       </div>
@@ -314,6 +315,8 @@ const fitFrameWidth = inject(Store.fitFrameWidth);
 
 // 当前素材最大帧数
 const maxFrameOfMaterial = inject(Store.maxFrameOfMaterial);
+
+const videoFrameList = inject(Store.videoFrameList);
 
 /** 依赖注入 end */
 

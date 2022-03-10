@@ -1,5 +1,6 @@
 import { provide, ref, computed, reactive, watchEffect } from "vue";
 import Mapping from "@/map";
+import WASM from "@/wasm";
 
 /**
  * This file define global states in project
@@ -53,7 +54,13 @@ const coreData = Symbol();
 // 当前段落焦点，初始值为 1
 const currentSectionIndex = Symbol();
 
+// 读帧用的 Worker
 const readFrameWorker = Symbol();
+
+// 临时存储视频帧数（只保存第一个视频的帧数）
+const videoFrameList = Symbol();
+
+const currentFile = Symbol();
 
 function useProvider() {
   // init data
@@ -335,6 +342,8 @@ function useProvider() {
   const $readFrameWorker = ref(
     new Worker(process.env.BASE_URL + "readFrame-lib/readFrameWorker.js")
   );
+  const $videoFrameList = ref([]);
+  const $currentFile = ref();
 
   // watchEffect data
   const $gridWidth = ref(0);
@@ -392,6 +401,67 @@ function useProvider() {
       $timeLine_width.value
     );
   });
+
+  watchEffect(() => {
+    // 计算视频帧列表
+    // 1. 视频有多长
+    if (
+      $coreData.sections[$currentSectionIndex.value - 1].sectionTimeline
+        .visionTrack.visionTrackMaterials.length !== 0
+    ) {
+      const visionTrackMaterial =
+        $coreData.sections[$currentSectionIndex.value - 1].sectionTimeline
+          .visionTrack.visionTrackMaterials[0];
+
+      const videoWidth = Mapping.getVideoItemWidth(
+        visionTrackMaterial.timeLineIn,
+        visionTrackMaterial.timeLineOut,
+        $frameWidth.value
+      );
+
+      // 2. 一帧有多长
+      const videoFrameWidth = 49;
+
+      // 3. 一共需要渲染多少帧
+      const frameNumber = Math.ceil(videoWidth / videoFrameWidth);
+
+      console.log("frameNumber", frameNumber);
+
+      // 4. 每一帧的开头是多少毫秒
+      const tempList = [];
+
+      for (let i = 0; i < frameNumber; i++) {
+        let frameMs = 0;
+        if (i === 0) {
+          frameMs = 0;
+        } else {
+          frameMs = Mapping.frame2ms(
+            i * (videoFrameWidth / $frameWidth.value),
+            30
+          );
+        }
+        tempList.push(frameMs);
+      }
+
+      // 开始读帧
+      const readFrameList = tempList.join(", ");
+      console.log("readFrameList", readFrameList);
+
+      WASM.readFrame(
+        $readFrameWorker.value,
+        $currentFile.value,
+        49,
+        52,
+        readFrameList,
+        url => {
+          console.log("url", url);
+          console.log("$videoFrameList.value", $videoFrameList.value);
+          $videoFrameList.value.push({ url: url });
+        }
+      );
+    }
+  });
+
   // provide
   provide(timeLineContainer_width, $timeLineContainer_width);
   provide(timeLine_width, $timeLine_width);
@@ -410,6 +480,8 @@ function useProvider() {
   provide(fitFrameWidth, $fitFrameWidth);
   provide(coreData, $coreData);
   provide(currentSectionIndex, $currentSectionIndex);
+  provide(videoFrameList, $videoFrameList);
+  provide(currentFile, $currentFile);
 }
 
 // GETTER METHOD
@@ -458,5 +530,7 @@ export default {
   fitFrameWidth,
   coreData,
   currentSectionIndex,
-  readFrameWorker
+  readFrameWorker,
+  videoFrameList,
+  currentFile
 };
