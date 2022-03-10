@@ -1,6 +1,11 @@
 <template>
   <div class="video-item" :style="{ width: width + 'px' }">
-    <img class="video-frame" />
+    <img
+      class="video-frame"
+      v-for="item in videoFrameList"
+      :key="item"
+      :src="url"
+    />
 
     <!-- 分割线 -->
     <div class="placeholder"></div>
@@ -14,6 +19,7 @@ import Store from "@/store";
 
 const props = defineProps({
   visionTrackMaterial: Object,
+  videoFrameList: Array,
 });
 
 const frameWidth = inject(Store.frameWidth);
@@ -37,6 +43,9 @@ const width = computed(() =>
 
   .video-frame {
     flex-shrink: 0;
+    width: 49px;
+    height: 52px;
+    object-fit: cover;
   }
 
   .placeholder {
