@@ -247,7 +247,7 @@
             v-for="item in coreData.sections[currentSectionIndex - 1]
               .sectionTimeline.visionTrack.visionTrackMaterials"
             :key="item"
-            :visionTrackMateril="item"
+            :visionTrackMaterial="item"
           ></video-item>
         </div>
       </div>

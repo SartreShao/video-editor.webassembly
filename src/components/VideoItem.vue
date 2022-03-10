@@ -1,5 +1,7 @@
 <template>
   <div class="video-item" :style="{ width: width + 'px' }">
+    <img class="video-frame" />
+
     <!-- 分割线 -->
     <div class="placeholder"></div>
   </div>
@@ -11,16 +13,16 @@ import Mapping from "@/map";
 import Store from "@/store";
 
 const props = defineProps({
-  visionTrackMateril: Object,
+  visionTrackMaterial: Object,
 });
 
 const frameWidth = inject(Store.frameWidth);
 
 const width = computed(() =>
-  props.visionTrackMateril
+  props.visionTrackMaterial
     ? Mapping.getVideoItemWidth(
-        props.visionTrackMateril.timeLineIn,
-        props.visionTrackMateril.timeLineOut,
+        props.visionTrackMaterial.timeLineIn,
+        props.visionTrackMaterial.timeLineOut,
         frameWidth.value
       )
     : 0
@@ -31,6 +33,11 @@ const width = computed(() =>
 .video-item {
   background: #000;
   position: relative;
+  display: flex;
+
+  .video-frame {
+    flex-shrink: 0;
+  }
 
   .placeholder {
     position: absolute;
