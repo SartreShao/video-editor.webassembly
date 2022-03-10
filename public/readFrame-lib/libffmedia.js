@@ -938,7 +938,7 @@ var TTY = {
     },
     put_char: function (tty, val) {
       if (val === null || val === 10) {
-        out(UTF8ArrayToString(tty.output, 0));
+        // out(UTF8ArrayToString(tty.output, 0));
         tty.output = [];
       } else {
         if (val != 0) tty.output.push(val);
@@ -946,7 +946,7 @@ var TTY = {
     },
     flush: function (tty) {
       if (tty.output && tty.output.length > 0) {
-        out(UTF8ArrayToString(tty.output, 0));
+        // out(UTF8ArrayToString(tty.output, 0));
         tty.output = [];
       }
     }
@@ -2862,9 +2862,9 @@ var FS = {
           chunkSize = datalength = 1;
           datalength = this.getter(0).length;
           chunkSize = datalength;
-          out(
-            "LazyFiles on gzip forces download of the whole file when length is accessed"
-          );
+          // out(
+          //   "LazyFiles on gzip forces download of the whole file when length is accessed"
+          // );
         }
         this._length = datalength;
         this._chunkSize = chunkSize;
@@ -3017,7 +3017,7 @@ var FS = {
       return onerror(e);
     }
     openRequest.onupgradeneeded = function openRequest_onupgradeneeded() {
-      out("creating db");
+      // out("creating db");
       var db = openRequest.result;
       db.createObjectStore(FS.DB_STORE_NAME);
     };
