@@ -64,6 +64,7 @@ import { inject, computed, ref, onMounted } from "vue";
 import Mapping from "@/map";
 import Api from "@/api";
 import { VideoEditor } from "@/viewmodels";
+import WASM from "@/wasm";
 
 // 核心数据
 const coreData = inject(Store.coreData);
@@ -113,6 +114,9 @@ const currentSectionIndex = inject(Store.currentSectionIndex);
 // 视频选择器 input type=file
 const videoInputElement = ref(null);
 
+// 读帧的 Worker
+const readFrameWorker = inject(Store.readFrameWorker);
+
 // 视频上传 Callback
 const addVideoOnCurrentSection = (e) => {
   VideoEditor.addVideoOnCurrentSection(
@@ -123,6 +127,17 @@ const addVideoOnCurrentSection = (e) => {
     fitFrameWidth,
     currentSectionIndex,
     videoInputElement
+  );
+
+  WASM.readFrame(
+    readFrameWorker.value,
+    e.target.files[0],
+    49,
+    52,
+    "0",
+    (imageData) => {
+      console.log("imageData", imageData);
+    }
   );
 };
 
