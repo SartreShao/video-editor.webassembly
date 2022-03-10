@@ -18,9 +18,6 @@ const readFrame = (
   readFrameList,
   callback
 ) => {
-  // worker
-  console.log("readFrame");
-
   // 初始化：传入 videoFile、outputWidth、outputHeiight
   worker.postMessage({
     what: InitFFCodecReq,
@@ -42,7 +39,6 @@ const readFrame = (
     const data = response.data;
     switch (data.what) {
       case VideoRGBFrameRsp:
-        console.log("fuck main receive VideoRGBFrameRsp", response.data);
         // 获取返回参数
         var rgbBuffers = data.data;
         var videoPts = data.timestamp;
@@ -57,14 +53,10 @@ const readFrame = (
         callback(imageData);
         break;
       case OnMessageEvent:
-        console.log("fuck main receive OnMessageEvent", response.data);
         break;
       case StartDecodeEndRsp:
-        console.log("fuck main receive StartDecodeEndRsp", response.data);
         break;
       case InitFFCodecRsp:
-        console.log("fuck main receive InitFFCodecRsp", response.data);
-        console.log("fuck main postMessage StartDecodeReq");
         worker.postMessage({
           what: StartDecodeReq,
           startTimeMs: 0,
@@ -73,10 +65,8 @@ const readFrame = (
         });
         break;
       case StopDecodeRsp:
-        console.log("fuck main receive StopDecodeRsp", response.data);
         break;
       case MediaInfoRsp:
-        console.log("fuck main receive MediaInfoRsp", response.data);
         break;
     }
   };
