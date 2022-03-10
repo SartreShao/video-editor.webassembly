@@ -20,6 +20,34 @@ const getVideoDuration = videoFile =>
   });
 
 /**
+ * 获取一个视频的宽和高
+ * @param {*} videoFile
+ * @returns
+ */
+const getVideoHeightWidth = videoFile =>
+  new Promise((resolve, reject) => {
+    try {
+      const video = document.createElement("video");
+
+      video.preload = "metadata";
+
+      video.src = URL.createObjectURL(videoFile);
+
+      video.onloadedmetadata = () => {
+        URL.revokeObjectURL(video.src);
+        console.log("getVideoHeightWidth success", {
+          width: video.videoWidth,
+          height: video.videoHeight
+        });
+        resolve({ width: video.videoWidth, height: video.videoHeight });
+      };
+    } catch (error) {
+      console.log("getVideoHeightWidth error", error);
+      reject(error);
+    }
+  });
+
+/**
  * 获取多个视频的时长，单位微秒
  * @param {*} videoFile
  * @returns
@@ -83,11 +111,15 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
 
         const timeLineOut = timeLineIn + duration;
 
+        const { width, height } = await getVideoHeightWidth(videoFile);
+
         tempVisionTrackMaterials.push({
           duration: duration,
           timeLineIn: timeLineIn,
           timeLineOut: timeLineOut,
-          url: URL.createObjectURL(videoFile)
+          url: URL.createObjectURL(videoFile),
+          width: width,
+          height: height
         });
       }
 
@@ -111,5 +143,6 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
 export default {
   getVideoDuration,
   getVideoListDuration,
-  addVideoToCoreData
+  addVideoToCoreData,
+  getVideoHeightWidth
 };
