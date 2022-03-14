@@ -137,8 +137,7 @@ if (ENVIRONMENT_IS_NODE) {
   };
 } else {
 }
-var out = Module["print"] || console.info.bind(console);
-
+var out = Module["print"] || console.log.bind(console);
 var err = Module["printErr"] || console.warn.bind(console);
 for (key in moduleOverrides) {
   if (moduleOverrides.hasOwnProperty(key)) {
@@ -4337,7 +4336,7 @@ var _memalign = (Module["_memalign"] = function () {
     arguments
   );
 });
-var _ff_h264_cabac_tables = (Module["_ff_h264_cabac_tables"] = 270165);
+var _ff_h264_cabac_tables = (Module["_ff_h264_cabac_tables"] = 270485);
 Module["addFunction"] = addFunction;
 var calledRun;
 function ExitStatus(status) {

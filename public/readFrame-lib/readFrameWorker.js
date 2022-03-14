@@ -1,15 +1,12 @@
-// Module 文件的初始化在 libffmedia.js 文件中
 self.Module = {
   onRuntimeInitialized: function () {
     onWasmLoaded();
   }
 };
-
 const MOUNT_DIR = "/working";
 self.importScripts("libffmedia.js");
 self.importScripts("constants.js");
 
-// Web FFmpeg 解码器
 function WebFFDecoder() {
   this.videoCallback = null;
   this.audioCallback = null;
@@ -28,12 +25,30 @@ function WebFFDecoder() {
   this.isDebug = 0;
 }
 
+// 字母字符串转byte数组
+function stringToBytes(str) {
+  var ch,
+    st,
+    re = [];
+  for (var i = 0; i < str.length; i++) {
+    ch = str.charCodeAt(i); // get char
+    st = []; // set up "stack"
+    do {
+      st.push(ch & 0xff); // push byte to stack
+      ch = ch >> 8; // shift value down by 1 byte
+    } while (ch);
+    // add stack contents to result
+    // done because chars have "wrong" endianness
+    re = re.concat(st.reverse());
+  }
+  // return an array of bytes
+  return re;
+}
+
 /**
  * 初始化底层缓存
  * @param file_size 填写文件大小即可，单位 kb
  */
-
-// 通过 prototype 给对象的构造函数添加新的方法
 
 /**
  * 初始化 ffmpeg for web 解码器
@@ -67,16 +82,27 @@ WebFFDecoder.prototype.initFFmpegDecoder = function (
   let tempPath = null;
   if (file != null) {
     // 创建并挂载 FS 工作目录.
-    // FS 是 libffmedia.js 中提供的
     if (!FS.analyzePath(MOUNT_DIR).exists) {
       FS.mkdir(MOUNT_DIR);
+      // console.info("web initFFmpegDecoder mkdir");
     }
     FS.mount(WORKERFS, { files: [file] }, MOUNT_DIR);
-
+    // console.info(
+    //   "web initFFmpegDecoder mount initFFDecoder",
+    //   `${MOUNT_DIR}/${file.name}`
+    // );
     tempPath = `${MOUNT_DIR}/${file.name}`;
     let urlTmp = intArrayFromString(tempPath).concat(0); // add '\0'
     ps_file_path = Module._malloc(urlTmp.length); // 用声明的c函数分配内存
     Module.HEAPU8.set(urlTmp, ps_file_path); //复制url内容
+
+    // let filename = stringToBytes(`${MOUNT_DIR}/${file.name}`)
+    // ps_file_path = Module._malloc(filename.length);//通过emscripten分配C/C++中的堆内存
+    // if (ps_file_path === null) {
+    //     return;
+    // }
+    // var aKeyData = Module.HEAPU8.subarray(ps_file_path, ps_file_path + filename.length);//堆内存绑定到视图对象
+    // aKeyData.set(new Uint8Array(filename));
   }
   if (this.isDebug == 1) {
     console.info(
@@ -147,16 +173,24 @@ WebFFDecoder.prototype.startClip = function (
   this.clipEndTimeMs = endTimeMs;
   let ret = 0;
   if (rangeFrameCounts != null) {
+    // let strs = stringToBytes(rangeFrameCounts)
+    // let str = Module._malloc(strs.length);//通过emscripten分配C/C++中的堆内存
+    // if (str === null) {
+    //     return;
+    // }
+    // var strData = Module.HEAPU8.subarray(str, str + strs.length);//堆内存绑定到视图对象
+    // strData.set(new Uint8Array(strs));
+
     let frame_str = intArrayFromString(rangeFrameCounts).concat(0); // add '\0'
     let str = Module._malloc(frame_str.length); // 用声明的c函数分配内存
     Module.HEAPU8.set(frame_str, str); //复制url内容
 
-    ret = Module._startDecode(startTimeMs, endTimeMs, str);
+    ret = Module._startDecode(startTimeMs, endTimeMs, -1, str);
 
     Module._free(str);
     str = null;
   } else {
-    ret = Module._startDecode(startTimeMs, endTimeMs, null);
+    ret = Module._startDecode(startTimeMs, endTimeMs, -1, null);
   }
 
   if (ret < 0) {
@@ -168,9 +202,8 @@ WebFFDecoder.prototype.startClip = function (
     self.postMessage(rsp);
   }
 };
-
 WebFFDecoder.prototype.stopFFDecoder = function () {
-  // console.info("web stopFFDecoder");
+  console.info("web stopFFDecoder");
   Module._stopDecode();
   let rsp = {
     what: StopDecodeRsp
@@ -182,6 +215,7 @@ WebFFDecoder.prototype.stopFFDecoder = function () {
  * 关闭本次解码器
  */
 WebFFDecoder.prototype.closeFFDecoder = function () {
+  // console.info("web closeFFDecoder");
   Module._closeDecoder();
   if (this.cacheBuffer != null) {
     Module._free(this.cacheBuffer);
@@ -193,6 +227,7 @@ WebFFDecoder.prototype.closeFFDecoder = function () {
   if (FS.analyzePath(MOUNT_DIR).exists) {
     FS.unmount(MOUNT_DIR);
     // FS.rmdir(MOUNT_DIR)
+    // console.info("web closeFFDecoder unmount");
   }
 };
 
@@ -203,10 +238,7 @@ WebFFDecoder.prototype.closeFFDecoder = function () {
 WebFFDecoder.prototype.processReq = function (req) {
   switch (req.what) {
     case InitFFCodecReq: //第一步
-      // 释放内存
       this.closeFFDecoder();
-
-      // 加载主进程传入的惨啊数
       this.initFFmpegDecoder(
         req.isDebug,
         req.ffthreadCount,
@@ -329,7 +361,7 @@ WebFFDecoder.prototype.onWasmLoaded = function () {
 
   // messageCallback
   this.messageCallback = Module.addFunction(function (event) {
-    // console.info(" messageCallback > " + event);
+    // console.error(" messageCallback > " + event);
     var rsp = {
       what: OnMessageEvent,
       event: event
@@ -348,24 +380,8 @@ WebFFDecoder.prototype.onWasmLoaded = function () {
     channels,
     totalMs
   ) {
-    // console.info(
-    //   " initCallback > width=" +
-    //     width +
-    //     " height=" +
-    //     height +
-    //     " videoBitRate=" +
-    //     videoBitRate +
-    //     " videoFps=" +
-    //     videoFps +
-    //     " videoRotate=" +
-    //     videoRotate +
-    //     " sampleRate=" +
-    //     sampleRate +
-    //     " channels=" +
-    //     channels +
-    //     " totalMs=" +
-    //     totalMs
-    // );
+    // console.info(" initCallback > width=" + width + " height=" + height + " videoBitRate=" + videoBitRate + " videoFps=" + videoFps + " videoRotate=" + videoRotate + " sampleRate=" + sampleRate
+    //     + " channels=" + channels + " totalMs=" + totalMs);
     var rsp = {
       what: MediaInfoRsp,
       width: width,
@@ -403,16 +419,11 @@ self.onmessage = function (evt) {
   }
 
   var req = evt.data;
-
-  // 如果还没有加载好，那就先向消息队列中 push 一个请求
-  // 当加载好后，遍历消息队列，再进行处理
   if (!self.ffDecoder.wasmLoaded) {
     self.ffDecoder.cacheReq(req);
-    // console.info("Temp cache req " + req.t + ".");
+    console.info("Temp cache req " + req.t + ".");
     return;
   }
-
-  // 处理请求
   self.ffDecoder.processReq(req);
 };
 
