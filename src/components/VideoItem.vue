@@ -40,7 +40,7 @@ const width = computed(() =>
   background: #000;
   position: relative;
   display: flex;
-  // overflow: hidden;
+  overflow: hidden;
   align-items: center;
 
   .video-frame {

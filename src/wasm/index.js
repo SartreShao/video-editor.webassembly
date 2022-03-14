@@ -10,6 +10,15 @@ const MediaInfoRsp = 8;
 const StopDecodeReq = 9;
 const StopDecodeRsp = 10;
 
+/**
+ * 视频读帧函数
+ * @param {*} worker 必须传入 public/readFrame-lib/readFrameWorker.js
+ * @param {*} videoFile 传入需要解析的视频文件
+ * @param {*} outputWidth 输出视频的宽度
+ * @param {*} outputHeight 输出视频的高度
+ * @param {*} readFrameList 需要阅读的帧数，请用 "200, 300, 44444" 这样子的数组传入
+ * @param {*} callback 回调函数：会返回图片的 blob 地址
+ */
 const readFrame = (
   worker,
   videoFile,
@@ -34,7 +43,6 @@ const readFrame = (
     outVideoFormat: -1
   });
 
-  let i = 0;
   // 监听消息
   worker.onmessage = function (response) {
     const data = response.data;
@@ -56,7 +64,6 @@ const readFrame = (
 
         context.putImageData(imageData, 0, 0, 0, 0, videoWidth, videoHeight);
 
-        console.log("i", i++);
         // 返回 imageData
         canvas
           .convertToBlob()

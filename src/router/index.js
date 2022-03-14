@@ -6,6 +6,11 @@ const routes = [
     path: "/",
     name: "viedoeditor",
     component: VideoEditor
+  },
+  {
+    path: "/test",
+    name: "testview",
+    component: () => import("../views/TestView.vue")
   }
 ];
 

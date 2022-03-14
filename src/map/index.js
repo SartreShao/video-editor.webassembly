@@ -397,7 +397,7 @@ const getFitFrameWidth = (maxMaterialFrame, timeLineWidth) => {
  * @param {number} fps 帧率
  * @returns 帧数
  */
-const μs2Frame = (ms, fps) => ms * (fps / 1000000);
+const μs2Frame = (μs, fps) => μs * (fps / 1000000);
 
 /**
  * 帧数转毫秒
@@ -495,6 +495,7 @@ export default {
   getFitFrameWidth,
   μs2Frame,
   frame2ms,
+  second2hms,
   getVideoItemWidth,
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList

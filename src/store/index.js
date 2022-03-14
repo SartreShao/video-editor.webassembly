@@ -445,7 +445,15 @@ function useProvider() {
 
       // 开始读帧
       const readFrameList = tempList.join(", ");
-      console.log("readFrameList", readFrameList);
+      console.log("全部参数")
+      console.log("readFrameList origin", readFrameList);
+
+
+
+      console.log(
+        "readFrameList",
+        tempList.map(item => Mapping.second2hms(item / 1000))
+      );
 
       WASM.readFrame(
         $readFrameWorker.value,
@@ -455,7 +463,7 @@ function useProvider() {
         readFrameList,
         url => {
           console.log("url", url);
-          console.log("$videoFrameList.value", $videoFrameList.value);
+          // console.log("$videoFrameList.value", $videoFrameList.value);
           $videoFrameList.value.push({ url: url });
         }
       );

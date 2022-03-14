@@ -1,5 +1,6 @@
 <template>
-  <video-editor></video-editor>
+  <!-- <video-editor></video-editor> -->
+  <router-view></router-view>
 </template>
 
 <script setup>
