@@ -615,8 +615,35 @@ const getFramesList = (
       count++;
     }
   }
+
   console.log("拆分成功", tempList);
   console.log("拆分后的当前帧在", currentTempIndex, tempList[currentTempIndex]);
+
+  // 开始的帧图
+  const startFrameIndex =
+    currentTempIndex - screenFramesNumber > 0
+      ? currentTempIndex - screenFramesNumber
+      : 0;
+
+  // 结束的帧图
+  const endFrameIndex =
+    currentTempIndex + 2 * screenFramesNumber > tempList.length - 1
+      ? tempList.length - 1
+      : currentTempIndex + 2 * screenFramesNumber;
+
+  console.log(
+    "currentTempIndex + 2 * screenFramesNumber",
+    currentTempIndex + 2 * screenFramesNumber
+  );
+  console.log("tempList.length", tempList.length - 1);
+
+  console.log("开始的帧图", startFrameIndex);
+  console.log("结束的帧图", endFrameIndex);
+
+  // 切分数组
+  const frameList = tempList.slice(startFrameIndex, endFrameIndex + 1);
+
+  console.log("切分数组成功", frameList);
 };
 
 export default {
