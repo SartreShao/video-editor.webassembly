@@ -544,14 +544,6 @@ const getFramesList = (
   // 计算屏幕内有多少图片
   const screenFramesNumber = Math.ceil(timeLine_width / videoFrameWidth);
 
-  const preFramesNumber =
-    Math.ceil(timeLineOffsetLeft / videoFrameWidth) > screenFramesNumber
-      ? screenFramesNumber
-      : Math.ceil(timeLineOffsetLeft / videoFrameWidth);
-
-  // 计算屏幕后有多少图片
-  const afterScreenFramesNumber = screenFramesNumber;
-
   // 当前是第几个视频的第几帧
   let currentVideoIndex = 0;
   let currentFrameIndex = 0;
@@ -644,6 +636,8 @@ const getFramesList = (
   const frameList = tempList.slice(startFrameIndex, endFrameIndex + 1);
 
   console.log("切分数组成功", frameList);
+
+  // 重组数组
 };
 
 export default {
