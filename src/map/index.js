@@ -541,10 +541,13 @@ const getFramesList = (
 
   // 第二步：根据屏幕偏移量，计算出当前应该渲染的帧图
   // 计算屏幕前方有多少图片
-  const preFramesNumber = Math.ceil(timeLineOffsetLeft / videoFrameWidth);
-
   // 计算屏幕内有多少图片
   const screenFramesNumber = Math.ceil(timeLine_width / videoFrameWidth);
+
+  const preFramesNumber =
+    Math.ceil(timeLineOffsetLeft / videoFrameWidth) > screenFramesNumber
+      ? screenFramesNumber
+      : Math.ceil(timeLineOffsetLeft / videoFrameWidth);
 
   // 计算屏幕后有多少图片
   const afterScreenFramesNumber = screenFramesNumber;
@@ -552,6 +555,7 @@ const getFramesList = (
   // 当前是第几个视频的第几帧
   let currentVideoIndex = 0;
   let currentFrameIndex = 0;
+
   let tempTotalMaterialWidth = 0;
   for (let i = 0; i < visionTrackMaterials.length; i++) {
     // 获取视频素材
@@ -583,7 +587,36 @@ const getFramesList = (
   console.log("currentVideoIndex: " + currentVideoIndex);
   console.log("currentFrameIndex: " + currentFrameIndex);
 
-  // 计算是第几帧
+  // 计算本次我需要渲染哪一帧
+  // 先计算纯数字，再构建成 frameList 结构
+  // 需要 currentVideoIndex 的 currentFrameIndex 向前找 screenFramesNumber 个帧图
+  // 需要 currentVideoIndex 的 currentFrameIndex 向后找 2*screenFramesNumber 个帧图
+  // 做一个步骤：先拆分，再组装
+  // 拆分 framesList 为 frames
+  const tempList = [];
+
+  // 拆分后的 index
+  let currentTempIndex;
+  let count = 0;
+
+  for (let i = 0; i < tempFramesList.length; i++) {
+    const tempFrames = tempFramesList[i];
+    for (let j = 0; j < tempFrames.length; j++) {
+      const tempFrame = tempFrames[j];
+      tempList.push({
+        videoIndex: i,
+        blobUrl: tempFrame.blobUrl,
+        frame: tempFrame.frame,
+        position: tempFrame.position
+      });
+      if (currentVideoIndex === i && currentFrameIndex === j) {
+        currentTempIndex = count;
+      }
+      count++;
+    }
+  }
+  console.log("拆分成功", tempList);
+  console.log("拆分后的当前帧在", currentTempIndex, tempList[currentTempIndex]);
 };
 
 export default {
