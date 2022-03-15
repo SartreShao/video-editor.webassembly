@@ -63,6 +63,9 @@ const VIDEO_FRAME_WIDTH = 49;
 // WASM ReadFrame 读帧的状态
 const isReadFrameBusy = Symbol();
 
+// 帧图的内存缓存区
+const videoFrameBuffer = Symbol();
+
 // 临时存储视频帧数（只保存第一个视频的帧数）
 const videoFrameList = Symbol();
 
@@ -351,6 +354,7 @@ function useProvider() {
   const $videoFrameList = ref([]);
   const $currentFile = ref();
   const $isReadFrameBusy = ref(false);
+  const $videoFrameBuffer = ref(new Map());
 
   // watchEffect data
   const $gridWidth = ref(0);
@@ -507,6 +511,7 @@ function useProvider() {
   provide(videoFrameList, $videoFrameList);
   provide(currentFile, $currentFile);
   provide(isReadFrameBusy, $isReadFrameBusy);
+  provide(videoFrameBuffer, $videoFrameBuffer);
 }
 
 // GETTER METHOD
@@ -558,5 +563,6 @@ export default {
   readFrameWorker,
   videoFrameList,
   currentFile,
-  isReadFrameBusy
+  isReadFrameBusy,
+  videoFrameBuffer
 };
