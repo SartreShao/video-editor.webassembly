@@ -120,11 +120,12 @@ const addVideoToCoreData = (coreData, videoFileList, currentSectionIndex) =>
           duration: duration,
           timelineIn: timelineIn,
           timelineOut: timelineOut,
-          url: URL.createObjectURL(videoFile)
+          url: URL.createObjectURL(videoFile),
+          file: videoFile
         });
       }
 
-      // 将 tempVisionTrackMaterials 加入 coreDataa
+      // 将 tempVisionTrackMaterials 加入 coreData
       for (let i = 0; i < tempVisionTrackMaterials.length; i++) {
         coreData.sections[
           currentSectionIndex - 1
