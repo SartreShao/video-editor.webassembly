@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 self.Module = {
   onRuntimeInitialized: function () {
     onWasmLoaded();

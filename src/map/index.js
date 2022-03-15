@@ -413,7 +413,7 @@ const frame2ms = (frame, fps) => (frame / fps) * 1000;
  * @param {*} frameWidth 帧宽度
  * @returns
  */
-const getVideoItemWidth = (timelineIn, timelineOut, frameWidth) =>
+const getMaterialWidth = (timelineIn, timelineOut, frameWidth) =>
   μs2Frame(timelineOut - timelineIn, 30) * frameWidth;
 
 /**
@@ -479,7 +479,64 @@ const getVideoTrackMaterialList = visionTrackMaterials => {
   return tempList.sort((a, b) => a.timelineIn - b.timelineIn);
 };
 
-const getVideoFrameList = () => {};
+const getFramesList = (
+  videoFrameWidth,
+  coreData,
+  frameWidth,
+  currentSectionIndex
+) => {
+  // 输入数据检查
+  if (coreData.sections.length === 0) {
+    return [];
+  }
+
+  // 输入数据检查
+  if (
+    coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
+      .visionTrackMaterials.length === 0
+  ) {
+    return [];
+  }
+
+  // 第一步：计算全部视频，在当前 frameWidth 下的全部帧图
+  const visionTrackMaterials =
+    coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
+      .visionTrackMaterials;
+
+  const tempFramesList = [];
+
+  for (let i = 0; i < visionTrackMaterials.length; i++) {
+    // 获取视频素材
+    const material = visionTrackMaterials[i];
+
+    // 计算视频素材的宽度
+    const materialWidth = getMaterialWidth(
+      material.timelineIn,
+      material.timelineOut,
+      frameWidth
+    );
+
+    // 计算视频素材内所需要的帧图数
+    const framesNumber = Math.ceil(materialWidth / videoFrameWidth);
+
+    const tempFrames = [];
+
+    for (let i = 0; i < framesNumber; i++) {
+      let blobUrl = "";
+      let frame = Math.floor(i * (videoFrameWidth / frameWidth));
+      let position = `${i * videoFrameWidth + "px"} 0px`;
+
+      tempFrames.push({
+        blobUrl: blobUrl,
+        frame: frame,
+        position: position
+      });
+    }
+    tempFramesList.push(tempFrames);
+  }
+
+  console.log("getFramesList tempFramesList", tempFramesList);
+};
 
 export default {
   calcTimeLineContainerWidth,
@@ -496,7 +553,8 @@ export default {
   μs2Frame,
   frame2ms,
   second2hms,
-  getVideoItemWidth,
+  getMaterialWidth,
   getMaxFrameOfMaterial,
-  getVideoTrackMaterialList
+  getVideoTrackMaterialList,
+  getFramesList
 };

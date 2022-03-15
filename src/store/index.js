@@ -57,6 +57,9 @@ const currentSectionIndex = Symbol();
 // 读帧用的 Worker
 const readFrameWorker = Symbol();
 
+// 视频帧图的宽度
+const VIDEO_FRAME_WIDTH = 49;
+
 // 临时存储视频帧数（只保存第一个视频的帧数）
 const videoFrameList = Symbol();
 
@@ -403,72 +406,79 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    // 计算视频帧列表
-    // 1. 视频有多长
-    if (
-      $coreData.sections[$currentSectionIndex.value - 1].sectionTimeline
-        .visionTrack.visionTrackMaterials.length !== 0
-    ) {
-      const visionTrackMaterial =
-        $coreData.sections[$currentSectionIndex.value - 1].sectionTimeline
-          .visionTrack.visionTrackMaterials[0];
-
-      const videoWidth = Mapping.getVideoItemWidth(
-        visionTrackMaterial.timelineIn,
-        visionTrackMaterial.timelineOut,
-        $frameWidth.value
-      );
-
-      // 2. 一帧有多长
-      const videoFrameWidth = 49;
-
-      // 3. 一共需要渲染多少帧
-      const frameNumber = Math.ceil(videoWidth / videoFrameWidth);
-
-      console.log("frameNumber", frameNumber);
-
-      // 4. 每一帧的开头是多少毫秒
-      const tempList = [];
-
-      for (let i = 0; i < frameNumber; i++) {
-        let frameMs = 0;
-        if (i === 0) {
-          frameMs = 0;
-        } else {
-          frameMs = Mapping.frame2ms(
-            i * (videoFrameWidth / $frameWidth.value),
-            30
-          );
-        }
-        tempList.push(frameMs);
-      }
-
-      // 开始读帧
-      const readFrameList = tempList.join(", ");
-      console.log("全部参数")
-      console.log("readFrameList origin", readFrameList);
-
-
-
-      console.log(
-        "readFrameList",
-        tempList.map(item => Mapping.second2hms(item / 1000))
-      );
-
-      WASM.readFrame(
-        $readFrameWorker.value,
-        $currentFile.value,
-        49,
-        52,
-        readFrameList,
-        url => {
-          console.log("url", url);
-          // console.log("$videoFrameList.value", $videoFrameList.value);
-          $videoFrameList.value.push({ url: url });
-        }
-      );
-    }
+    Mapping.getFramesList(
+      VIDEO_FRAME_WIDTH,
+      $coreData,
+      $frameWidth.value,
+      $currentSectionIndex.value
+    );
   });
+
+  // watchEffect(() => {
+  //   // 计算视频帧列表
+  //   // 1. 视频有多长
+  //   if (
+  //     $coreData.sections[$currentSectionIndex.value - 1].sectionTimeline
+  //       .visionTrack.visionTrackMaterials.length !== 0
+  //   ) {
+  //     const visionTrackMaterial =
+  //       $coreData.sections[$currentSectionIndex.value - 1].sectionTimeline
+  //         .visionTrack.visionTrackMaterials[0];
+
+  //     const videoWidth = Mapping.getMaterialWidth(
+  //       visionTrackMaterial.timelineIn,
+  //       visionTrackMaterial.timelineOut,
+  //       $frameWidth.value
+  //     );
+
+  //     // 2. 一帧有多长
+  //     const videoFrameWidth = 49;
+
+  //     // 3. 一共需要渲染多少帧
+  //     const frameNumber = Math.ceil(videoWidth / videoFrameWidth);
+
+  //     console.log("frameNumber", frameNumber);
+
+  //     // 4. 每一帧的开头是多少毫秒
+  //     const tempList = [];
+
+  //     for (let i = 0; i < frameNumber; i++) {
+  //       let frameMs = 0;
+  //       if (i === 0) {
+  //         frameMs = 0;
+  //       } else {
+  //         frameMs = Mapping.frame2ms(
+  //           i * (videoFrameWidth / $frameWidth.value),
+  //           30
+  //         );
+  //       }
+  //       tempList.push(frameMs);
+  //     }
+
+  //     // 开始读帧
+  //     const readFrameList = tempList.join(", ");
+  //     console.log("全部参数")
+  //     console.log("readFrameList origin", readFrameList);
+
+  //     console.log(
+  //       "readFrameList",
+  //       tempList.map(item => Mapping.second2hms(item / 1000))
+  //     );
+
+  //     WASM.readFrame(
+  //       $readFrameWorker.value,
+  //       $currentFile.value,
+  //       49,
+  //       52,
+  //       readFrameList,
+  //       url => {
+  //         console.log("url", url);
+  //         // console.log("$videoFrameList.value", $videoFrameList.value);
+  //         $videoFrameList.value.push({ url: url });
+  //       }
+  //     );
+  //   }
+  // });
 
   // provide
   provide(timeLineContainer_width, $timeLineContainer_width);
