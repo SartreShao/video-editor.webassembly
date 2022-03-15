@@ -17,6 +17,7 @@ const StopDecodeRsp = 10;
  * @param {*} outputWidth 输出视频的宽度
  * @param {*} outputHeight 输出视频的高度
  * @param {*} readFrameList 需要阅读的帧数，请用 "200, 300, 44444" 这样子的数组传入
+ * @param {*} isReadFrameBusy 读帧函数当前处于什么状态
  * @param {*} callback 回调函数：会返回图片的 blob 地址
  */
 const readFrame = (
@@ -25,6 +26,7 @@ const readFrame = (
   outputWidth,
   outputHeight,
   readFrameList,
+  isReadFrameBusy,
   callback
 ) => {
   // 初始化：传入 videoFile、outputWidth、outputHeiight
@@ -75,9 +77,11 @@ const readFrame = (
         break;
       case StartDecodeEndRsp:
         console.log("fuck StartDecodeEndRsp", data);
+        isReadFrameBusy.value = false;
         break;
       case InitFFCodecRsp:
         console.log("fuck InitFFCodecRsp", data);
+        isReadFrameBusy.value = true;
         worker.postMessage({
           what: StartDecodeReq,
           startTimeMs: 0,
