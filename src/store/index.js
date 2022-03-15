@@ -66,6 +66,9 @@ const isReadFrameBusy = Symbol();
 // 帧图的内存缓存区
 const videoFrameBuffer = Symbol();
 
+// 读帧任务栈
+const readFrameTaskStack = Symbol();
+
 // 临时存储视频帧数（只保存第一个视频的帧数）
 const videoFrameList = Symbol();
 
@@ -367,6 +370,7 @@ function useProvider() {
   const $minFrameWidth = ref(0);
   const $fitFrameWidth = ref(0);
   const $maxFrameOfMaterial = ref(0);
+  const $readFrameTaskStack = ref([]);
 
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
@@ -512,6 +516,7 @@ function useProvider() {
   provide(currentFile, $currentFile);
   provide(isReadFrameBusy, $isReadFrameBusy);
   provide(videoFrameBuffer, $videoFrameBuffer);
+  provide(readFrameTaskStack, $readFrameTaskStack);
 }
 
 // GETTER METHOD
@@ -564,5 +569,6 @@ export default {
   videoFrameList,
   currentFile,
   isReadFrameBusy,
-  videoFrameBuffer
+  videoFrameBuffer,
+  readFrameTaskStack
 };
