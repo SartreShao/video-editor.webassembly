@@ -483,7 +483,9 @@ const getFramesList = (
   videoFrameWidth,
   coreData,
   frameWidth,
-  currentSectionIndex
+  currentSectionIndex,
+  timeLineOffsetLeft,
+  timeLine_width
 ) => {
   // 输入数据检查
   if (coreData.sections.length === 0) {
@@ -536,6 +538,43 @@ const getFramesList = (
   }
 
   console.log("getFramesList tempFramesList", tempFramesList);
+
+  // 第二步：根据屏幕偏移量，计算出当前应该渲染的帧图
+  // 计算屏幕前方有多少图片
+  const preFramesNumber = Math.ceil(timeLineOffsetLeft / videoFrameWidth);
+
+  // 计算屏幕内有多少图片
+  const screenFramesNumber = Math.ceil(timeLine_width / videoFrameWidth);
+
+  // 计算屏幕后有多少图片
+  const afterScreenFramesNumber = screenFramesNumber;
+
+  // 当前是第几个视频的第几帧
+  let currentVideoIndex = 0;
+  let tempTotalMaterialWidth = 0;
+  for (let i = 0; i < visionTrackMaterials.length; i++) {
+    // 获取视频素材
+    const material = visionTrackMaterials[i];
+
+    // 计算视频素材的宽度
+    const materialWidth = getMaterialWidth(
+      material.timelineIn,
+      material.timelineOut,
+      frameWidth
+    );
+
+    tempTotalMaterialWidth += materialWidth;
+
+    if (timeLineOffsetLeft < tempTotalMaterialWidth) {
+      currentVideoIndex = i;
+      break;
+    } else if (timeLineOffsetLeft === tempTotalMaterialWidth) {
+      currentVideoIndex = i + 1;
+      break;
+    }
+  }
+
+  console.log("currentVideoIndex: " + currentVideoIndex);
 };
 
 export default {

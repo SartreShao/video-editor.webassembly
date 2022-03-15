@@ -410,7 +410,9 @@ function useProvider() {
       VIDEO_FRAME_WIDTH,
       $coreData,
       $frameWidth.value,
-      $currentSectionIndex.value
+      $currentSectionIndex.value,
+      $timeLineOffsetLeft.value,
+      $timeLine_width.value
     );
   });
 
