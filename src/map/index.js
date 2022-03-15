@@ -551,6 +551,7 @@ const getFramesList = (
 
   // 当前是第几个视频的第几帧
   let currentVideoIndex = 0;
+  let currentFrameIndex = 0;
   let tempTotalMaterialWidth = 0;
   for (let i = 0; i < visionTrackMaterials.length; i++) {
     // 获取视频素材
@@ -567,14 +568,22 @@ const getFramesList = (
 
     if (timeLineOffsetLeft < tempTotalMaterialWidth) {
       currentVideoIndex = i;
+      currentFrameIndex = Math.floor(
+        (timeLineOffsetLeft - (tempTotalMaterialWidth - materialWidth)) /
+          videoFrameWidth
+      );
       break;
     } else if (timeLineOffsetLeft === tempTotalMaterialWidth) {
       currentVideoIndex = i + 1;
+      currentFrameIndex = 0;
       break;
     }
   }
 
   console.log("currentVideoIndex: " + currentVideoIndex);
+  console.log("currentFrameIndex: " + currentFrameIndex);
+
+  // 计算是第几帧
 };
 
 export default {
