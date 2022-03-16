@@ -1,4 +1,4 @@
-import { provide, ref, computed, reactive, watchEffect } from "vue";
+import { provide, ref, computed, reactive, watchEffect, watch } from "vue";
 import Mapping from "@/map";
 import WASM from "@/wasm";
 
@@ -433,6 +433,14 @@ function useProvider() {
       $currentSectionIndex.value,
       $timeLineOffsetLeft.value,
       $timeLine_width.value
+    );
+  });
+
+  watchEffect(() => {
+    $framesList.value = Mapping.getFramesList(
+      $flatFramesList.value,
+      $videoFrameBuffer.value,
+      $readFrameTaskStack.value
     );
   });
 
