@@ -682,15 +682,66 @@ const getflatFrameList = (
   return flatFrameList;
 };
 
-// const constructFramesList = (
-//   flatFrameList,
-//   videoFrameBuffer,
-//   readFrameTaskStack
-// ) => {
-//   for (let i = 0; i < flatFrameList.length; i++) {
-//     const flatFrame = 
-//   }
-// };
+const constructFramesList = (
+  flatFrameList,
+  videoFrameBuffer,
+  readFrameTaskStack
+) => {
+  /**
+   * task = {
+      file: File,
+      readFrameList: "0,374593.975,749187.95,1123781"
+    }
+   */
+  const taskList = [];
+
+  /**
+   * key: {
+      priority: number,
+      videoIndex: number
+    }
+
+    value: {
+      time,
+      file
+    }[]
+   */
+  const tempMap = new Map();
+
+  // Step 1.1: 为 flatFrame 的 blobUrl 赋值
+  // Step 1.2：为 tempMap 赋值
+  for (let i = 0; i < flatFrameList.length; i++) {
+    const flatFrame = flatFrameList[i];
+    const key = JSON.stringify({
+      videoIndex: flatFrame.videoIndex,
+      frame: flatFrame.frame
+    });
+    if (videoFrameBuffer.has(key)) {
+      flatFrame.blobUrl = videoFrameBuffer.get(key);
+    } else {
+      // 1. 判断 Map 中是否存在组[pririty, videoIndex]
+      const groupKey = JSON.stringify({
+        priority: flatFrame.priority,
+        videoIndex: flatFrame.videoIndex
+      });
+      if (tempMap.has(groupKey)) {
+        tempMap.get(groupKey).push({
+          time: frame2ms(flatFrame.frame, 30),
+          file: flatFrame.file
+        });
+      } else {
+        const value = [];
+        value.push({
+          time: frame2ms(flatFrame.frame, 30),
+          file: flatFrame.file
+        });
+        tempMap.set(groupKey, value);
+      }
+    }
+  }
+
+  console.log("tempMap", tempMap);
+};
 
 export default {
   calcTimeLineContainerWidth,
