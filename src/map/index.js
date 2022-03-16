@@ -479,7 +479,7 @@ const getVideoTrackMaterialList = visionTrackMaterials => {
   return tempList.sort((a, b) => a.timelineIn - b.timelineIn);
 };
 
-const getFramesList = (
+const getFlatFramesList = (
   videoFrameWidth,
   coreData,
   frameWidth,
@@ -531,13 +531,14 @@ const getFramesList = (
       tempFrames.push({
         blobUrl: blobUrl,
         frame: frame,
-        position: position
+        position: position,
+        file: material.file
       });
     }
     tempFramesList.push(tempFrames);
   }
 
-  console.log("getFramesList tempFramesList", tempFramesList);
+  console.log("getFlatFramesList tempFramesList", tempFramesList);
 
   // 第二步：根据屏幕偏移量，计算出当前应该渲染的帧图
   // 计算屏幕前方有多少图片
@@ -580,7 +581,7 @@ const getFramesList = (
   console.log("currentFrameIndex: " + currentFrameIndex);
 
   // 计算本次我需要渲染哪一帧
-  // 先计算纯数字，再构建成 frameList 结构
+  // 先计算纯数字，再构建成 flatFramesList 结构
   // 需要 currentVideoIndex 的 currentFrameIndex 向前找 screenFramesNumber 个帧图
   // 需要 currentVideoIndex 的 currentFrameIndex 向后找 2*screenFramesNumber 个帧图
   // 做一个步骤：先拆分，再组装
@@ -599,7 +600,8 @@ const getFramesList = (
         videoIndex: i,
         blobUrl: tempFrame.blobUrl,
         frame: tempFrame.frame,
-        position: tempFrame.position
+        position: tempFrame.position,
+        file: tempFrame.file
       });
       if (currentVideoIndex === i && currentFrameIndex === j) {
         currentTempIndex = count;
@@ -632,12 +634,12 @@ const getFramesList = (
   console.log("开始的帧图", startFrameIndex);
   console.log("结束的帧图", endFrameIndex);
 
-  // 切分数组
-  const frameList = tempList.slice(startFrameIndex, endFrameIndex + 1);
+  // 切分数组：称为一个扁平化的数据
+  const flatFramesList = tempList.slice(startFrameIndex, endFrameIndex + 1);
 
-  console.log("切分数组成功", frameList);
+  console.log("切分数组成功", flatFramesList);
 
-  // 重组数组
+  return flatFramesList;
 };
 
 export default {
@@ -658,5 +660,5 @@ export default {
   getMaterialWidth,
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList,
-  getFramesList
+  getFlatFramesList
 };

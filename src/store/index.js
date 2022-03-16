@@ -418,7 +418,7 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    Mapping.getFramesList(
+    Mapping.getFlatFramesList(
       VIDEO_FRAME_WIDTH,
       $coreData,
       $frameWidth.value,
