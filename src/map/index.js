@@ -682,6 +682,14 @@ const getFlatFramesList = (
   return flatFramesList;
 };
 
+const constructFramesList = (
+  flatFramesList,
+  videoFrameBuffer,
+  readFrameTaskStack
+) => {
+  
+};
+
 export default {
   calcTimeLineContainerWidth,
   frame2Time,
@@ -700,5 +708,6 @@ export default {
   getMaterialWidth,
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList,
-  getFlatFramesList
+  getFlatFramesList,
+  constructFramesList
 };

@@ -437,7 +437,7 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    $framesList.value = Mapping.getFramesList(
+    $framesList.value = Mapping.constructFramesList(
       $flatFramesList.value,
       $videoFrameBuffer.value,
       $readFrameTaskStack.value
