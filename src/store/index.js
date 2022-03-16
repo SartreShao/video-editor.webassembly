@@ -72,6 +72,9 @@ const readFrameTaskStack = Symbol();
 // 扁平帧图列表：决定了当前屏幕上应该显示的帧图+ 前后该缓存的帧图
 const flatFramesList = Symbol();
 
+// 帧图列表
+const framesList = Symbol();
+
 // 临时存储视频帧数（只保存第一个视频的帧数）
 const videoFrameList = Symbol();
 
@@ -375,6 +378,7 @@ function useProvider() {
   const $fitFrameWidth = ref(0);
   const $maxFrameOfMaterial = ref(0);
   const $readFrameTaskStack = ref([]);
+  const $framesList = ref([]);
 
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
@@ -522,6 +526,7 @@ function useProvider() {
   provide(videoFrameBuffer, $videoFrameBuffer);
   provide(readFrameTaskStack, $readFrameTaskStack);
   provide(flatFramesList, $flatFramesList);
+  provide(framesList, $framesList);
 }
 
 // GETTER METHOD
@@ -576,5 +581,6 @@ export default {
   isReadFrameBusy,
   videoFrameBuffer,
   readFrameTaskStack,
-  flatFramesList
+  flatFramesList,
+  framesList
 };
