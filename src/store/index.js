@@ -70,7 +70,7 @@ const videoFrameBuffer = Symbol();
 const readFrameTaskStack = Symbol();
 
 // 扁平帧图列表：决定了当前屏幕上应该显示的帧图+ 前后该缓存的帧图
-const flatFramesList = Symbol();
+const flatFrameList = Symbol();
 
 // 帧图列表
 const framesList = Symbol();
@@ -364,7 +364,7 @@ function useProvider() {
   const $currentFile = ref();
   const $isReadFrameBusy = ref(false);
   const $videoFrameBuffer = ref(new Map());
-  const $flatFramesList = ref([]);
+  const $flatFrameList = ref([]);
 
   // watchEffect data
   const $gridWidth = ref(0);
@@ -426,7 +426,7 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    $flatFramesList.value = Mapping.getFlatFramesList(
+    $flatFrameList.value = Mapping.getflatFrameList(
       VIDEO_FRAME_WIDTH,
       $coreData,
       $frameWidth.value,
@@ -438,7 +438,7 @@ function useProvider() {
 
   watchEffect(() => {
     $framesList.value = Mapping.constructFramesList(
-      $flatFramesList.value,
+      $flatFrameList.value,
       $videoFrameBuffer.value,
       $readFrameTaskStack.value
     );
@@ -533,7 +533,7 @@ function useProvider() {
   provide(isReadFrameBusy, $isReadFrameBusy);
   provide(videoFrameBuffer, $videoFrameBuffer);
   provide(readFrameTaskStack, $readFrameTaskStack);
-  provide(flatFramesList, $flatFramesList);
+  provide(flatFrameList, $flatFrameList);
   provide(framesList, $framesList);
 }
 
@@ -589,6 +589,6 @@ export default {
   isReadFrameBusy,
   videoFrameBuffer,
   readFrameTaskStack,
-  flatFramesList,
+  flatFrameList,
   framesList
 };

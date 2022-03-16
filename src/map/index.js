@@ -480,7 +480,7 @@ const getVideoTrackMaterialList = visionTrackMaterials => {
 };
 
 /**
- * 获取 flatFramesList：它决定了当前屏幕上应该显示哪些帧，以及该缓存哪些帧
+ * 获取 flatFrameList：它决定了当前屏幕上应该显示哪些帧，以及该缓存哪些帧
  * @param {*} videoFrameWidth
  * @param {*} coreData
  * @param {*} frameWidth
@@ -498,7 +498,7 @@ const getVideoTrackMaterialList = visionTrackMaterials => {
  *               - 2：最低优先级（表示是前一屏幕的帧）
  * }[]
  */
-const getFlatFramesList = (
+const getflatFrameList = (
   videoFrameWidth,
   coreData,
   frameWidth,
@@ -555,7 +555,7 @@ const getFlatFramesList = (
     tempFramesList.push(tempFrames);
   }
 
-  console.log("getFlatFramesList tempFramesList", tempFramesList);
+  console.log("getflatFrameList tempFramesList", tempFramesList);
 
   // 第二步：根据屏幕偏移量，计算出当前应该渲染的帧图
   // 计算屏幕前方有多少图片
@@ -598,7 +598,7 @@ const getFlatFramesList = (
   console.log("currentFrameIndex: " + currentFrameIndex);
 
   // 计算本次我需要渲染哪一帧
-  // 先计算纯数字，再构建成 flatFramesList 结构
+  // 先计算纯数字，再构建成 flatFrameList 结构
   // 需要 currentVideoIndex 的 currentFrameIndex 向前找 screenFramesNumber 个帧图
   // 需要 currentVideoIndex 的 currentFrameIndex 向后找 2*screenFramesNumber 个帧图
   // 做一个步骤：先拆分，再组装
@@ -656,39 +656,41 @@ const getFlatFramesList = (
   console.log("结束的帧图", endFrameIndex);
 
   // 切分数组：称为一个扁平化的数据
-  const flatFramesList = tempList.slice(startFrameIndex, endFrameIndex + 1);
-  console.log("切分数组成功", flatFramesList);
+  const flatFrameList = tempList.slice(startFrameIndex, endFrameIndex + 1);
+  console.log("切分数组成功", flatFrameList);
 
   // 切分后的数组的当前帧
   const afterSliceFlatCurrentFrameIndex =
     flatCurrentFrameIndex - startFrameIndex;
 
   // 第三步：获取读帧优先级
-  for (let i = 0; i < flatFramesList.length; i++) {
+  for (let i = 0; i < flatFrameList.length; i++) {
     if (i >= 0 && i < afterSliceFlatCurrentFrameIndex) {
-      flatFramesList[i].priority = 2;
+      flatFrameList[i].priority = 2;
     } else if (
       i >= afterSliceFlatCurrentFrameIndex &&
       i < afterSliceFlatCurrentFrameIndex + screenFramesNumber
     ) {
-      flatFramesList[i].priority = 0;
+      flatFrameList[i].priority = 0;
     } else if (i >= afterSliceFlatCurrentFrameIndex + screenFramesNumber) {
-      flatFramesList[i].priority = 1;
+      flatFrameList[i].priority = 1;
     }
   }
 
-  console.log("读帧优先级获取成功", flatFramesList);
+  console.log("读帧优先级获取成功", flatFrameList);
 
-  return flatFramesList;
+  return flatFrameList;
 };
 
-const constructFramesList = (
-  flatFramesList,
-  videoFrameBuffer,
-  readFrameTaskStack
-) => {
-  
-};
+// const constructFramesList = (
+//   flatFrameList,
+//   videoFrameBuffer,
+//   readFrameTaskStack
+// ) => {
+//   for (let i = 0; i < flatFrameList.length; i++) {
+//     const flatFrame = 
+//   }
+// };
 
 export default {
   calcTimeLineContainerWidth,
@@ -708,6 +710,6 @@ export default {
   getMaterialWidth,
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList,
-  getFlatFramesList,
+  getflatFrameList,
   constructFramesList
 };
