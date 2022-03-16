@@ -709,7 +709,7 @@ const constructFramesList = (
   const tempMap = new Map();
 
   // Step 1.1: 为 flatFrame 的 blobUrl 赋值
-  // Step 1.2：为 tempMap 赋值
+  // Step 1.2：为 tempMap 赋值——完成聚类
   for (let i = 0; i < flatFrameList.length; i++) {
     const flatFrame = flatFrameList[i];
     const key = JSON.stringify({
@@ -740,7 +740,22 @@ const constructFramesList = (
     }
   }
 
+  // 完成聚类
   console.log("tempMap", tempMap);
+
+  for (let frameList of tempMap.values()) {
+    const readFrameList = [];
+    frameList.forEach(frame => readFrameList.push(frame.time));
+
+    const task = {
+      file: frameList[0].file,
+      readFrameList: readFrameList.join(", ")
+    };
+
+    taskList.push(task);
+  }
+
+  console.log("构建完成 TaskList", taskList);
 };
 
 export default {
