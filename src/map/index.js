@@ -479,6 +479,25 @@ const getVideoTrackMaterialList = visionTrackMaterials => {
   return tempList.sort((a, b) => a.timelineIn - b.timelineIn);
 };
 
+/**
+ * 获取 flatFramesList：它决定了当前屏幕上应该显示哪些帧，以及该缓存哪些帧
+ * @param {*} videoFrameWidth
+ * @param {*} coreData
+ * @param {*} frameWidth
+ * @param {*} currentSectionIndex
+ * @param {*} timeLineOffsetLeft
+ * @param {*} timeLine_width
+ * @returns {
+ *     videoIndex: 当前视频在 CoreData 中的 index,
+ *     frame: 当前帧图的帧数——这将传给 readFrame 函数读帧,
+ *     position: 当前帧图的渲染到 background-position 时应该传输的值,
+ *     file: 当前帧图的视频源文件——这将传给 readFrame 函数读帧,
+ *     priority: 【重点】读帧优先级——这将用于生成 ReadFrameTask 时进行分片
+ *               - 0：最高优先级（表示是当前屏幕的帧）
+ *               - 1：次优先级（表示是下一屏幕的帧）
+ *               - 2：最低优先级（表示是前一屏幕的帧）
+ * }[]
+ */
 const getFlatFramesList = (
   videoFrameWidth,
   coreData,
@@ -524,12 +543,10 @@ const getFlatFramesList = (
     const tempFrames = [];
 
     for (let i = 0; i < framesNumber; i++) {
-      let blobUrl = "";
       let frame = Math.floor(i * (videoFrameWidth / frameWidth));
       let position = `${i * videoFrameWidth + "px"} 0px`;
 
       tempFrames.push({
-        blobUrl: blobUrl,
         frame: frame,
         position: position,
         file: material.file
@@ -589,7 +606,7 @@ const getFlatFramesList = (
   const tempList = [];
 
   // 拆分后的 index
-  let currentTempIndex;
+  let flatCurrentFrameIndex;
   let count = 0;
 
   for (let i = 0; i < tempFramesList.length; i++) {
@@ -598,37 +615,41 @@ const getFlatFramesList = (
       const tempFrame = tempFrames[j];
       tempList.push({
         videoIndex: i,
-        blobUrl: tempFrame.blobUrl,
         frame: tempFrame.frame,
         position: tempFrame.position,
         file: tempFrame.file
       });
       if (currentVideoIndex === i && currentFrameIndex === j) {
-        currentTempIndex = count;
+        flatCurrentFrameIndex = count;
       }
       count++;
     }
   }
 
   console.log("拆分成功", tempList);
-  console.log("拆分后的当前帧在", currentTempIndex, tempList[currentTempIndex]);
+  console.log(
+    "拆分后的当前帧在",
+    flatCurrentFrameIndex,
+    tempList[flatCurrentFrameIndex]
+  );
 
   // 开始的帧图
   const startFrameIndex =
-    currentTempIndex - screenFramesNumber > 0
-      ? currentTempIndex - screenFramesNumber
+    flatCurrentFrameIndex - screenFramesNumber > 0
+      ? flatCurrentFrameIndex - screenFramesNumber
       : 0;
 
   // 结束的帧图
   const endFrameIndex =
-    currentTempIndex + 2 * screenFramesNumber > tempList.length - 1
+    flatCurrentFrameIndex + 2 * screenFramesNumber - 1 > tempList.length - 1
       ? tempList.length - 1
-      : currentTempIndex + 2 * screenFramesNumber;
+      : flatCurrentFrameIndex + 2 * screenFramesNumber - 1;
 
   console.log(
-    "currentTempIndex + 2 * screenFramesNumber",
-    currentTempIndex + 2 * screenFramesNumber
+    "flatCurrentFrameIndex + 2 * screenFramesNumber",
+    flatCurrentFrameIndex + 2 * screenFramesNumber
   );
+  console.log("screenFramesNumber", screenFramesNumber);
   console.log("tempList.length", tempList.length - 1);
 
   console.log("开始的帧图", startFrameIndex);
@@ -636,8 +657,27 @@ const getFlatFramesList = (
 
   // 切分数组：称为一个扁平化的数据
   const flatFramesList = tempList.slice(startFrameIndex, endFrameIndex + 1);
-
   console.log("切分数组成功", flatFramesList);
+
+  // 切分后的数组的当前帧
+  const afterSliceFlatCurrentFrameIndex =
+    flatCurrentFrameIndex - startFrameIndex;
+
+  // 第三步：获取读帧优先级
+  for (let i = 0; i < flatFramesList.length; i++) {
+    if (i >= 0 && i < afterSliceFlatCurrentFrameIndex) {
+      flatFramesList[i].priority = 2;
+    } else if (
+      i >= afterSliceFlatCurrentFrameIndex &&
+      i < afterSliceFlatCurrentFrameIndex + screenFramesNumber
+    ) {
+      flatFramesList[i].priority = 0;
+    } else if (i >= afterSliceFlatCurrentFrameIndex + screenFramesNumber) {
+      flatFramesList[i].priority = 1;
+    }
+  }
+
+  console.log("读帧优先级获取成功", flatFramesList);
 
   return flatFramesList;
 };
