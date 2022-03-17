@@ -450,19 +450,14 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    if (
-      $isReadFrameBusy.value === false &&
-      $readFrameTaskStack.value.length !== 0
-    ) {
-      ReadFrame.excuteReadFrameTask(
-        $readFrameTaskStack,
-        $isReadFrameBusy,
-        $currentReadFrameVideoIndex,
-        $readFrameWorker,
-        VIDEO_FRAME_WIDTH,
-        $videoFrameBuffer
-      );
-    }
+    ReadFrame.excuteReadFrameTask(
+      $readFrameTaskStack,
+      $isReadFrameBusy,
+      $currentReadFrameVideoIndex,
+      $readFrameWorker,
+      VIDEO_FRAME_WIDTH,
+      $videoFrameBuffer
+    );
   });
 
   // watchEffect(() => {

@@ -8,19 +8,20 @@ const excuteReadFrameTask = (
   videoFrameWidth,
   videoFrameBuffer
 ) => {
-  const task = readFrameTaskStack.value.pop();
-  isReadFrameBusy.value = true;
-  currentReadFrameVideoIndex.value = task.videoIndex;
-  WASM.readFrame(
-    readFrameWorker.value,
-    task.file,
-    videoFrameWidth,
-    52,
-    task.readFrameList,
-    (blobUrl, frame, isWorkEnd) => {
-      if (isWorkEnd) {
-        isReadFrameBusy.value = false;
-      } else {
+  if (
+    isReadFrameBusy.value === false &&
+    readFrameTaskStack.value.length !== 0
+  ) {
+    const task = readFrameTaskStack.value.pop();
+    currentReadFrameVideoIndex.value = task.videoIndex;
+    WASM.readFrame(
+      readFrameWorker.value,
+      task.file,
+      videoFrameWidth,
+      52,
+      task.readFrameList,
+      isReadFrameBusy,
+      (blobUrl, frame) => {
         const key = JSON.stringify({
           videoIndex: currentReadFrameVideoIndex.value,
           frame: frame
@@ -30,8 +31,8 @@ const excuteReadFrameTask = (
 
         videoFrameBuffer.value.set(key, value);
       }
-    }
-  );
+    );
+  }
 };
 
 export default {
