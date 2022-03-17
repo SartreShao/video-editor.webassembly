@@ -244,10 +244,10 @@
         <!-- 时间轴的视频容器 -->
         <div class="video-line" :style="{ width: timescale_width + 'px' }">
           <video-item
-            v-for="item in videoTrackMaterialList"
+            v-for="(item, index) in videoTrackMaterialList"
             :key="item"
             :visionTrackMaterial="item"
-            :videoFrameList="videoFrameList"
+            :frames="framesMap.get(index)"
           ></video-item>
         </div>
       </div>
@@ -322,6 +322,9 @@ const fitFrameWidth = inject(Store.fitFrameWidth);
 
 // 当前素材最大帧数
 const maxFrameOfMaterial = inject(Store.maxFrameOfMaterial);
+
+// 需要加载上来的视频帧
+const framesMap = inject(Store.framesMap);
 
 const videoFrameList = inject(Store.videoFrameList);
 

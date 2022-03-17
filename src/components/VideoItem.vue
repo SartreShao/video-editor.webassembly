@@ -1,28 +1,58 @@
 <template>
   <div class="video-item" :style="{ width: width + 'px' }">
-    <img
+    <!-- <img
       class="video-frame"
       v-for="item in videoFrameList"
       :key="item"
       :src="item.url"
-    />
-
+    /> -->
+    <div
+      class="video-frame"
+      :style="{
+        backgroundImage: backgroundStyle.image,
+        backgroundPosition: backgroundStyle.position,
+      }"
+    ></div>
     <!-- 分割线 -->
     <div class="placeholder"></div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, computed, inject } from "vue";
+import { defineProps, computed, inject, watchEffect, ref } from "vue";
 import Mapping from "@/map";
 import Store from "@/store";
 
 const props = defineProps({
   visionTrackMaterial: Object,
-  videoFrameList: Array,
+  frames: Array,
 });
 
 const frameWidth = inject(Store.frameWidth);
+
+const backgroundStyle = ref({ image: "", position: "" });
+
+watchEffect(() => {
+  console.log("props.frames", props.frames);
+  const imageList = [];
+  const positionList = [];
+  for (let i = 0; i < props.frames.length; i++) {
+    const frame = props.frames[i];
+    const blobUrl = frame.blobUrl;
+    const position = frame.position;
+    const image = blobUrl ? `url(${blobUrl})` : `#000`;
+    imageList.push(image);
+    positionList.push(position);
+  }
+
+  console.log("shit image", imageList.join(", "));
+  console.log("shit position", positionList.join(", "));
+
+  backgroundStyle.value = {
+    image: imageList.join(", "),
+    position: positionList.join(", "),
+  };
+});
 
 const width = computed(() =>
   props.visionTrackMaterial
@@ -44,10 +74,14 @@ const width = computed(() =>
   align-items: center;
 
   .video-frame {
-    flex-shrink: 0;
-    width: 49px;
+    // flex-shrink: 0;
+    // width: 49px;
     height: 52px;
-    object-fit: cover;
+    width: 100%;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: contain;
+    // object-fit: cover;
   }
 
   .placeholder {
