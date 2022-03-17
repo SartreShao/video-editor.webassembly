@@ -1,3 +1,5 @@
+import Mapping from "@/map";
+
 const InitFFCodecReq = 0;
 const CloseFFDecodeReq = 1;
 const StartDecodeReq = 2;
@@ -53,7 +55,7 @@ const readFrame = (
         console.log("fuck VideoRGBFrameRsp", data);
         // 获取返回参数
         var rgbBuffers = data.data;
-        var videoPts = data.timestamp;
+        var timestamp = data.timestamp;
         var rgbSize = data.size;
         var videoWidth = data.width;
         var videoHeight = data.height;
@@ -70,7 +72,9 @@ const readFrame = (
         // 返回 imageData
         canvas
           .convertToBlob()
-          .then(blob => callback(URL.createObjectURL(blob)));
+          .then(blob =>
+            callback(URL.createObjectURL(blob), Mapping.ms2Frame(timestamp, 30))
+          );
         break;
       case OnMessageEvent:
         console.log("fuck OnMessageEvent", data);
