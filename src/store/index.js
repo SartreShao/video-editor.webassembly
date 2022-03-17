@@ -1,5 +1,6 @@
 import { provide, ref, computed, reactive, watchEffect, watch } from "vue";
 import Mapping from "@/map";
+import { ReadFrame } from "@/viewmodels";
 import WASM from "@/wasm";
 
 /**
@@ -368,6 +369,7 @@ function useProvider() {
   const $isReadFrameBusy = ref(false);
   const $videoFrameBuffer = ref(new Map());
   const $flatFrameList = ref([]);
+  const $currentReadFrameVideoIndex = ref(0);
 
   // watchEffect data
   const $gridWidth = ref(0);
@@ -382,7 +384,6 @@ function useProvider() {
   const $maxFrameOfMaterial = ref(0);
   const $readFrameTaskStack = ref([]);
   const $framesMap = ref(new Map());
-  const $currentReadFrameVideoIndex = ref(0);
 
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
@@ -446,6 +447,22 @@ function useProvider() {
       $videoFrameBuffer.value,
       $readFrameTaskStack.value
     );
+  });
+
+  watchEffect(() => {
+    if (
+      $isReadFrameBusy.value === false &&
+      $readFrameTaskStack.value.length !== 0
+    ) {
+      ReadFrame.excuteReadFrameTask(
+        $readFrameTaskStack,
+        $isReadFrameBusy,
+        $currentReadFrameVideoIndex,
+        $readFrameWorker,
+        VIDEO_FRAME_WIDTH,
+        $videoFrameBuffer
+      );
+    }
   });
 
   // watchEffect(() => {
