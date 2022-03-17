@@ -75,6 +75,9 @@ const flatFrameList = Symbol();
 // 帧图列表
 const framesMap = Symbol();
 
+// 当前 ReadFrame 函数在读的视频的 VideoIndex
+const currentReadFrameVideoIndex = Symbol();
+
 // 临时存储视频帧数（只保存第一个视频的帧数）
 const videoFrameList = Symbol();
 
@@ -379,6 +382,7 @@ function useProvider() {
   const $maxFrameOfMaterial = ref(0);
   const $readFrameTaskStack = ref([]);
   const $framesMap = ref(new Map());
+  const $currentReadFrameVideoIndex = ref(0);
 
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
@@ -535,6 +539,7 @@ function useProvider() {
   provide(readFrameTaskStack, $readFrameTaskStack);
   provide(flatFrameList, $flatFrameList);
   provide(framesMap, $framesMap);
+  provide(currentReadFrameVideoIndex, $currentReadFrameVideoIndex);
 }
 
 // GETTER METHOD
@@ -590,5 +595,6 @@ export default {
   videoFrameBuffer,
   readFrameTaskStack,
   flatFrameList,
-  framesMap
+  framesMap,
+  currentReadFrameVideoIndex
 };
