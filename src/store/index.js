@@ -73,7 +73,7 @@ const readFrameTaskStack = Symbol();
 const flatFrameList = Symbol();
 
 // 帧图列表
-const framesList = Symbol();
+const framesMap = Symbol();
 
 // 临时存储视频帧数（只保存第一个视频的帧数）
 const videoFrameList = Symbol();
@@ -378,7 +378,7 @@ function useProvider() {
   const $fitFrameWidth = ref(0);
   const $maxFrameOfMaterial = ref(0);
   const $readFrameTaskStack = ref([]);
-  const $framesList = ref([]);
+  const $framesMap = ref(new Map());
 
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
@@ -437,7 +437,7 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    $framesList.value = Mapping.constructFramesList(
+    $framesMap.value = Mapping.constructFramesMap(
       $flatFrameList.value,
       $videoFrameBuffer.value,
       $readFrameTaskStack.value
@@ -534,7 +534,7 @@ function useProvider() {
   provide(videoFrameBuffer, $videoFrameBuffer);
   provide(readFrameTaskStack, $readFrameTaskStack);
   provide(flatFrameList, $flatFrameList);
-  provide(framesList, $framesList);
+  provide(framesMap, $framesMap);
 }
 
 // GETTER METHOD
@@ -590,5 +590,5 @@ export default {
   videoFrameBuffer,
   readFrameTaskStack,
   flatFrameList,
-  framesList
+  framesMap
 };
