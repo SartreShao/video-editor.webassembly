@@ -421,7 +421,7 @@ const frame2ms = (frame, fps) => (frame / fps) * 1000;
  * @param {*} frameWidth 帧宽度
  * @returns
  */
-const getMaterialWidth = (timelineIn, timelineOut, frameWidth) =>
+const getMaterialWidthInTimeLine = (timelineIn, timelineOut, frameWidth) =>
   μs2Frame(timelineOut - timelineIn, 30) * frameWidth;
 
 /**
@@ -504,6 +504,8 @@ const getVideoTrackMaterialList = visionTrackMaterials => {
  *               - 0：最高优先级（表示是当前屏幕的帧）
  *               - 1：次优先级（表示是下一屏幕的帧）
  *               - 2：最低优先级（表示是前一屏幕的帧）
+ *     width: 当前视频的宽度,
+ *     height: 当前视频的高度
  * }[]
  */
 const getflatFrameList = (
@@ -538,8 +540,8 @@ const getflatFrameList = (
     // 获取视频素材
     const material = visionTrackMaterials[i];
 
-    // 计算视频素材的宽度
-    const materialWidth = getMaterialWidth(
+    // 获取视频在时间轴上的宽度，单位 px
+    const materialWidth = getMaterialWidthInTimeLine(
       material.timelineIn,
       material.timelineOut,
       frameWidth
@@ -557,7 +559,9 @@ const getflatFrameList = (
       tempFrames.push({
         frame: frame,
         position: position,
-        file: material.file
+        file: material.file,
+        width: material.width,
+        height: material.height
       });
     }
     tempFramesList.push(tempFrames);
@@ -580,7 +584,7 @@ const getflatFrameList = (
     const material = visionTrackMaterials[i];
 
     // 计算视频素材的宽度
-    const materialWidth = getMaterialWidth(
+    const materialWidth = getMaterialWidthInTimeLine(
       material.timelineIn,
       material.timelineOut,
       frameWidth
@@ -625,7 +629,9 @@ const getflatFrameList = (
         videoIndex: i,
         frame: tempFrame.frame,
         position: tempFrame.position,
-        file: tempFrame.file
+        file: tempFrame.file,
+        width: tempFrame.width,
+        height: tempFrame.height
       });
       if (currentVideoIndex === i && currentFrameIndex === j) {
         flatCurrentFrameIndex = count;
@@ -737,7 +743,9 @@ const constructFramesMap = (
           time: frame2ms(flatFrame.frame, 30),
           file: flatFrame.file,
           videoIndex: flatFrame.videoIndex,
-          priority: flatFrame.priority
+          priority: flatFrame.priority,
+          height: flatFrame.height,
+          width: flatFrame.width
         });
       } else {
         const value = [];
@@ -745,7 +753,9 @@ const constructFramesMap = (
           time: frame2ms(flatFrame.frame, 30),
           file: flatFrame.file,
           videoIndex: flatFrame.videoIndex,
-          priority: flatFrame.priority
+          priority: flatFrame.priority,
+          height: flatFrame.height,
+          width: flatFrame.width
         });
         tempMap.set(groupKey, value);
       }
@@ -764,6 +774,8 @@ const constructFramesMap = (
       file: frameList[0].file,
       videoIndex: frameList[0].videoIndex,
       priority: frameList[0].priority,
+      width: frameList[0].width,
+      height: frameList[0].height,
       readFrameList: readFrameList.join(", ")
     };
 
@@ -826,7 +838,7 @@ export default {
   ms2Frame,
   frame2ms,
   second2hms,
-  getMaterialWidth,
+  getMaterialWidthInTimeLine,
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList,
   getflatFrameList,

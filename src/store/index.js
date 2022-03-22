@@ -471,7 +471,7 @@ function useProvider() {
   //       $coreData.sections[$currentSectionIndex.value - 1].sectionTimeline
   //         .visionTrack.visionTrackMaterials[0];
 
-  //     const videoWidth = Mapping.getMaterialWidth(
+  //     const videoWidth = Mapping.getMaterialWidthInTimeLine(
   //       visionTrackMaterial.timelineIn,
   //       visionTrackMaterial.timelineOut,
   //       $frameWidth.value

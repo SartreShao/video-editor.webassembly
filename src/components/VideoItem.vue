@@ -33,7 +33,6 @@ const frameWidth = inject(Store.frameWidth);
 const backgroundStyle = ref({ image: "", position: "" });
 
 watchEffect(() => {
-  console.log("props.frames", props.frames);
   const imageList = [];
   const positionList = [];
   for (let i = 0; i < props.frames.length; i++) {
@@ -45,9 +44,6 @@ watchEffect(() => {
     positionList.push(position);
   }
 
-  console.log("shit image", imageList.join(", "));
-  console.log("shit position", positionList.join(", "));
-
   backgroundStyle.value = {
     image: imageList.join(", "),
     position: positionList.join(", "),
@@ -56,7 +52,7 @@ watchEffect(() => {
 
 const width = computed(() =>
   props.visionTrackMaterial
-    ? Mapping.getMaterialWidth(
+    ? Mapping.getMaterialWidthInTimeLine(
         props.visionTrackMaterial.timelineIn,
         props.visionTrackMaterial.timelineOut,
         frameWidth.value
