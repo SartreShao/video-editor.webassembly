@@ -696,6 +696,16 @@ const getflatFrameList = (
   return flatFrameList;
 };
 
+/**
+ * 获取视频帧图的高度
+ * @param {*} videoFrameWidth 
+ * @param {*} videoWidth 
+ * @param {*} videoHeight 
+ * @returns 
+ */
+const getVideoFrameHeight = (videoFrameWidth, videoWidth, videoHeight) =>
+  (videoHeight / videoWidth) * videoFrameWidth;
+
 const constructFramesMap = (
   flatFrameList,
   videoFrameBuffer,
