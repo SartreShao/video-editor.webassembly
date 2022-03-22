@@ -534,7 +534,17 @@ const getflatFrameList = (
     coreData.sections[currentSectionIndex - 1].sectionTimeline.visionTrack
       .visionTrackMaterials;
 
-  const tempFramesList = [];
+  // 全部的帧
+  const allFrameList = [];
+
+  // 当前是第几个视频的第几帧
+  let currentVideoIndex;
+  let currentFrameIndex;
+
+  let tempTotalMaterialWidth = 0;
+
+  let flatCurrentFrameIndex;
+  let count = 0;
 
   for (let i = 0; i < visionTrackMaterials.length; i++) {
     // 获取视频素材
@@ -547,105 +557,53 @@ const getflatFrameList = (
       frameWidth
     );
 
+    tempTotalMaterialWidth += materialWidth;
+
+    // 获取 currentVideoIndex 和 currentFrameIndex
+    if (currentVideoIndex === undefined && currentFrameIndex === undefined) {
+      if (timeLineOffsetLeft < tempTotalMaterialWidth) {
+        currentVideoIndex = i;
+        currentFrameIndex = Math.floor(
+          (timeLineOffsetLeft - (tempTotalMaterialWidth - materialWidth)) /
+            videoFrameWidth
+        );
+      } else if (timeLineOffsetLeft === tempTotalMaterialWidth) {
+        currentVideoIndex = i + 1;
+        currentFrameIndex = 0;
+      }
+    }
+
     // 计算视频素材内所需要的帧图数
     const framesNumber = Math.ceil(materialWidth / videoFrameWidth);
 
-    const tempFrames = [];
+    for (let j = 0; j < framesNumber; j++) {
+      let frame = Math.floor(j * (videoFrameWidth / frameWidth));
+      let position = `${j * videoFrameWidth + "px"} 0px`;
 
-    for (let i = 0; i < framesNumber; i++) {
-      let frame = Math.floor(i * (videoFrameWidth / frameWidth));
-      let position = `${i * videoFrameWidth + "px"} 0px`;
-
-      tempFrames.push({
+      allFrameList.push({
+        videoIndex: i,
         frame: frame,
         position: position,
         file: material.file,
-        width: material.width,
-        height: material.height
+        width: videoFrameWidth,
+        height: getVideoFrameHeight(
+          videoFrameWidth,
+          material.width,
+          material.height
+        )
       });
-    }
-    tempFramesList.push(tempFrames);
-  }
 
-  console.log("getflatFrameList tempFramesList", tempFramesList);
-
-  // 第二步：根据屏幕偏移量，计算出当前应该渲染的帧图
-  // 计算屏幕前方有多少图片
-  // 计算屏幕内有多少图片
-  const screenFramesNumber = Math.ceil(timeLine_width / videoFrameWidth);
-
-  // 当前是第几个视频的第几帧
-  let currentVideoIndex = 0;
-  let currentFrameIndex = 0;
-
-  let tempTotalMaterialWidth = 0;
-  for (let i = 0; i < visionTrackMaterials.length; i++) {
-    // 获取视频素材
-    const material = visionTrackMaterials[i];
-
-    // 计算视频素材的宽度
-    const materialWidth = getMaterialWidthInTimeLine(
-      material.timelineIn,
-      material.timelineOut,
-      frameWidth
-    );
-
-    tempTotalMaterialWidth += materialWidth;
-
-    if (timeLineOffsetLeft < tempTotalMaterialWidth) {
-      currentVideoIndex = i;
-      currentFrameIndex = Math.floor(
-        (timeLineOffsetLeft - (tempTotalMaterialWidth - materialWidth)) /
-          videoFrameWidth
-      );
-      break;
-    } else if (timeLineOffsetLeft === tempTotalMaterialWidth) {
-      currentVideoIndex = i + 1;
-      currentFrameIndex = 0;
-      break;
-    }
-  }
-
-  console.log("currentVideoIndex: " + currentVideoIndex);
-  console.log("currentFrameIndex: " + currentFrameIndex);
-
-  // 计算本次我需要渲染哪一帧
-  // 先计算纯数字，再构建成 flatFrameList 结构
-  // 需要 currentVideoIndex 的 currentFrameIndex 向前找 screenFramesNumber 个帧图
-  // 需要 currentVideoIndex 的 currentFrameIndex 向后找 2*screenFramesNumber 个帧图
-  // 做一个步骤：先拆分，再组装
-  // 拆分 framesList 为 frames
-  const tempList = [];
-
-  // 拆分后的 index
-  let flatCurrentFrameIndex;
-  let count = 0;
-
-  for (let i = 0; i < tempFramesList.length; i++) {
-    const tempFrames = tempFramesList[i];
-    for (let j = 0; j < tempFrames.length; j++) {
-      const tempFrame = tempFrames[j];
-      tempList.push({
-        videoIndex: i,
-        frame: tempFrame.frame,
-        position: tempFrame.position,
-        file: tempFrame.file,
-        width: tempFrame.width,
-        height: tempFrame.height
-      });
-      if (currentVideoIndex === i && currentFrameIndex === j) {
+      if (currentFrameIndex === i && currentFrameIndex === j) {
         flatCurrentFrameIndex = count;
       }
       count++;
     }
   }
 
-  console.log("拆分成功", tempList);
-  console.log(
-    "拆分后的当前帧在",
-    flatCurrentFrameIndex,
-    tempList[flatCurrentFrameIndex]
-  );
+  console.log("allFrameList", allFrameList);
+
+  // 一屏幕内有多少帧图片
+  const screenFramesNumber = Math.ceil(timeLine_width / videoFrameWidth);
 
   // 开始的帧图
   const startFrameIndex =
@@ -655,23 +613,12 @@ const getflatFrameList = (
 
   // 结束的帧图
   const endFrameIndex =
-    flatCurrentFrameIndex + 2 * screenFramesNumber - 1 > tempList.length - 1
-      ? tempList.length - 1
+    flatCurrentFrameIndex + 2 * screenFramesNumber - 1 > allFrameList.length - 1
+      ? allFrameList.length - 1
       : flatCurrentFrameIndex + 2 * screenFramesNumber - 1;
 
-  console.log(
-    "flatCurrentFrameIndex + 2 * screenFramesNumber",
-    flatCurrentFrameIndex + 2 * screenFramesNumber
-  );
-  console.log("screenFramesNumber", screenFramesNumber);
-  console.log("tempList.length", tempList.length - 1);
-
-  console.log("开始的帧图", startFrameIndex);
-  console.log("结束的帧图", endFrameIndex);
-
   // 切分数组：称为一个扁平化的数据
-  const flatFrameList = tempList.slice(startFrameIndex, endFrameIndex + 1);
-  console.log("切分数组成功", flatFrameList);
+  const flatFrameList = allFrameList.slice(startFrameIndex, endFrameIndex + 1);
 
   // 切分后的数组的当前帧
   const afterSliceFlatCurrentFrameIndex =
@@ -691,17 +638,16 @@ const getflatFrameList = (
     }
   }
 
-  console.log("读帧优先级获取成功", flatFrameList);
-
+  console.log("get flatFrameList successful", flatFrameList);
   return flatFrameList;
 };
 
 /**
  * 获取视频帧图的高度
- * @param {*} videoFrameWidth 
- * @param {*} videoWidth 
- * @param {*} videoHeight 
- * @returns 
+ * @param {*} videoFrameWidth
+ * @param {*} videoWidth
+ * @param {*} videoHeight
+ * @returns
  */
 const getVideoFrameHeight = (videoFrameWidth, videoWidth, videoHeight) =>
   (videoHeight / videoWidth) * videoFrameWidth;
