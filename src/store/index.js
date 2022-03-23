@@ -59,7 +59,9 @@ const currentSectionIndex = Symbol();
 const readFrameWorker = Symbol();
 
 // 视频帧图的宽度
-const VIDEO_FRAME_WIDTH = 49;
+const VIDEO_FRAME_WIDTH = 92.44;
+
+const VIDEO_FRAME_HEIGHT = 52;
 
 // WASM ReadFrame 读帧的状态
 const isReadFrameBusy = Symbol();
@@ -441,6 +443,42 @@ function useProvider() {
     );
   });
 
+  watch($coreData, value => {
+    console.log("debug coreData", value);
+  });
+
+  watch($frameWidth, value => {
+    console.log("debug frameWidth", value);
+  });
+
+  watch($currentSectionIndex, value => {
+    console.log("debug currentSectionIndex", value);
+  });
+
+  watch($timeLineOffsetLeft, value => {
+    console.log("debug timeLineOffsetLeft", value);
+  });
+
+  watch($timeLine_width, value => {
+    console.log("debug timeLine_width", value);
+  });
+
+  watch($flatFrameList, value => {
+    console.log("debug flatFrameList", value);
+  });
+
+  watch($videoFrameBuffer, value => {
+    console.log("debug videoFrameBuffer", value);
+  });
+
+  watch($readFrameTaskStack, value => {
+    console.log("debug readFrameTaskStack", value);
+  });
+
+  watch($framesMap, value => {
+    console.log("debug framesMap", value);
+  });
+
   watchEffect(() => {
     Mapping.createTask(
       $flatFrameList.value,
@@ -460,6 +498,7 @@ function useProvider() {
       $currentReadFrameVideoIndex,
       $readFrameWorker,
       VIDEO_FRAME_WIDTH,
+      VIDEO_FRAME_HEIGHT,
       $videoFrameBuffer
     );
   });
@@ -612,5 +651,7 @@ export default {
   readFrameTaskStack,
   flatFrameList,
   framesMap,
-  currentReadFrameVideoIndex
+  currentReadFrameVideoIndex,
+  VIDEO_FRAME_WIDTH,
+  VIDEO_FRAME_HEIGHT
 };

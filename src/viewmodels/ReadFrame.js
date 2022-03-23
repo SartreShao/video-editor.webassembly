@@ -6,6 +6,7 @@ const excuteReadFrameTask = (
   currentReadFrameVideoIndex,
   readFrameWorker,
   videoFrameWidth,
+  videoFrameHeight,
   videoFrameBuffer
 ) => {
   if (
@@ -14,11 +15,12 @@ const excuteReadFrameTask = (
   ) {
     const task = readFrameTaskStack.value.pop();
     currentReadFrameVideoIndex.value = task.videoIndex;
+    console.log("debug height", task.height);
     WASM.readFrame(
       readFrameWorker.value,
       task.file,
       videoFrameWidth,
-      52,
+      videoFrameHeight,
       task.readFrameList,
       isReadFrameBusy,
       (blobUrl, frame) => {

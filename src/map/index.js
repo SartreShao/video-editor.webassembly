@@ -650,131 +650,7 @@ const getflatFrameList = (
 const getVideoFrameHeight = (videoFrameWidth, videoWidth, videoHeight) =>
   (videoHeight / videoWidth) * videoFrameWidth;
 
-const constructFramesMap = (
-  flatFrameList,
-  videoFrameBuffer,
-  readFrameTaskStack
-) => {
-  /**
-   * task = {
-      file: File,
-      readFrameList: "0,374593.975,749187.95,1123781"
-    }
-   */
-  const taskList = [];
 
-  /**
-   * key: {
-      priority: number,
-      videoIndex: number
-    }
-
-    value: {
-      time,
-      file
-    }[]
-   */
-  const tempMap = new Map();
-
-  // Step 1.1: 为 flatFrame 的 blobUrl 赋值
-  // Step 1.2：为 tempMap 赋值——完成聚类
-  for (let i = 0; i < flatFrameList.length; i++) {
-    const flatFrame = flatFrameList[i];
-    const key = JSON.stringify({
-      videoIndex: flatFrame.videoIndex,
-      frame: flatFrame.frame
-    });
-    if (videoFrameBuffer.has(key)) {
-      flatFrame.blobUrl = videoFrameBuffer.get(key);
-    } else {
-      // 1. 判断 Map 中是否存在组[pririty, videoIndex]
-      const groupKey = JSON.stringify({
-        priority: flatFrame.priority,
-        videoIndex: flatFrame.videoIndex
-      });
-      if (tempMap.has(groupKey)) {
-        tempMap.get(groupKey).push({
-          time: frame2ms(flatFrame.frame, 30),
-          file: flatFrame.file,
-          videoIndex: flatFrame.videoIndex,
-          priority: flatFrame.priority,
-          height: flatFrame.height,
-          width: flatFrame.width
-        });
-      } else {
-        const value = [];
-        value.push({
-          time: frame2ms(flatFrame.frame, 30),
-          file: flatFrame.file,
-          videoIndex: flatFrame.videoIndex,
-          priority: flatFrame.priority,
-          height: flatFrame.height,
-          width: flatFrame.width
-        });
-        tempMap.set(groupKey, value);
-      }
-    }
-  }
-
-  // 完成聚类
-  console.log("tempMap", tempMap);
-
-  for (let frameList of tempMap.values()) {
-    const readFrameList = [];
-
-    frameList.forEach(frame => readFrameList.push(frame.time));
-
-    const task = {
-      file: frameList[0].file,
-      videoIndex: frameList[0].videoIndex,
-      priority: frameList[0].priority,
-      width: frameList[0].width,
-      height: frameList[0].height,
-      readFrameList: readFrameList.join(", ")
-    };
-
-    taskList.push(task);
-  }
-
-  // Stack：后进先出，所以 priority 越低的数据，越是后被放进去，因此 prority 应该是个降序排列（大的在前），videoIndex 也是个降序排列
-  // 排序：先按照 videoIndex 降序排列，再按照 priority 降序排列
-  taskList.sort((a, b) => b.videoIndex - a.videoIndex);
-  taskList.sort((a, b) => b.priority - a.priority);
-
-  console.log("构建完成 TaskList", taskList);
-
-  // 将 Task 推送到任务栈内
-  for (let i = 0; i < taskList.length; i++) {
-    readFrameTaskStack.push(taskList[i]);
-  }
-
-  // 最后一步：将 flatFrameList 格式化为 framesMap
-  const framesMap = new Map();
-
-  for (let i = 0; i < flatFrameList.length; i++) {
-    const flatFrame = flatFrameList[i];
-    const isVideoIndexAlreadyExist = framesMap.has(flatFrame.videoIndex);
-    if (isVideoIndexAlreadyExist) {
-      const frames = framesMap.get(flatFrame.videoIndex);
-      frames.push({
-        blobUrl: flatFrame.blobUrl,
-        frame: flatFrame.frame,
-        position: flatFrame.position
-      });
-    } else {
-      const frames = [];
-      frames.push({
-        blobUrl: flatFrame.blobUrl,
-        frame: flatFrame.frame,
-        position: flatFrame.position
-      });
-      framesMap.set(flatFrame.videoIndex, frames);
-    }
-  }
-
-  console.log("完成 framesMap", framesMap);
-  return framesMap;
-};
 
 const createTask = (flatFrameList, videoFrameBuffer, readFrameTaskStack) => {
   /**
@@ -888,6 +764,5 @@ export default {
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList,
   getflatFrameList,
-  constructFramesMap,
   createTask
 };

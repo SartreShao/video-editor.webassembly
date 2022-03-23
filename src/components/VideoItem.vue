@@ -11,6 +11,7 @@
       :style="{
         backgroundImage: backgroundStyle.image,
         backgroundPosition: backgroundStyle.position,
+        height: videoFrameHeight + 'px',
       }"
     ></div>
     <!-- 分割线 -->
@@ -32,9 +33,9 @@ const frameWidth = inject(Store.frameWidth);
 
 const backgroundStyle = ref({ image: "", position: "" });
 
-watchEffect(() => {
-  console.log("props.frames", props.frames);
+const videoFrameHeight = Store.VIDEO_FRAME_HEIGHT;
 
+watchEffect(() => {
   const imageList = [];
   const positionList = [];
 
@@ -74,7 +75,6 @@ const width = computed(() =>
   .video-frame {
     // flex-shrink: 0;
     // width: 49px;
-    height: 52px;
     width: 100%;
     overflow: hidden;
     background-repeat: no-repeat;
