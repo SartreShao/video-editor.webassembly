@@ -776,6 +776,98 @@ const constructFramesMap = (
   return framesMap;
 };
 
+const createTask = (flatFrameList, videoFrameBuffer, readFrameTaskStack) => {
+  /**
+   * taskList = { 
+        file: File,
+        videoIndex: number,
+        priority: number,
+        width: number,
+        height: number,
+        readFrameList: string
+    }[]
+   */
+  const taskList = [];
+
+  /**
+   * key : {
+   *  priority: number,
+   *  videIndex: number
+   * }
+   * value : {
+   *   time: number,
+   *   file: File,
+   *   videoIndex: number,
+   *   priority: number,
+   *   height: number,
+   *   width: number
+   * }
+   */
+  const tempMap = new Map();
+
+  for (let i = 0; i < flatFrameList.length; i++) {
+    const flatFrame = flatFrameList[i];
+    const key = JSON.stringify({
+      videIndex: flatFrame.videIndex,
+      frame: flatFrame.frame
+    });
+
+    if (!videoFrameBuffer.has(key)) {
+      // 1. 判断 Map 中是否存在组[pririty, videoIndex]
+      const groupKey = JSON.stringify({
+        priority: flatFrame.priority,
+        videoIndex: flatFrame.videoIndex
+      });
+      if (tempMap.has(groupKey)) {
+        tempMap.get(groupKey).push({
+          time: frame2ms(flatFrame.frame, 30),
+          file: flatFrame.file,
+          videoIndex: flatFrame.videoIndex,
+          priority: flatFrame.priority,
+          height: flatFrame.height,
+          width: flatFrame.width
+        });
+      } else {
+        const value = [];
+        value.push({
+          time: frame2ms(flatFrame.frame, 30),
+          file: flatFrame.file,
+          videoIndex: flatFrame.videoIndex,
+          priority: flatFrame.priority,
+          height: flatFrame.height,
+          width: flatFrame.width
+        });
+        tempMap.set(groupKey, value);
+      }
+    }
+  }
+
+  for (let frameList of tempMap.values()) {
+    const readFrameList = [];
+
+    frameList.forEach(frame => readFrameList.push(frame.time));
+
+    const task = {
+      file: frameList[0].file,
+      videoIndex: frameList[0].videoIndex,
+      priority: frameList[0].priority,
+      width: frameList[0].width,
+      height: frameList[0].height,
+      readFrameList: readFrameList.join(", ")
+    };
+
+    taskList.push(task);
+  }
+
+  taskList.sort((a, b) => b.videoIndex - a.videoIndex);
+  taskList.sort((a, b) => b.priority - a.priority);
+
+  // 将 Task 推送到任务栈内
+  for (let i = 0; i < taskList.length; i++) {
+    readFrameTaskStack.push(taskList[i]);
+  }
+};
+
 export default {
   calcTimeLineContainerWidth,
   frame2Time,
@@ -796,5 +888,6 @@ export default {
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList,
   getflatFrameList,
-  constructFramesMap
+  constructFramesMap,
+  createTask
 };

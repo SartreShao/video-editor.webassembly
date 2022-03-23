@@ -442,11 +442,15 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    $framesMap.value = Mapping.constructFramesMap(
+    Mapping.createTask(
       $flatFrameList.value,
       $videoFrameBuffer.value,
       $readFrameTaskStack.value
     );
+  });
+
+  watchEffect(() => {
+    ReadFrame.renderFramesMap($framesMap, $flatFrameList, $videoFrameBuffer);
   });
 
   watchEffect(() => {

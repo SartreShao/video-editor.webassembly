@@ -953,7 +953,7 @@ var TTY = {
   default_tty1_ops: {
     put_char: function (tty, val) {
       if (val === null || val === 10) {
-        err(UTF8ArrayToString(tty.output, 0));
+        // err(UTF8ArrayToString(tty.output, 0));
         tty.output = [];
       } else {
         if (val != 0) tty.output.push(val);

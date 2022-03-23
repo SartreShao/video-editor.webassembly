@@ -25,7 +25,7 @@ import Store from "@/store";
 
 const props = defineProps({
   visionTrackMaterial: Object,
-  frames: Array,
+  frames: Map,
 });
 
 const frameWidth = inject(Store.frameWidth);
@@ -33,16 +33,18 @@ const frameWidth = inject(Store.frameWidth);
 const backgroundStyle = ref({ image: "", position: "" });
 
 watchEffect(() => {
+  console.log("props.frames", props.frames);
+
   const imageList = [];
   const positionList = [];
-  for (let i = 0; i < props.frames.length; i++) {
-    const frame = props.frames[i];
-    const blobUrl = frame.blobUrl;
-    const position = frame.position;
+
+  props.frames.forEach((value, key) => {
+    const blobUrl = value.blobUrl;
+    const position = value.position;
     const image = blobUrl ? `url(${blobUrl})` : `#000`;
     imageList.push(image);
     positionList.push(position);
-  }
+  });
 
   backgroundStyle.value = {
     image: imageList.join(", "),
