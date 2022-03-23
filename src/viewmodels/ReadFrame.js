@@ -9,13 +9,15 @@ const excuteReadFrameTask = (
   videoFrameHeight,
   videoFrameBuffer
 ) => {
+  console.log("debug.method excuteReadFrameTask fake");
   if (
     isReadFrameBusy.value === false &&
     readFrameTaskStack.value.length !== 0
   ) {
+    console.log("debug.method excuteReadFrameTask true");
+
     const task = readFrameTaskStack.value.pop();
     currentReadFrameVideoIndex.value = task.videoIndex;
-    console.log("debug height", task.height);
     WASM.readFrame(
       readFrameWorker.value,
       task.file,
@@ -24,6 +26,7 @@ const excuteReadFrameTask = (
       task.readFrameList,
       isReadFrameBusy,
       (blobUrl, frame) => {
+        console.log("debug.method callback");
         const key = JSON.stringify({
           videoIndex: currentReadFrameVideoIndex.value,
           frame: frame
@@ -39,11 +42,17 @@ const excuteReadFrameTask = (
 };
 
 const renderFramesMap = (oldFramesMap, flatFrameList, videoFrameBuffer) => {
+  console.log("debug.method renderFramesMap");
+  console.log("shit oldFramesMap", oldFramesMap.value);
+  console.log("shit flatFrameList", flatFrameList.value);
+  console.log("shit videoFrameBuffer", videoFrameBuffer.value);
   // crete newFramesMap
   const newFramesMap = createFramesMap(
     flatFrameList.value,
     videoFrameBuffer.value
   );
+
+  console.log("shit newFramesMap", newFramesMap);
 
   updateFramesMap(oldFramesMap.value, newFramesMap);
 };
