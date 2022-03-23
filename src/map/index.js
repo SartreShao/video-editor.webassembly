@@ -600,8 +600,6 @@ const getflatFrameList = (
     }
   }
 
-  console.log("allFrameList", allFrameList);
-
   // 一屏幕内有多少帧图片
   const screenFramesNumber = Math.ceil(timeLine_width / videoFrameWidth);
 
