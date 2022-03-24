@@ -61,6 +61,7 @@ const readFrameWorker = Symbol();
 // 视频帧图的宽度
 const VIDEO_FRAME_WIDTH = 92.44;
 
+// 视频帧图的高度
 const VIDEO_FRAME_HEIGHT = 52;
 
 // WASM ReadFrame 读帧的状态
@@ -654,6 +655,5 @@ export default {
   flatFrameList,
   framesMap,
   currentReadFrameVideoIndex,
-  VIDEO_FRAME_WIDTH,
   VIDEO_FRAME_HEIGHT
 };

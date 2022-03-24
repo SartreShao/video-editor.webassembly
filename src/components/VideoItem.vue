@@ -9,9 +9,9 @@
     <div
       class="video-frame"
       :style="{
-        backgroundImage: image,
-        backgroundPosition: position,
-        height: videoFrameHeight + 'px',
+        backgroundImage: backgroundStyle.image,
+        backgroundPosition: backgroundStyle.position,
+        height: frameHeight + 'px',
       }"
     ></div>
     <!-- 分割线 -->
@@ -34,16 +34,9 @@ const frameWidth = inject(Store.frameWidth);
 
 const backgroundStyle = ref({ image: "", position: "" });
 
-const image = ref("");
-
-const position = ref("");
-
-const videoFrameHeight = Store.VIDEO_FRAME_HEIGHT;
+const frameHeight = Store.VIDEO_FRAME_HEIGHT;
 
 watchEffect(() => {
-  console.log("mian mian props.index", props.index);
-  console.log("mian mian props.frames", props.frames);
-
   const imageList = [];
   const positionList = [];
 
@@ -60,11 +53,10 @@ watchEffect(() => {
   //   position: positionList.join(", "),
   // };
 
-  image.value = imageList.join(",");
-  position.value = positionList.join(",");
-
-  console.log("mian mian image", props.index, image.value);
-  console.log("mian mian position", props.index, position.value);
+  backgroundStyle.value = {
+    image: imageList.join(", "),
+    position: positionList.join(", "),
+  };
 });
 
 const width = computed(() =>
@@ -92,7 +84,7 @@ const width = computed(() =>
     width: 100%;
     overflow: hidden;
     background-repeat: no-repeat;
-    background-size: contain;
+    // background-size: contain;
     // object-fit: cover;
   }
 
