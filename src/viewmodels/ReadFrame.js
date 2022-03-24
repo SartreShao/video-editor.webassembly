@@ -28,8 +28,9 @@ const excuteReadFrameTask = (
         });
 
         const value = blobUrl;
-
-        videoFrameBuffer.value.set(key, value);
+        if (!videoFrameBuffer.value.has(key)) {
+          videoFrameBuffer.value.set(key, value);
+        }
       }
     );
   }
