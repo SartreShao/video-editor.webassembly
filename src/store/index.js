@@ -386,7 +386,6 @@ function useProvider() {
   const $fitFrameWidth = ref(0);
   const $maxFrameOfMaterial = ref(0);
   const $readFrameTaskStack = ref([]);
-  const $framesMap = ref(new Map());
 
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
@@ -444,13 +443,13 @@ function useProvider() {
     );
   });
 
-  watchEffect(() => {
-    $framesMap.value = Mapping.constructFramesMap(
+  const $framesMap = computed(() =>
+    Mapping.constructFramesMap(
       $flatFrameList.value,
       $videoFrameBuffer.value,
       $readFrameTaskStack.value
-    );
-  });
+    )
+  );
 
   watchEffect(() => {
     ReadFrame.excuteReadFrameTask(
