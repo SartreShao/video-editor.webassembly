@@ -248,6 +248,7 @@
             :key="item"
             :visionTrackMaterial="item"
             :frames="framesMap.get(index)"
+            :index="index"
           ></video-item>
         </div>
       </div>

@@ -55,6 +55,8 @@ const renderFramesMap = (oldFramesMap, flatFrameList, videoFrameBuffer) => {
   console.log("shit newFramesMap", newFramesMap);
 
   updateFramesMap(oldFramesMap.value, newFramesMap);
+
+  console.log("shit oldFramesMap", oldFramesMap.value);
 };
 
 const createFramesMap = (flatFrameList, videoFrameBuffer) => {

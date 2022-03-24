@@ -397,7 +397,7 @@ const getFitFrameWidth = (maxMaterialFrame, timeLineWidth) => {
  * @param {number} fps 帧率
  * @returns 帧数
  */
-const μs2Frame = (μs, fps) => Math.round(μs * (fps / 1000000));
+const μs2Frame = (μs, fps) => μs * (fps / 1000000);
 
 /**
  * 毫秒转帧数
@@ -405,7 +405,7 @@ const μs2Frame = (μs, fps) => Math.round(μs * (fps / 1000000));
  * @param {*} fps
  * @returns
  */
-const ms2Frame = (ms, fps) => Math.round(ms * (fps / 1000));
+const ms2Frame = (ms, fps) => ms * (fps / 1000);
 
 /**
  * 帧数转毫秒

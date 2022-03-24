@@ -441,43 +441,44 @@ function useProvider() {
       $timeLineOffsetLeft.value,
       $timeLine_width.value
     );
+    console.log("shit flatFrameList", $flatFrameList.value);
   });
 
-  watch($coreData, value => {
-    console.log("debug coreData", value);
-  });
+  // watch($coreData, value => {
+  //   console.log("debug coreData", value);
+  // });
 
-  watch($frameWidth, value => {
-    console.log("debug frameWidth", value);
-  });
+  // watch($frameWidth, value => {
+  //   console.log("debug frameWidth", value);
+  // });
 
-  watch($currentSectionIndex, value => {
-    console.log("debug currentSectionIndex", value);
-  });
+  // watch($currentSectionIndex, value => {
+  //   console.log("debug currentSectionIndex", value);
+  // });
 
-  watch($timeLineOffsetLeft, value => {
-    console.log("debug timeLineOffsetLeft", value);
-  });
+  // watch($timeLineOffsetLeft, value => {
+  //   console.log("debug timeLineOffsetLeft", value);
+  // });
 
-  watch($timeLine_width, value => {
-    console.log("debug timeLine_width", value);
-  });
+  // watch($timeLine_width, value => {
+  //   console.log("debug timeLine_width", value);
+  // });
 
-  watch($flatFrameList, value => {
-    console.log("debug flatFrameList", value);
-  });
+  // watch($flatFrameList, value => {
+  //   console.log("debug flatFrameList", value);
+  // });
 
-  watch($videoFrameBuffer, value => {
-    console.log("debug videoFrameBuffer", value);
-  });
+  // watch($videoFrameBuffer, value => {
+  //   console.log("debug videoFrameBuffer", value);
+  // });
 
-  watch($readFrameTaskStack, value => {
-    console.log("debug readFrameTaskStack", value);
-  });
+  // watch($readFrameTaskStack, value => {
+  //   console.log("debug readFrameTaskStack", value);
+  // });
 
-  watch($framesMap, value => {
-    console.log("debug framesMap", value);
-  });
+  // watch($framesMap, value => {
+  //   console.log("debug framesMap", value);
+  // });
 
   watchEffect(() => {
     Mapping.createTask(
@@ -489,6 +490,7 @@ function useProvider() {
 
   watchEffect(() => {
     ReadFrame.renderFramesMap($framesMap, $flatFrameList, $videoFrameBuffer);
+    console.log("mian mian renderFramesMap framesMap", $framesMap.value);
   });
 
   watchEffect(() => {

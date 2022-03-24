@@ -9,8 +9,8 @@
     <div
       class="video-frame"
       :style="{
-        backgroundImage: backgroundStyle.image,
-        backgroundPosition: backgroundStyle.position,
+        backgroundImage: image,
+        backgroundPosition: position,
         height: videoFrameHeight + 'px',
       }"
     ></div>
@@ -27,15 +27,23 @@ import Store from "@/store";
 const props = defineProps({
   visionTrackMaterial: Object,
   frames: Map,
+  index: Number,
 });
 
 const frameWidth = inject(Store.frameWidth);
 
 const backgroundStyle = ref({ image: "", position: "" });
 
+const image = ref("");
+
+const position = ref("");
+
 const videoFrameHeight = Store.VIDEO_FRAME_HEIGHT;
 
 watchEffect(() => {
+  console.log("mian mian props.index", props.index);
+  console.log("mian mian props.frames", props.frames);
+
   const imageList = [];
   const positionList = [];
 
@@ -47,10 +55,16 @@ watchEffect(() => {
     positionList.push(position);
   });
 
-  backgroundStyle.value = {
-    image: imageList.join(", "),
-    position: positionList.join(", "),
-  };
+  // backgroundStyle.value = {
+  //   image: imageList.join(", "),
+  //   position: positionList.join(", "),
+  // };
+
+  image.value = imageList.join(",");
+  position.value = positionList.join(",");
+
+  console.log("mian mian image", props.index, image.value);
+  console.log("mian mian position", props.index, position.value);
 });
 
 const width = computed(() =>
