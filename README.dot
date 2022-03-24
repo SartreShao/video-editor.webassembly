@@ -46,6 +46,12 @@ digraph examle1 {
       gridBufferList[shape="box3d"];
       timescale_placeholder_width[shape="box3d"]
   }
+
+  subgraph cluster_UIs{
+    node[shape=box];
+    label="时间轴帧图渲染"
+    framesMap[shape="box3d"]
+  }
   
 
   // 方法 ----------------------------------------
@@ -62,6 +68,14 @@ digraph examle1 {
   getMaxFrameOfMaterial[shape=box, label="Map.getMaxFrameOfMaterial()",color=red];
 
   getTimeScalePlaceHolderWidth[shape=box, label="Map.getTimeScalePlaceHolderWidth()"]
+
+  getFlatFrameList[shape=box, label="Map.getFlatFrameList()"]
+
+  createTask[shape=box, label="Map.createTask()"]
+
+  renderFramesMap[shape=box, label="Map.renderFramesMap()"]
+
+  excuteReadFrameTask[shape=box, label="Map.excuteReadFrameTask()"]
 
   // 获取帧宽度
   "0.03px"->frameWidth[label="   init"];
@@ -92,4 +106,15 @@ digraph examle1 {
 
   timeLineOffsetleft, gridWidth->getTimeScalePlaceHolderWidth->timescale_placeholder_width;
   
+  // flatFrameList
+  VIDEO_FRAME_WIDTH, coreData, frameWidth, currentSectionIndex, timeLineOffsetLeft, timescale_width->getFlatFrameList->flatFrameList;
+
+  // createTask
+  flatFrameList, videoFrameBuffer->createTask->readFrameTaskStack;
+
+  // renderFramesMap
+  flatFrameList, videoFrameBuffer->renderFramesMap->framesMap;
+
+  // excuteReadFrameTask
+  readFrameTaskStack->excuteReadFrameTask->videoFrameBuffer
 }

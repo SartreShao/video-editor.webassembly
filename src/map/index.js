@@ -397,7 +397,7 @@ const getFitFrameWidth = (maxMaterialFrame, timeLineWidth) => {
  * @param {number} fps 帧率
  * @returns 帧数
  */
-const μs2Frame = (μs, fps) => Math.round(μs * (fps / 1000000));
+const μs2Frame = (μs, fps) => μs * (fps / 1000000);
 
 /**
  * 毫秒转帧数
@@ -405,7 +405,7 @@ const μs2Frame = (μs, fps) => Math.round(μs * (fps / 1000000));
  * @param {*} fps
  * @returns
  */
-const ms2Frame = (ms, fps) => Math.round(ms * (fps / 1000));
+const ms2Frame = (ms, fps) => ms * (fps / 1000);
 
 /**
  * 帧数转毫秒
@@ -421,7 +421,7 @@ const frame2ms = (frame, fps) => (frame / fps) * 1000;
  * @param {*} frameWidth 帧宽度
  * @returns
  */
-const getMaterialWidth = (timelineIn, timelineOut, frameWidth) =>
+const getMaterialWidthInTimeLine = (timelineIn, timelineOut, frameWidth) =>
   μs2Frame(timelineOut - timelineIn, 30) * frameWidth;
 
 /**
@@ -504,6 +504,8 @@ const getVideoTrackMaterialList = visionTrackMaterials => {
  *               - 0：最高优先级（表示是当前屏幕的帧）
  *               - 1：次优先级（表示是下一屏幕的帧）
  *               - 2：最低优先级（表示是前一屏幕的帧）
+ *     width: 当前视频的宽度,
+ *     height: 当前视频的高度
  * }[]
  */
 const getflatFrameList = (
@@ -539,7 +541,7 @@ const getflatFrameList = (
     const material = visionTrackMaterials[i];
 
     // 计算视频素材的宽度
-    const materialWidth = getMaterialWidth(
+    const materialWidth = getMaterialWidthInTimeLine(
       material.timelineIn,
       material.timelineOut,
       frameWidth
@@ -580,7 +582,7 @@ const getflatFrameList = (
     const material = visionTrackMaterials[i];
 
     // 计算视频素材的宽度
-    const materialWidth = getMaterialWidth(
+    const materialWidth = getMaterialWidthInTimeLine(
       material.timelineIn,
       material.timelineOut,
       frameWidth
@@ -690,43 +692,54 @@ const getflatFrameList = (
   return flatFrameList;
 };
 
-const constructFramesMap = (
-  flatFrameList,
-  videoFrameBuffer,
-  readFrameTaskStack
-) => {
+/**
+ * 获取视频帧图的高度
+ * @param {*} videoFrameWidth
+ * @param {*} videoWidth
+ * @param {*} videoHeight
+ * @returns
+ */
+const getVideoFrameHeight = (videoFrameWidth, videoWidth, videoHeight) =>
+  (videoHeight / videoWidth) * videoFrameWidth;
+
+const createTask = (flatFrameList, videoFrameBuffer, readFrameTaskStack) => {
+  console.log("debug.method createTask");
   /**
-   * task = {
-      file: File,
-      readFrameList: "0,374593.975,749187.95,1123781"
-    }
+   * taskList = { 
+        file: File,
+        videoIndex: number,
+        priority: number,
+        width: number,
+        height: number,
+        readFrameList: string
+    }[]
    */
   const taskList = [];
 
   /**
-   * key: {
-      priority: number,
-      videoIndex: number
-    }
-
-    value: {
-      time,
-      file
-    }[]
+   * key : {
+   *  priority: number,
+   *  videIndex: number
+   * }
+   * value : {
+   *   time: number,
+   *   file: File,
+   *   videoIndex: number,
+   *   priority: number,
+   *   height: number,
+   *   width: number
+   * }
    */
   const tempMap = new Map();
 
-  // Step 1.1: 为 flatFrame 的 blobUrl 赋值
-  // Step 1.2：为 tempMap 赋值——完成聚类
   for (let i = 0; i < flatFrameList.length; i++) {
     const flatFrame = flatFrameList[i];
     const key = JSON.stringify({
-      videoIndex: flatFrame.videoIndex,
+      videIndex: flatFrame.videIndex,
       frame: flatFrame.frame
     });
-    if (videoFrameBuffer.has(key)) {
-      flatFrame.blobUrl = videoFrameBuffer.get(key);
-    } else {
+
+    if (!videoFrameBuffer.has(key)) {
       // 1. 判断 Map 中是否存在组[pririty, videoIndex]
       const groupKey = JSON.stringify({
         priority: flatFrame.priority,
@@ -752,9 +765,6 @@ const constructFramesMap = (
     }
   }
 
-  // 完成聚类
-  console.log("tempMap", tempMap);
-
   for (let frameList of tempMap.values()) {
     const readFrameList = [];
 
@@ -770,44 +780,13 @@ const constructFramesMap = (
     taskList.push(task);
   }
 
-  // Stack：后进先出，所以 priority 越低的数据，越是后被放进去，因此 prority 应该是个降序排列（大的在前），videoIndex 也是个降序排列
-  // 排序：先按照 videoIndex 降序排列，再按照 priority 降序排列
   taskList.sort((a, b) => b.videoIndex - a.videoIndex);
   taskList.sort((a, b) => b.priority - a.priority);
-
-  console.log("构建完成 TaskList", taskList);
 
   // 将 Task 推送到任务栈内
   for (let i = 0; i < taskList.length; i++) {
     readFrameTaskStack.push(taskList[i]);
   }
-
-  // 最后一步：将 flatFrameList 格式化为 framesMap
-  const framesMap = new Map();
-
-  for (let i = 0; i < flatFrameList.length; i++) {
-    const flatFrame = flatFrameList[i];
-    const isVideoIndexAlreadyExist = framesMap.has(flatFrame.videoIndex);
-    if (isVideoIndexAlreadyExist) {
-      const frames = framesMap.get(flatFrame.videoIndex);
-      frames.push({
-        blobUrl: flatFrame.blobUrl,
-        frame: flatFrame.frame,
-        position: flatFrame.position
-      });
-    } else {
-      const frames = [];
-      frames.push({
-        blobUrl: flatFrame.blobUrl,
-        frame: flatFrame.frame,
-        position: flatFrame.position
-      });
-      framesMap.set(flatFrame.videoIndex, frames);
-    }
-  }
-
-  console.log("完成 framesMap", framesMap);
-  return framesMap;
 };
 
 export default {
@@ -826,9 +805,9 @@ export default {
   ms2Frame,
   frame2ms,
   second2hms,
-  getMaterialWidth,
+  getMaterialWidthInTimeLine,
   getMaxFrameOfMaterial,
   getVideoTrackMaterialList,
   getflatFrameList,
-  constructFramesMap
+  createTask
 };
