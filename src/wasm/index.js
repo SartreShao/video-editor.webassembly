@@ -52,7 +52,7 @@ const readFrame = (
     const data = response.data;
     switch (data.what) {
       case VideoRGBFrameRsp:
-        console.log("fuck VideoRGBFrameRsp", data);
+        // console.log("fuck VideoRGBFrameRsp", data);
         // 获取返回参数
         var rgbBuffers = data.data;
         var timestamp = data.timestamp;
@@ -77,14 +77,14 @@ const readFrame = (
           );
         break;
       case OnMessageEvent:
-        console.log("fuck OnMessageEvent", data);
+        // console.log("fuck OnMessageEvent", data);
         break;
       case StartDecodeEndRsp:
-        console.log("fuck StartDecodeEndRsp", data);
+        // console.log("fuck StartDecodeEndRsp", data);
         isReadFrameBusy.value = false;
         break;
       case InitFFCodecRsp:
-        console.log("fuck InitFFCodecRsp", data);
+        // console.log("fuck InitFFCodecRsp", data);
         isReadFrameBusy.value = true;
         worker.postMessage({
           what: StartDecodeReq,
@@ -94,10 +94,10 @@ const readFrame = (
         });
         break;
       case StopDecodeRsp:
-        console.log("fuck StopDecodeRsp", data);
+        // console.log("fuck StopDecodeRsp", data);
         break;
       case MediaInfoRsp:
-        console.log("fuck MediaInfoRsp", data);
+        // console.log("fuck MediaInfoRsp", data);
         break;
     }
   };

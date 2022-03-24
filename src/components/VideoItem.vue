@@ -36,7 +36,6 @@ const backgroundStyle = ref({ image: "", position: "" });
 const frameHeight = Store.VIDEO_FRAME_HEIGHT;
 
 watchEffect(() => {
-  console.log("props.frames", props.frames);
   const imageList = [];
   const positionList = [];
   for (let i = 0; i < props.frames.length; i++) {
@@ -47,9 +46,6 @@ watchEffect(() => {
     imageList.push(image);
     positionList.push(position);
   }
-
-  console.log("shit image", imageList.join(", "));
-  console.log("shit position", positionList.join(", "));
 
   backgroundStyle.value = {
     image: imageList.join(", "),
