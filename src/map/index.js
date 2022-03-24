@@ -636,10 +636,10 @@ const getflatFrameList = (
 
   // console.log("拆分成功", tempList);
   // console.log(
-    "拆分后的当前帧在",
-    flatCurrentFrameIndex,
-    tempList[flatCurrentFrameIndex]
-  );
+  //   "拆分后的当前帧在",
+  //   flatCurrentFrameIndex,
+  //   tempList[flatCurrentFrameIndex]
+  // );
 
   // 开始的帧图
   const startFrameIndex =
@@ -654,9 +654,9 @@ const getflatFrameList = (
       : flatCurrentFrameIndex + 2 * screenFramesNumber - 1;
 
   // console.log(
-    "flatCurrentFrameIndex + 2 * screenFramesNumber",
-    flatCurrentFrameIndex + 2 * screenFramesNumber
-  );
+  //   "flatCurrentFrameIndex + 2 * screenFramesNumber",
+  //   flatCurrentFrameIndex + 2 * screenFramesNumber
+  // );
   // console.log("screenFramesNumber", screenFramesNumber);
   // console.log("tempList.length", tempList.length - 1);
 
