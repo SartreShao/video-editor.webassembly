@@ -6,6 +6,7 @@ const excuteReadFrameTask = (
   currentReadFrameVideoIndex,
   readFrameWorker,
   videoFrameWidth,
+  videoFrameHeight,
   videoFrameBuffer
 ) => {
   if (
@@ -18,7 +19,7 @@ const excuteReadFrameTask = (
       readFrameWorker.value,
       task.file,
       videoFrameWidth,
-      52,
+      videoFrameHeight,
       task.readFrameList,
       isReadFrameBusy,
       (blobUrl, frame) => {
