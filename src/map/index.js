@@ -359,7 +359,7 @@ const renderGridBufferList = (
     }
   } catch (error) {
     // doing nothing
-    console.log(error);
+    // console.log(error);
   }
 };
 
@@ -563,7 +563,7 @@ const getflatFrameList = (
     tempFramesList.push(tempFrames);
   }
 
-  console.log("getflatFrameList tempFramesList", tempFramesList);
+  // // console.log("getflatFrameList tempFramesList", tempFramesList);
 
   // 第二步：根据屏幕偏移量，计算出当前应该渲染的帧图
   // 计算屏幕前方有多少图片
@@ -602,8 +602,8 @@ const getflatFrameList = (
     }
   }
 
-  console.log("currentVideoIndex: " + currentVideoIndex);
-  console.log("currentFrameIndex: " + currentFrameIndex);
+  // console.log("currentVideoIndex: " + currentVideoIndex);
+  // console.log("currentFrameIndex: " + currentFrameIndex);
 
   // 计算本次我需要渲染哪一帧
   // 先计算纯数字，再构建成 flatFrameList 结构
@@ -634,8 +634,8 @@ const getflatFrameList = (
     }
   }
 
-  console.log("拆分成功", tempList);
-  console.log(
+  // console.log("拆分成功", tempList);
+  // console.log(
     "拆分后的当前帧在",
     flatCurrentFrameIndex,
     tempList[flatCurrentFrameIndex]
@@ -653,19 +653,19 @@ const getflatFrameList = (
       ? tempList.length - 1
       : flatCurrentFrameIndex + 2 * screenFramesNumber - 1;
 
-  console.log(
+  // console.log(
     "flatCurrentFrameIndex + 2 * screenFramesNumber",
     flatCurrentFrameIndex + 2 * screenFramesNumber
   );
-  console.log("screenFramesNumber", screenFramesNumber);
-  console.log("tempList.length", tempList.length - 1);
+  // console.log("screenFramesNumber", screenFramesNumber);
+  // console.log("tempList.length", tempList.length - 1);
 
-  console.log("开始的帧图", startFrameIndex);
-  console.log("结束的帧图", endFrameIndex);
+  // console.log("开始的帧图", startFrameIndex);
+  // console.log("结束的帧图", endFrameIndex);
 
   // 切分数组：称为一个扁平化的数据
   const flatFrameList = tempList.slice(startFrameIndex, endFrameIndex + 1);
-  console.log("切分数组成功", flatFrameList);
+  // console.log("切分数组成功", flatFrameList);
 
   // 切分后的数组的当前帧
   const afterSliceFlatCurrentFrameIndex =
@@ -685,7 +685,7 @@ const getflatFrameList = (
     }
   }
 
-  console.log("读帧优先级获取成功", flatFrameList);
+  // console.log("读帧优先级获取成功", flatFrameList);
 
   return flatFrameList;
 };
@@ -753,7 +753,7 @@ const constructFramesMap = (
   }
 
   // 完成聚类
-  console.log("tempMap", tempMap);
+  // console.log("tempMap", tempMap);
 
   for (let frameList of tempMap.values()) {
     const readFrameList = [];
@@ -775,7 +775,7 @@ const constructFramesMap = (
   taskList.sort((a, b) => b.videoIndex - a.videoIndex);
   taskList.sort((a, b) => b.priority - a.priority);
 
-  console.log("构建完成 TaskList", taskList);
+  // console.log("构建完成 TaskList", taskList);
 
   // 将 Task 推送到任务栈内
   for (let i = 0; i < taskList.length; i++) {
@@ -806,7 +806,7 @@ const constructFramesMap = (
     }
   }
 
-  console.log("完成 framesMap", framesMap);
+  // console.log("完成 framesMap", framesMap);
   return framesMap;
 };
 

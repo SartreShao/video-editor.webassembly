@@ -22,7 +22,7 @@ const addVideoOnCurrentSection = async (
     currentVideoUrl.value = URL.createObjectURL(videoList[0]);
   }
 
-  console.log("currentVideoUrl loaded", currentVideoUrl.value);
+  // console.log("currentVideoUrl loaded", currentVideoUrl.value);
 
   await Api.addVideoToCoreData(coreData, videoList, currentSectionIndex.value);
   

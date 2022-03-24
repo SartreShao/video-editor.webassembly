@@ -143,7 +143,7 @@ const addVideoOnCurrentSection = (e) => {
   //   52,
   //   "0",
   //   (imageData) => {
-  //     console.log("imageData", imageData);
+  //     // console.log("imageData", imageData);
   //   }
   // );
 };

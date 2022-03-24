@@ -10,7 +10,7 @@ import WASM from "@/wasm";
 const worker = inject(Store.readFrameWorker);
 
 const inputFile = (e) => {
-  console.log("file", e.target.files);
+  // console.log("file", e.target.files);
 };
 </script>
 
