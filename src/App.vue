@@ -5,7 +5,6 @@
 
 <script setup>
 import Store from "@/store";
-import VideoEditor from "@/views/VideoEditor.vue";
 
 // 依赖注入
 Store.useProvider();
