@@ -82,7 +82,7 @@ const width = computed(() =>
     width: 100%;
     overflow: hidden;
     background-repeat: no-repeat;
-    background-size: contain;
+    // background-size: contain;
     // object-fit: cover;
   }
 
