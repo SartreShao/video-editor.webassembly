@@ -695,6 +695,7 @@ const constructFramesMap = (
   videoFrameBuffer,
   readFrameTaskStack
 ) => {
+  // debugger
   /**
    * task = {
       file: File,
@@ -807,6 +808,7 @@ const constructFramesMap = (
   }
 
   // console.log("完成 framesMap", framesMap);
+  // debugger;
   return framesMap;
 };
 

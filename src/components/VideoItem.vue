@@ -20,7 +20,15 @@
 </template>
 
 <script setup>
-import { defineProps, computed, inject, watchEffect, ref } from "vue";
+import {
+  defineProps,
+  computed,
+  inject,
+  watchEffect,
+  ref,
+  onRenderTracked,
+  onRenderTriggered,
+} from "vue";
 import Mapping from "@/map";
 import Store from "@/store";
 
@@ -36,21 +44,32 @@ const backgroundStyle = ref({ image: "", position: "" });
 const frameHeight = Store.VIDEO_FRAME_HEIGHT;
 
 watchEffect(() => {
-  const imageList = [];
-  const positionList = [];
-  for (let i = 0; i < props.frames.length; i++) {
-    const frame = props.frames[i];
-    const blobUrl = frame.blobUrl;
-    const position = frame.position;
-    const image = blobUrl ? `url(${blobUrl})` : `#000`;
-    imageList.push(image);
-    positionList.push(position);
-  }
+  // debugger;
+  // 当传入的 frames 为空的时候，就是本 VideoItem 不需要渲染的时候
+  if (props.frames) {
+    const imageList = [];
+    const positionList = [];
+    for (let i = 0; i < props.frames.length; i++) {
+      const frame = props.frames[i];
+      const blobUrl = frame.blobUrl;
+      const position = frame.position;
+      const image = blobUrl
+        ? `url(${blobUrl})`
+        : `url(https://ishaolizhi.file.hearfresh.cn/jxvW7NlLf8kyXS5Tm7doOgvUJufsQBCg/1.png)`;
+      imageList.push(image);
+      positionList.push(position);
+    }
 
-  backgroundStyle.value = {
-    image: imageList.join(", "),
-    position: positionList.join(", "),
-  };
+    backgroundStyle.value = {
+      image: imageList.join(", "),
+      position: positionList.join(", "),
+    };
+  }
+  // debugger;
+});
+
+onRenderTriggered((event) => {
+  // debugger;
 });
 
 const width = computed(() =>
