@@ -53,9 +53,12 @@ watchEffect(() => {
       const frame = props.frames[i];
       const blobUrl = frame.blobUrl;
       const position = frame.position;
+      // const image = blobUrl
+      //   ? `url(${blobUrl})`
+      //   : `url(https://ishaolizhi.file.hearfresh.cn/jxvW7NlLf8kyXS5Tm7doOgvUJufsQBCg/1.png)`;
       const image = blobUrl
         ? `url(${blobUrl})`
-        : `url(https://ishaolizhi.file.hearfresh.cn/jxvW7NlLf8kyXS5Tm7doOgvUJufsQBCg/1.png)`;
+        : `linear-gradient(#181818, #181818)`;
       imageList.push(image);
       positionList.push(position);
     }
