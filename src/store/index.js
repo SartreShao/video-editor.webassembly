@@ -87,6 +87,10 @@ const videoFrameList = Symbol();
 
 const currentFile = Symbol();
 
+const rightCount = Symbol();
+
+const errorCount = Symbol();
+
 function useProvider() {
   // init data
   const $timeLineContainer_width = ref(0);
@@ -387,6 +391,9 @@ function useProvider() {
   const $maxFrameOfMaterial = ref(0);
   const $readFrameTaskStack = ref([]);
 
+  const $rightCount = ref(0);
+  const $errorCount = ref(0);
+
   watchEffect(() => {
     $maxFrameOfMaterial.value = getMaxFrameOfMaterial(
       $coreData,
@@ -459,8 +466,18 @@ function useProvider() {
       $readFrameWorker,
       VIDEO_FRAME_WIDTH,
       VIDEO_FRAME_HEIGHT,
-      $videoFrameBuffer
+      $videoFrameBuffer,
+      $rightCount,
+      $errorCount
     );
+  });
+
+  watchEffect(() => {
+    console.log("rightCount: " + $rightCount.value);
+  });
+
+  watchEffect(() => {
+    console.log("errorCount: " + $errorCount.value);
   });
 
   // watchEffect(() => {
@@ -555,6 +572,8 @@ function useProvider() {
   provide(flatFrameList, $flatFrameList);
   provide(framesMap, $framesMap);
   provide(currentReadFrameVideoIndex, $currentReadFrameVideoIndex);
+  provide(rightCount, $rightCount);
+  provide(errorCount, $errorCount);
 }
 
 // GETTER METHOD
@@ -612,5 +631,7 @@ export default {
   flatFrameList,
   framesMap,
   currentReadFrameVideoIndex,
-  VIDEO_FRAME_HEIGHT
+  VIDEO_FRAME_HEIGHT,
+  rightCount,
+  errorCount
 };

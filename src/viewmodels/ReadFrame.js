@@ -7,7 +7,9 @@ const excuteReadFrameTask = (
   readFrameWorker,
   videoFrameWidth,
   videoFrameHeight,
-  videoFrameBuffer
+  videoFrameBuffer,
+  rightCount,
+  errorCount
 ) => {
   if (
     isReadFrameBusy.value === false &&
@@ -29,8 +31,12 @@ const excuteReadFrameTask = (
         });
 
         const value = blobUrl;
+
         if (!videoFrameBuffer.value.has(key)) {
           videoFrameBuffer.value.set(key, value);
+          rightCount.value++;
+        } else {
+          errorCount.value++;
         }
       }
     );
