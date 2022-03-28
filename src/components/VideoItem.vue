@@ -61,8 +61,8 @@ watchEffect(() => {
     }
 
     backgroundStyle.value = {
-      image: imageList.join(", "),
-      position: positionList.join(", "),
+      image: imageList.join(","),
+      position: positionList.join(","),
     };
   }
   // debugger;

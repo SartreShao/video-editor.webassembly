@@ -765,7 +765,7 @@ const constructFramesMap = (
       file: frameList[0].file,
       videoIndex: frameList[0].videoIndex,
       priority: frameList[0].priority,
-      readFrameList: readFrameList.join(", ")
+      readFrameList: readFrameList.join(",")
     };
 
     taskList.push(task);
@@ -810,6 +810,21 @@ const constructFramesMap = (
   // console.log("完成 framesMap", framesMap);
   // debugger;
   return framesMap;
+};
+
+/**
+ * 为 TaskStack 去重
+ * @param {*} taskStack
+ */
+const deduplicationTask = taskStack => {
+  if (taskStack.length >= 2) {
+    // 最高优先级任务
+    const topPriorityTask = taskStack[taskStack.length - 1];
+    for (let i = taskStack.length - 2; i >= 0; i--) {
+      const task = taskStack[i];
+
+    }
+  }
 };
 
 export default {

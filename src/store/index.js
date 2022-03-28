@@ -522,7 +522,7 @@ function useProvider() {
   //     }
 
   //     // 开始读帧
-  //     const readFrameList = tempList.join(", ");
+  //     const readFrameList = tempList.join(",");
   //     console.log("全部参数")
   //     console.log("readFrameList origin", readFrameList);
 
