@@ -31,6 +31,8 @@ const readFrame = (
   isReadFrameBusy,
   callback
 ) => {
+  isReadFrameBusy.value = true;
+
   // 初始化：传入 videoFile、outputWidth、outputHeiight
   worker.postMessage({
     what: InitFFCodecReq,
@@ -85,7 +87,6 @@ const readFrame = (
         break;
       case InitFFCodecRsp:
         // console.log("fuck InitFFCodecRsp", data);
-        isReadFrameBusy.value = true;
         worker.postMessage({
           what: StartDecodeReq,
           startTimeMs: 0,
