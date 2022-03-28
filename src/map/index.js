@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /**
  * 计算时间轴包裹器宽度
  * @param {number} clientWidth 请传入 document.body.clientWidth
@@ -783,6 +785,9 @@ const constructFramesMap = (
     readFrameTaskStack.push(taskList[i]);
   }
 
+  // 推送完之后，去重
+  // deduplicationTask(readFrameTaskStack);
+
   // 最后一步：将 flatFrameList 格式化为 framesMap
   const framesMap = new Map();
 
@@ -817,14 +822,7 @@ const constructFramesMap = (
  * @param {*} taskStack
  */
 const deduplicationTask = taskStack => {
-  if (taskStack.length >= 2) {
-    // 最高优先级任务
-    const topPriorityTask = taskStack[taskStack.length - 1];
-    for (let i = taskStack.length - 2; i >= 0; i--) {
-      const task = taskStack[i];
-
-    }
-  }
+  // TODO 去重函数：有效清除 errorCount
 };
 
 export default {
