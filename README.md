@@ -1,11 +1,15 @@
 # Web Video Editor
+## Preview
+https://ishaolizhi.file.hearfresh.cn/neAJ9oRrMnnsWqjNypJRr5UGWrXAR0Qn/1.mp4
+
+## Feature
+- Upload File And Read Frame
+- TimeLine Dynamic Cache Loading Frame
+- JUST LIKE 剪映's TimeLine
+
 ## Tech Stack
 - WebAssmeble：C / C++ working in JavaScript
-- Emscripten: turn C / C++ to WASM
 - FFmpeg：library for video editing
-- H5 Canvas
-- H5 Video Blob
-- H5 Web Worker
 
 ## How To Start Using
 ```
