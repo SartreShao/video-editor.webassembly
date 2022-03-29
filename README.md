@@ -8,7 +8,7 @@ https://ishaolizhi.file.hearfresh.cn/neAJ9oRrMnnsWqjNypJRr5UGWrXAR0Qn/1.mp4
 - JUST LIKE 剪映's TIMELINE
 
 ## Tech Stack
-- WebAssmeble：C / C++ working in JavaScript for read frame from video
+- WebAssmeble：C / C++ working in JavaScript for read frames from video
 - FFmpeg：library for video editing
 
 ## How To Start Using
