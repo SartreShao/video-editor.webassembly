@@ -5,7 +5,7 @@ https://ishaolizhi.file.hearfresh.cn/neAJ9oRrMnnsWqjNypJRr5UGWrXAR0Qn/1.mp4
 ## Feature
 - Upload File And Read Frame
 - TimeLine Dynamic Cache Loading Frame
-- JUST LIKE 剪映's TimeLine
+- JUST LIKE 剪映's TIMELINE
 
 ## Tech Stack
 - WebAssmeble：C / C++ working in JavaScript
