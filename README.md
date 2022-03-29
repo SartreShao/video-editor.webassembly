@@ -10,6 +10,8 @@ https://ishaolizhi.file.hearfresh.cn/neAJ9oRrMnnsWqjNypJRr5UGWrXAR0Qn/1.mp4
 ## Tech Stack
 - WebAssmeble：C / C++ working in JavaScript for read frames from video
 - FFmpeg：library for video editing
+- Vue3 + JavaScript
+- MY GENIUS SELF-DEVELOPED TIMELINE FRAMEWORK
 
 ## How To Start Using
 ```
