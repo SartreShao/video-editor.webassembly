@@ -34,7 +34,12 @@ const readFrame = (
 ) => {
   isReadFrameBusy.value = true;
 
-  console.log("execute readFrame file", videoFile.name, readFrameList);
+  console.log(
+    "execute readFrame file",
+    currentReadFrameVideoIndex.value,
+    videoFile.name,
+    readFrameList
+  );
   // 初始化：传入 videoFile、outputWidth、outputHeiight
   worker.postMessage({
     what: InitFFCodecReq,
@@ -56,12 +61,6 @@ const readFrame = (
     const data = response.data;
     switch (data.what) {
       case VideoRGBFrameRsp:
-        console.log(
-          "fuck callback",
-          data,
-          currentReadFrameVideoIndex.value,
-          videoFile
-        );
         // 获取返回参数
         var rgbBuffers = data.data;
         var timestamp = data.timestamp;
@@ -80,7 +79,29 @@ const readFrame = (
 
         var videoIndex = currentReadFrameVideoIndex.value;
 
-        // 返回 imageData
+        // console.log(
+        //   `读帧成功 pre：
+        //   key:${videoIndex},
+        //   currentKey:${currentReadFrameVideoIndex.value}
+        //   file:${videoFile.name},
+        //   frame:${Mapping.ms2Frame(timestamp, 30)},
+        //   imageData:${imageData}`
+        // );
+
+        // // 返回 imageData
+        // var blob = await canvas.convertToBlob();
+        // var blobUrl = URL.createObjectURL(blob);
+
+        // console.log(
+        //   `读帧成功 after
+        //   key:${videoIndex},
+        //   currentKey:${currentReadFrameVideoIndex.value}
+        //   file:${videoFile.name},
+        //   frame:${Mapping.ms2Frame(timestamp, 30)},
+        //   imageData:${imageData},
+        //   blobUrl:${blobUrl},`
+        // );
+
         canvas
           .convertToBlob()
           .then(blob =>
@@ -95,7 +116,7 @@ const readFrame = (
         // console.log("fuck OnMessageEvent", data);
         break;
       case StartDecodeEndRsp:
-        console.log("fuck StartDecodeEndRsp", data);
+        // console.log("fuck StartDecodeEndRsp", data);
         isReadFrameBusy.value = false;
         break;
       case InitFFCodecRsp:
