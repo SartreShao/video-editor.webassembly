@@ -34,12 +34,12 @@ const readFrame = (
 ) => {
   isReadFrameBusy.value = true;
 
-  console.log(
-    "execute readFrame file",
-    currentReadFrameVideoIndex.value,
-    videoFile.name,
-    readFrameList
-  );
+  // console.log(
+  //   "execute readFrame file",
+  //   currentReadFrameVideoIndex.value,
+  //   videoFile.name,
+  //   readFrameList
+  // );
   // 初始化：传入 videoFile、outputWidth、outputHeiight
   worker.postMessage({
     what: InitFFCodecReq,
