@@ -473,11 +473,11 @@ function useProvider() {
   });
 
   watchEffect(() => {
-    console.log("rightCount: " + $rightCount.value);
+    // console.log("rightCount: " + $rightCount.value);
   });
 
   watchEffect(() => {
-    console.log("errorCount: " + $errorCount.value);
+    // console.log("errorCount: " + $errorCount.value);
   });
 
   // watchEffect(() => {

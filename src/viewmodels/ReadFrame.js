@@ -32,6 +32,9 @@ const excuteReadFrameTask = (
 
         const value = blobUrl;
 
+        console.log("key: " + key);
+        console.log("value: " + value);
+
         if (!videoFrameBuffer.value.has(key)) {
           videoFrameBuffer.value.set(key, value);
           rightCount.value++;
