@@ -29,6 +29,7 @@ const readFrame = (
   outputHeight,
   readFrameList,
   isReadFrameBusy,
+  currentReadFrameVideoIndex,
   callback
 ) => {
   isReadFrameBusy.value = true;
@@ -55,7 +56,12 @@ const readFrame = (
     const data = response.data;
     switch (data.what) {
       case VideoRGBFrameRsp:
-        // console.log("fuck VideoRGBFrameRsp", data);
+        console.log(
+          "fuck callback",
+          data,
+          currentReadFrameVideoIndex.value,
+          videoFile
+        );
         // 获取返回参数
         var rgbBuffers = data.data;
         var timestamp = data.timestamp;
@@ -72,11 +78,17 @@ const readFrame = (
 
         context.putImageData(imageData, 0, 0, 0, 0, videoWidth, videoHeight);
 
+        var videoIndex = currentReadFrameVideoIndex.value;
+
         // 返回 imageData
         canvas
           .convertToBlob()
           .then(blob =>
-            callback(URL.createObjectURL(blob), Mapping.ms2Frame(timestamp, 30))
+            callback(
+              URL.createObjectURL(blob),
+              Mapping.ms2Frame(timestamp, 30),
+              videoIndex
+            )
           );
         break;
       case OnMessageEvent:

@@ -24,9 +24,13 @@ const excuteReadFrameTask = (
       videoFrameHeight,
       task.readFrameList,
       isReadFrameBusy,
-      (blobUrl, frame) => {
+      currentReadFrameVideoIndex,
+      (blobUrl, frame, videoIndex) => {
+        // if (videoIndex !== currentReadFrameVideoIndex.value) {
+        //   console.log("shit", videoIndex, currentReadFrameVideoIndex.value);
+        // }
         const key = JSON.stringify({
-          videoIndex: currentReadFrameVideoIndex.value,
+          videoIndex: videoIndex,
           frame: frame
         });
 
