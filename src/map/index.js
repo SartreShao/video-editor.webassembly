@@ -737,7 +737,7 @@ const constructFramesMap = (
       });
       if (tempMap.has(groupKey)) {
         tempMap.get(groupKey).push({
-          time: frame2ms(flatFrame.frame, 30),
+          frame: flatFrame.frame,
           file: flatFrame.file,
           videoIndex: flatFrame.videoIndex,
           priority: flatFrame.priority
@@ -745,7 +745,7 @@ const constructFramesMap = (
       } else {
         const value = [];
         value.push({
-          time: frame2ms(flatFrame.frame, 30),
+          frame: flatFrame.frame,
           file: flatFrame.file,
           videoIndex: flatFrame.videoIndex,
           priority: flatFrame.priority
@@ -761,13 +761,13 @@ const constructFramesMap = (
   for (let frameList of tempMap.values()) {
     const readFrameList = [];
 
-    frameList.forEach(frame => readFrameList.push(frame.time));
+    frameList.forEach(frame => readFrameList.push(frame.frame));
 
     const task = {
       file: frameList[0].file,
       videoIndex: frameList[0].videoIndex,
       priority: frameList[0].priority,
-      readFrameList: readFrameList.join(",")
+      readFrameList: readFrameList
     };
 
     taskList.push(task);

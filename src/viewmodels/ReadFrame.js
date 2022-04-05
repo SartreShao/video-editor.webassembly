@@ -1,4 +1,5 @@
 import WASM from "@/wasm";
+import Mapping from "@/map";
 
 const excuteReadFrameTask = (
   readFrameTaskStack,
@@ -16,13 +17,16 @@ const excuteReadFrameTask = (
     readFrameTaskStack.value.length !== 0
   ) {
     const task = readFrameTaskStack.value.pop();
+    const readFrameList = task.readFrameList
+      .map(frame => Mapping.frame2ms(frame, 30))
+      .join(",");
     currentReadFrameVideoIndex.value = task.videoIndex;
     WASM.readFrame(
       readFrameWorker.value,
       task.file,
       videoFrameWidth,
       videoFrameHeight,
-      task.readFrameList,
+      readFrameList,
       isReadFrameBusy,
       currentReadFrameVideoIndex,
       (blobUrl, frame, videoIndex) => {
