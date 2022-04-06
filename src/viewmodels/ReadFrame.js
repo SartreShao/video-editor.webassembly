@@ -1,6 +1,13 @@
 import WASM from "@/wasm";
 import Mapping from "@/map";
 
+/**
+ * 优化 TaskStack 栈：去掉其中重复阅读的帧
+ * @param {*} currentTask 
+ * @param {*} readFrameTaskStack 
+ * @param {*} videoFrameBuffer 
+ * @returns 
+ */
 const optimizeTaskStack = (
   currentTask,
   readFrameTaskStack,
