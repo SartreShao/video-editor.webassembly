@@ -20,8 +20,7 @@ const optimizeTaskStack = (
       ""
     )
   );
-  // 1. readFrameTaskStack 数据结构
-  // 2. videoFrameBuffer 数据结构
+
   for (let i = 0; i < readFrameTaskStack.length; i++) {
     const task = readFrameTaskStack[i];
     const readFrameList = task.readFrameList.filter(frame => {
