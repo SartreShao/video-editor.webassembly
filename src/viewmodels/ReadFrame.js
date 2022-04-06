@@ -1,20 +1,6 @@
 import WASM from "@/wasm";
 import Mapping from "@/map";
 
-const getTask = (readFrameTaskStack, videoFrameBuffer) => {
-  const task = readFrameTaskStack.pop();
-  debugger;
-  const readFrameList = task.readFrameList.filter(
-    frame =>
-      !videoFrameBuffer.has({ videoIndex: task.videoIndex, frame: frame })
-  );
-  task.readFrameList = readFrameList;
-  debugger;
-  return task.readFrameList.length === 0
-    ? getTask(readFrameTaskStack, videoFrameBuffer)
-    : task;
-};
-
 const optimizeTaskStack = (
   currentTask,
   readFrameTaskStack,
@@ -61,7 +47,6 @@ const excuteReadFrameTask = (
     isReadFrameBusy.value === false &&
     readFrameTaskStack.value.length !== 0
   ) {
-    // const task = getTask(readFrameTaskStack.value, videoFrameBuffer.value);
     const task = readFrameTaskStack.value.pop();
     // 优化 readFrameTaskStack
     // debugger;
