@@ -1,6 +1,51 @@
 import WASM from "@/wasm";
 import Mapping from "@/map";
 
+const getTask = (readFrameTaskStack, videoFrameBuffer) => {
+  const task = readFrameTaskStack.pop();
+  debugger;
+  const readFrameList = task.readFrameList.filter(
+    frame =>
+      !videoFrameBuffer.has({ videoIndex: task.videoIndex, frame: frame })
+  );
+  task.readFrameList = readFrameList;
+  debugger;
+  return task.readFrameList.length === 0
+    ? getTask(readFrameTaskStack, videoFrameBuffer)
+    : task;
+};
+
+const optimizeTaskStack = (
+  currentTask,
+  readFrameTaskStack,
+  videoFrameBuffer
+) => {
+  const currentTaskHashMap = new Map();
+  currentTask.readFrameList.forEach(frame =>
+    currentTaskHashMap.set(
+      JSON.stringify({ videoIndex: currentTask.videoIndex, frame: frame }),
+      ""
+    )
+  );
+  // 1. readFrameTaskStack 数据结构
+  // 2. videoFrameBuffer 数据结构
+  for (let i = 0; i < readFrameTaskStack.length; i++) {
+    const task = readFrameTaskStack[i];
+    const readFrameList = task.readFrameList.filter(frame => {
+      const isFrameInVideoFrameBuffer = videoFrameBuffer.has(
+        JSON.stringify({ videoIndex: task.videoIndex, frame: frame })
+      );
+      const isFrameInCurrentTask = currentTaskHashMap.has(
+        JSON.stringify({ videoIndex: task.videoIndex, frame: frame })
+      );
+      return !isFrameInVideoFrameBuffer && !isFrameInCurrentTask;
+    });
+    task.readFrameList = readFrameList;
+  }
+
+  return readFrameTaskStack.filter(task => task.readFrameList.length !== 0);
+};
+
 const excuteReadFrameTask = (
   readFrameTaskStack,
   isReadFrameBusy,
@@ -16,7 +61,18 @@ const excuteReadFrameTask = (
     isReadFrameBusy.value === false &&
     readFrameTaskStack.value.length !== 0
   ) {
+    // const task = getTask(readFrameTaskStack.value, videoFrameBuffer.value);
     const task = readFrameTaskStack.value.pop();
+    // 优化 readFrameTaskStack
+    // debugger;
+    readFrameTaskStack.value = optimizeTaskStack(
+      task,
+      readFrameTaskStack.value,
+      videoFrameBuffer.value
+    );
+    // 优化完成
+    // debugger;
+
     const readFrameList = task.readFrameList
       .map(frame => Mapping.frame2ms(frame, 30))
       .join(",");
